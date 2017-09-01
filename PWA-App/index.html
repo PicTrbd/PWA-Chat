@@ -21,7 +21,7 @@
     <meta name="msapplication-TileColor" content="#1B3866">
     
     <meta name="theme-color" content="#1B3866">
-
+    
     <link href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css" rel="stylesheet">
     <link href="styles/main.css" rel="stylesheet">
   </head>
@@ -55,32 +55,14 @@
         <div id="bottom-area">
           <input id="submit-button" type="button" value="Envoyer" />
           <div id="textarea-container">
-              <input class="textarea" type="text" placeholder="Tapez ici votre message"/>
+              <input class="textarea" type="text" placeholder="Tapez ici votre message" onclick="test()"/>
           </div>
         </div>
       </div>
     </div>
 
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('service-worker.js').then(function(registration) {
-            // Registration was successful
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-          }, function(err) {
-            // registration failed :(
-            console.log('ServiceWorker registration failed: ', err);
-          }).catch(function(err) {
-            console.log(err)
-          });
-        });
-      } else {
-        console.log('service worker is not supported');
-      }
-    </script>
     <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
-    <!-- build:js scripts/main.min.js -->
     <script src="scripts/main.js"></script>
-    <!-- endbuild -->
+    <script src="scripts/chat.js"></script>
   </body>
 </html>
