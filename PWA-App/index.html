@@ -36,13 +36,29 @@
           <a class="mdl-layout__tab is-active">PWA - Chat</a>
         </div>
       </header>
-      <main class="mdl-layout__content">
-        <footer>
-            <div id="footer-inside">
-              POC ChatBot for VISEO
+
+      <div id="chatbox">
+        <ol class="chat">
+          <li class="other">
+            <div class="msg tri-right talk-bubble round left-in">
+              <p>Salut salut, t'as deux minutes ?</p>
+              <time>20:17</time>
             </div>
-        </footer>
-      </main>
+          </li>
+          <li class="self">
+            <div class="msg tri-right talk-bubble round right-in">
+              <p>Oui bien sur.</p>
+              <time>20:18</time>
+            </div>
+          </li>
+        </ol>
+        <div id="bottom-area">
+          <input id="submit-button" type="button" value="Envoyer" />
+          <div id="textarea-container">
+              <input class="textarea" type="text" placeholder="Tapez ici votre message"/>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script>
