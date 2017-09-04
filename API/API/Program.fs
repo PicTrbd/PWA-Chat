@@ -1,7 +1,10 @@
-﻿// Learn more about F# at http://fsharp.org
-// See the 'F# Tutorial' project for more help.
+﻿open Api.Model
+open Suave.Web
+open Api.Controller
+open MessageController
+open MessageRepositoryDb
 
 [<EntryPoint>]
-let main argv = 
-    printfn "%A" argv
-    0 // return an integer exit code
+let main argv =
+  startWebServer defaultConfig (messageController messageRepositoryDb)
+  0

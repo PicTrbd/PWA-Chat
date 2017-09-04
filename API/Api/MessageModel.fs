@@ -1,4 +1,4 @@
-﻿namespace API.MessageModel
+﻿namespace Api.Model
 
 open System
 open System.Collections.Concurrent
@@ -22,11 +22,16 @@ module MessageRepositoryDb =
     let private messages = new ConcurrentDictionary<Guid, Message>()
 
     let add msg = 
-        let msgCopy = { msg with Id = Guid.NewGuid() }
+        let msgCopy = { msg with Id = Guid.NewGuid(); Date = DateTime.UtcNow.ToUniversalTime()}
         if messages.TryAdd(msgCopy.Id, msgCopy) then
-            Some(msgCopy)
+            Some msgCopy
         else
             None
 
     let getAll () = 
         messages.Values |> Seq.cast
+
+    let messageRepositoryDb = {
+        Add = add
+        GetAll = getAll
+    }
