@@ -8,7 +8,7 @@
 
     <meta name="msapplication-tap-highlight" content="no">
 
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/manifest.json">
 
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="PWA - Chat">
@@ -33,11 +33,4 @@
     </noscript>
     <div id="root"></div>
   </body>
-  <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/service-worker.js');
-        });
-      }
-    </script>
 </html>
