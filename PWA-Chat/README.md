@@ -1,1 +1,0 @@
-This is a POC of a Progressive web app chat.
