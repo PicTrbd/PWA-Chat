@@ -6,4 +6,4 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js');
-  }
+}

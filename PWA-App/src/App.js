@@ -2,6 +2,31 @@ import React, { Component } from 'react';
 import './styles/App.css';
 
 class App extends Component {
+
+  handleFetch = function(path, input) {
+    input.headers = {'Content-Type': 'application/json' }
+    var request = fetch("http://localhost:8080/api/" + path, input)
+      .then(response => {
+        console.log(response);
+        if (response.ok) return response.json();
+       console.log(test);
+      })
+    return request;
+  }
+
+  post = function(path, body) {
+    return this.handleFetch(path, { method: 'post', body: JSON.stringify(body) });
+  };
+
+  sendMessage = function() {
+    var params = 
+    {
+      sender: "Juju lchintok",
+      message: "jé mang du ri"
+    };
+    this.post("message", params);
+  };
+
   render() {
     return (
       <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -30,7 +55,7 @@ class App extends Component {
           </li>
         </ol>
         <div id="bottom-area">
-          <input id="submit-button" type="button" value="Envoyer" />
+          <input id="submit-button" type="button" value="Envoyer" onClick={this.sendMessage.bind(this)}/>
           <div id="textarea-container">
               <input className="textarea" type="text" placeholder="Tapez ici votre message"/>
           </div>
