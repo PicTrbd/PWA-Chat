@@ -1,5 +1,6 @@
 ﻿namespace Api.Controller
 
+open System
 open Suave
 open Newtonsoft.Json
 open Api.Model
@@ -44,6 +45,7 @@ module Controller =
 
 
 module MessageController = 
+    open Suave.RequestErrors
 
     let getAll db =
         warbler (fun _ -> db.GetAll() |> Controller.JSON)
@@ -53,7 +55,8 @@ module MessageController =
         request (Controller.getResourceFromReq >> (Controller.handleResourceBADREQUEST addDb))
 
     let messageController (db:MessageRepository) = 
-        pathStarts "/api/message" >=> choose [
+        pathStarts "/api/" >=> choose [
             POST >=> path "/api/message" >=> (add db)
-            GET >=> path "/api/messages" >=> (getAll db)  
+            GET >=> path "/api/messages" >=> (getAll db)
+            NOT_FOUND "Route not found"
         ]
