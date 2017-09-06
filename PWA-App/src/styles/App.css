@@ -521,3 +521,18 @@ header {
 .mdl-demo .mdl-menu__container {
   z-index: 99;
 }
+
+.bubble-infos {
+  display:inline-block;
+  width:100%;
+}
+
+.bubble-infos .sender {
+  font-weight:bold;
+  margin-right:5px;
+  float:right;
+}
+
+.bubble-infos time {
+  margin-top: 0px !important;
+}

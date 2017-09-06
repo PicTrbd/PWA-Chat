@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 import './styles/App.css';
+import ChatBubbleList from './ChatBubbleList';
+import AddChatBubbleForm from './AddChatBubbleForm'
+import * as guid from 'guid'
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = { messages : [ { sender: "other", message: "salut", id: guid.raw(), date: new Date() } ] };
+  }
 
   componentDidMount() {
     this.retrieveMessages()
@@ -13,8 +21,7 @@ class App extends Component {
       var response = self.get("messages", {}).then((value) => {
         console.log(value)
       })
-    }, 10000)
-  }
+    }, 10000)}
 
   handleFetch = function(path, input) {
     input.headers = {'Content-Type': 'application/json'}
@@ -32,18 +39,16 @@ class App extends Component {
   };
 
   post = function(path, body) {
-    return this.handleFetch(path, { method: 'post', mode: 'no-cors', body: JSON.stringify(body) });
+    return this.handleFetch(path, { method: 'post', mode: 'cors', body: JSON.stringify(body) });
+    this.addChatBubble();
   };
 
-  sendMessage = function() {
-    var params = 
-    {
-      sender: "Paul President",
-      message: this.inputTitle.value
-    };
-    this.post("message", params);
-    this.inputTitle.value = ""
-  };
+  addMessage = function(message) {
+    var newMessages = this.state.messages;
+    newMessages.push(message);
+    this.post("message", message)
+    this.setState({ messages : newMessages });
+   };
 
   render() {
     return (
@@ -59,24 +64,10 @@ class App extends Component {
 
       <div id="chatbox">
         <ol className="chat">
-          <li className="other">
-            <div className="msg tri-right talk-bubble round left-in">
-              <p>Salut salut, t'as deux minutes ?</p>
-              <time>20:17</time>
-            </div>
-          </li>
-          <li className="self">
-            <div className="msg tri-right talk-bubble round right-in">
-              <p>Oui bien sur.</p>
-              <time>20:18</time>
-            </div>
-          </li>
+          <ChatBubbleList messages={this.state.messages} />
         </ol>
         <div id="bottom-area">
-          <input id="submit-button" type="button" value="Envoyer" onClick={this.sendMessage.bind(this)}/>
-          <div id="textarea-container">
-              <input className="textarea" ref={el => this.inputTitle = el} type="text" placeholder="Tapez ici votre message"/>
-          </div>
+          <AddChatBubbleForm addMessage={this.addMessage.bind(this)}/>
         </div>
       </div>
     </div>
