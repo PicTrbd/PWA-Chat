@@ -11,38 +11,44 @@ class App extends Component {
     this.state = { messages : [ { sender: "other", message: "salut", id: guid.raw(), date: new Date() } ] };
   }
 
+  componentDidMount() {
+    this.retrieveMessages()
+  }
+
+  retrieveMessages = function () {
+    var self = this;
+    setInterval(function(){
+      var response = self.get("messages", {}).then((value) => {
+        console.log(value)
+      })
+    }, 10000)}
+
   handleFetch = function(path, input) {
-    input.headers = {'Content-Type': 'application/json' }
+    input.headers = {'Content-Type': 'application/json'}
     var request = fetch("http://localhost:8080/api/" + path, input)
       .then(response => {
         console.log(response);
-        if (response.ok) return response.json();
-       console.log(test);
-      })
+        if (response.status === 200)
+          return response.json();        
+        })
     return request;
   }
 
+  get = function(path, body) {
+    return this.handleFetch(path, { method: 'get', mode: 'cors'});
+  };
+
   post = function(path, body) {
+    return this.handleFetch(path, { method: 'post', mode: 'cors', body: JSON.stringify(body) });
     this.addChatBubble();
-    //return this.handleFetch(path, { method: 'post', body: JSON.stringify(body) });
   };
 
   addMessage = function(message) {
     var newMessages = this.state.messages;
     newMessages.push(message);
+    this.post("message", message)
     this.setState({ messages : newMessages });
    };
-
-  sendMessage = function() {
-    var params = 
-    {
-      sender: "Other",
-      message: "Test message",
-      id: guid.raw(),
-      date: new Date()
-    };
-    this.post("message", params);
-  };
 
   render() {
     return (
