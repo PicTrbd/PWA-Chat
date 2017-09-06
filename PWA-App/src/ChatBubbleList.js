@@ -31,7 +31,10 @@ class ChatBubbleList extends Component {
                     <li className="other">
                       <div className="msg tri-right talk-bubble round left-in">
                         <p>{message.message}</p>
-                        <time>{this.getFormattedTimeFromDate(message.date)}</time>
+                        <div className="bubble-infos">
+                          <time>{this.getFormattedTimeFromDate(message.date)}</time>
+                          <p className="sender">{message.sender}</p>
+                        </div>
                       </div>
                     </li>
                   </div>
