@@ -3,28 +3,46 @@ import './styles/App.css';
 
 class App extends Component {
 
+  componentDidMount() {
+    this.retrieveMessages()
+  }
+
+  retrieveMessages = function () {
+    var self = this;
+    setInterval(function(){
+      var response = self.get("messages", {}).then((value) => {
+        console.log(value)
+      })
+    }, 10000)
+  }
+
   handleFetch = function(path, input) {
-    input.headers = {'Content-Type': 'application/json' }
+    input.headers = {'Content-Type': 'application/json'}
     var request = fetch("http://localhost:8080/api/" + path, input)
       .then(response => {
         console.log(response);
-        if (response.ok) return response.json();
-       console.log(test);
-      })
+        if (response.status === 200)
+          return response.json();        
+        })
     return request;
   }
 
+  get = function(path, body) {
+    return this.handleFetch(path, { method: 'get', mode: 'cors'});
+  };
+
   post = function(path, body) {
-    return this.handleFetch(path, { method: 'post', body: JSON.stringify(body) });
+    return this.handleFetch(path, { method: 'post', mode: 'no-cors', body: JSON.stringify(body) });
   };
 
   sendMessage = function() {
     var params = 
     {
-      sender: "Juju lchintok",
-      message: "jé mang du ri"
+      sender: "Paul President",
+      message: this.inputTitle.value
     };
     this.post("message", params);
+    this.inputTitle.value = ""
   };
 
   render() {
@@ -57,7 +75,7 @@ class App extends Component {
         <div id="bottom-area">
           <input id="submit-button" type="button" value="Envoyer" onClick={this.sendMessage.bind(this)}/>
           <div id="textarea-container">
-              <input className="textarea" type="text" placeholder="Tapez ici votre message"/>
+              <input className="textarea" ref={el => this.inputTitle = el} type="text" placeholder="Tapez ici votre message"/>
           </div>
         </div>
       </div>

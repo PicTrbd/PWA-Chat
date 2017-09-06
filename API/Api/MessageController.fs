@@ -42,10 +42,13 @@ module Controller =
     let handleResourceCONFLICT = 
         (fun f -> handleResource f (RequestErrors.CONFLICT "Resource already exists"))
 
-
+    
 
 module MessageController = 
     open Suave.RequestErrors
+    open Suave.CORS
+    open Suave.Writers
+    open Suave.Successful
 
     let getAll db =
         warbler (fun _ -> db.GetAll() |> Controller.JSON)
@@ -54,9 +57,15 @@ module MessageController =
         let addDb = db.Add >> (Controller.handleResourceCONFLICT Controller.JSON)
         request (Controller.getResourceFromReq >> (Controller.handleResourceBADREQUEST addDb))
 
+
+    let setCORSHeaders =
+        addHeader  "Access-Control-Allow-Origin" "*" 
+        >=> addHeader "Access-Control-Allow-Headers" "*" 
+        >=> addHeader "Access-Control-Allow-Methods" "GET,POST,PUT"
+
     let messageController (db:MessageRepository) = 
-        pathStarts "/api/" >=> choose [
-            POST >=> path "/api/message" >=> (add db)
-            GET >=> path "/api/messages" >=> (getAll db)
+        pathStarts "/api" >=> choose [ 
+            POST >=> setCORSHeaders >=> path "/api/message" >=> (add db)
+            GET >=> setCORSHeaders >=> path "/api/messages" >=> (getAll db)
             NOT_FOUND "Route not found"
         ]
