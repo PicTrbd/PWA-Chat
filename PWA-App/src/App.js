@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import './styles/App.css';
 import ChatBubbleList from './ChatBubbleList';
 import AddChatBubbleForm from './AddChatBubbleForm'
+import * as guid from 'guid'
 
 class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { messages : { } };
+    this.state = { messages : [ { sender: "other", message: "salut", id: guid.raw(), date: new Date() } ] };
   }
 
   handleFetch = function(path, input) {
@@ -27,17 +28,18 @@ class App extends Component {
   };
 
   addMessage = function(message) {
-    var timestamp = (new Date()).getTime();
     var newMessages = this.state.messages;
-    newMessages['message-' + timestamp] = message;
+    newMessages.push(message);
     this.setState({ messages : newMessages });
    };
 
   sendMessage = function() {
     var params = 
     {
-      sender: "Juju",
-      message: "jé mang du ri"
+      sender: "Other",
+      message: "Test message",
+      id: guid.raw(),
+      date: new Date()
     };
     this.post("message", params);
   };

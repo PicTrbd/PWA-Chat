@@ -1,14 +1,22 @@
 import React, { Component } from 'react';
 import './styles/App.css';
+import * as guid from 'guid'
 
 class AddChatBubbleForm extends Component {
     
     createMessage(e) {
         e.preventDefault();
-        var message = this.refs.bubbleText.value;
-        if(typeof message === 'string' && message.length > 0) {
-        this.props.addMessage(message);
-        this.refs.chatBubbleForm.reset();
+        var newMessage = 
+        {
+            message: this.refs.bubbleText.value,
+            sender: "self",
+            id: guid.raw(),
+            date: new Date()
+        };
+
+        if(typeof newMessage.message === 'string' && newMessage.message.length > 0) {
+            this.props.addMessage(newMessage);
+            this.refs.chatBubbleForm.reset();
         }
     }
 
