@@ -29,7 +29,7 @@ module MessageRepositoryDb =
             None
 
     let getAll () = 
-        messages.Values |> Seq.cast
+        messages.Values |> Seq.sortBy (fun elem -> elem.Date) |> Seq.cast
 
     let messageRepositoryDb = {
         Add = add

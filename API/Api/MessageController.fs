@@ -1,12 +1,18 @@
 ﻿namespace Api.Controller
 
-open System
+open Suave.RequestErrors
+open Suave.Writers
+open Suave.Successful
 open Suave
+open Suave.WebSocket
+open Suave.Sockets
+open Suave.Sockets.Control
 open Newtonsoft.Json
 open Api.Model
 open Suave.Filters
 open Suave.Operators
 open Newtonsoft.Json.Serialization
+open Suave.Sockets.Control.SocketMonad
 
 module Controller = 
 
@@ -45,10 +51,6 @@ module Controller =
     
 
 module MessageController = 
-    open Suave.RequestErrors
-    open Suave.CORS
-    open Suave.Writers
-    open Suave.Successful
 
     let getAll db =
         warbler (fun _ -> db.GetAll() |> Controller.JSON)
@@ -56,6 +58,27 @@ module MessageController =
     let add db =
         let addDb = db.Add >> (Controller.handleResourceCONFLICT Controller.JSON)
         request (Controller.getResourceFromReq >> (Controller.handleResourceBADREQUEST addDb))
+    
+    //let handleSocket Text data webSocket =
+    //    let str = UTF8.toString data
+    //    let response = sprintf "response to %s" str
+    //    let byteResponse = 
+    //        reponse 
+    //        |> System.Text.Encoding.ASCII.GetBytes 
+    //        |> ByteSegment
+    //    do! webSocket.send text byteResponse true
+
+    //let initWebSocket (webSocket : WebSocket) (context: HttpContext) = 
+    //    socket {
+    //        let mutable loop = true
+            
+    //        while loop do 
+    //            let! msg = webSocket.read()
+
+    //            match msg with 
+    //            | (Text, data, true) -> handleSocket Text data webSocket
+            
+    //    }
 
 
     let setCORSHeaders =
