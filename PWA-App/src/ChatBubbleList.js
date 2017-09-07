@@ -3,7 +3,8 @@ import './styles/App.css';
 
 class ChatBubbleList extends Component {
 
-  getFormattedTimeFromDate(date) {
+  getFormattedTimeFromDate(dateStr) {
+      var date = new Date(dateStr);
       var timeStr = date.getHours() + ":" + (date.getMinutes()<10?'0':'') + date.getMinutes();
       return timeStr;
   }

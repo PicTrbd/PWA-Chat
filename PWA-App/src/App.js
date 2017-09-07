@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import './styles/App.css';
 import ChatBubbleList from './ChatBubbleList';
 import AddChatBubbleForm from './AddChatBubbleForm'
-import * as guid from 'guid'
 
 class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { messages : [ { sender: "other", message: "salut", id: guid.raw(), date: new Date() } ] };
+    this.state = { messages : [ ] };
   }
 
   componentDidMount() {
@@ -16,12 +15,13 @@ class App extends Component {
   }
 
   retrieveMessages = function () {
-    var self = this;
-    setInterval(function(){
-      var response = self.get("messages", {}).then((value) => {
-        console.log(value)
+    setInterval(function() {
+      this.get("messages", {})
+      .then((value) => {
+        this.setState({ messages: value});
       })
-    }, 10000)}
+    }.bind(this), 1000)
+  }
 
   handleFetch = function(path, input) {
     input.headers = {'Content-Type': 'application/json'}
@@ -40,14 +40,14 @@ class App extends Component {
 
   post = function(path, body) {
     return this.handleFetch(path, { method: 'post', mode: 'cors', body: JSON.stringify(body) });
-    this.addChatBubble();
   };
 
   addMessage = function(message) {
     var newMessages = this.state.messages;
     newMessages.push(message);
-    this.post("message", message)
-    this.setState({ messages : newMessages });
+    this.post("message", message).then(() => {
+      this.setState({ messages : newMessages });      
+    });
    };
 
   render() {
