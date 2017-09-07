@@ -9,7 +9,7 @@ class AddChatBubbleForm extends Component {
         var newMessage = 
         {
             message: this.refs.bubbleText.value,
-            sender: "self",
+            sender: this.props.userId,
             id: guid.raw(),
             date: new Date()
         };

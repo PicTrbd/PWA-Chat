@@ -14,7 +14,7 @@ class ChatBubbleList extends Component {
       <div className="container">
           {
             this.props.messages.map(function(message) {
-              if (message.sender === "self") {
+              if (message.sender === this.props.userId) {
                 return (
                   <div key={message.id}>
                     <li className="self">
@@ -34,7 +34,7 @@ class ChatBubbleList extends Component {
                         <p>{message.message}</p>
                         <div className="bubble-infos">
                           <time>{this.getFormattedTimeFromDate(message.date)}</time>
-                          <p className="sender">{message.sender}</p>
+                          <p className="sender">{'#' + message.sender.substr(0, 8)}</p>
                         </div>
                       </div>
                     </li>

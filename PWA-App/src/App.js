@@ -1,16 +1,27 @@
 import React, { Component } from 'react';
 import './styles/App.css';
 import ChatBubbleList from './ChatBubbleList';
-import AddChatBubbleForm from './AddChatBubbleForm'
+import AddChatBubbleForm from './AddChatBubbleForm';
+import Cookies from 'universal-cookie';
+import guid from 'guid';
 
 class App extends Component {
 
-  constructor(props) {
+  constructor(props)
+  {
     super(props);
-    this.state = { messages : [ ] };
+    this.state = { messages : [ ], userId : "" };    
   }
 
   componentDidMount() {
+    var cookies = new Cookies();
+    var pwaUserId = cookies.get('pwa-user');
+    if (pwaUserId === undefined)
+    {
+      pwaUserId = guid.raw();
+      cookies.set('pwa-user', pwaUserId, { path: '/' });
+    }
+    this.state = { messages : [ ], userId : pwaUserId };
     this.retrieveMessages()
   }
 
@@ -64,10 +75,10 @@ class App extends Component {
 
       <div id="chatbox">
         <ol className="chat">
-          <ChatBubbleList messages={this.state.messages} />
+          <ChatBubbleList messages={this.state.messages} userId={this.state.userId}/>
         </ol>
         <div id="bottom-area">
-          <AddChatBubbleForm addMessage={this.addMessage.bind(this)}/>
+          <AddChatBubbleForm addMessage={this.addMessage.bind(this)} userId={this.state.userId}/>
         </div>
       </div>
     </div>
