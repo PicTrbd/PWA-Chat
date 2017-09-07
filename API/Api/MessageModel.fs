@@ -6,8 +6,8 @@ open System.Collections.Concurrent
 
 type Message = {
     Id: Guid
+    Sender: Guid 
     Date: DateTime
-    Sender: string 
     Message: string
 }
 
