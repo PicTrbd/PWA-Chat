@@ -51,35 +51,39 @@ module Controller =
     
 
 module MessageController = 
+    open System.Text
 
     let getAll db =
         warbler (fun _ -> db.GetAll() |> Controller.JSON)
 
     let add db =
         let addDb = db.Add >> (Controller.handleResourceCONFLICT Controller.JSON)
-        request (Controller.getResourceFromReq >> (Controller.handleResourceBADREQUEST addDb))
-    
-    //let handleSocket Text data webSocket =
-    //    let str = UTF8.toString data
-    //    let response = sprintf "response to %s" str
-    //    let byteResponse = 
-    //        reponse 
-    //        |> System.Text.Encoding.ASCII.GetBytes 
-    //        |> ByteSegment
-    //    do! webSocket.send text byteResponse true
+        request (Controller.getResourceFromReq >> (Controller.handleResourceBADREQUEST addDb))        
 
-    //let initWebSocket (webSocket : WebSocket) (context: HttpContext) = 
-    //    socket {
-    //        let mutable loop = true
+    let initWebSocket (webSocket: WebSocket) (context: HttpContext) = 
+        socket {
+            let mutable loop = true
             
-    //        while loop do 
-    //            let! msg = webSocket.read()
+            while loop do 
+                let! msg = webSocket.read()
 
-    //            match msg with 
-    //            | (Text, data, true) -> handleSocket Text data webSocket
-            
-    //    }
-
+                match msg with 
+                | (Text, data, true) ->
+                    let str = UTF8Encoding.UTF8.GetString data
+                    let response = sprintf "response to %s" str
+                    let byteResponse = 
+                        response 
+                        |> System.Text.Encoding.ASCII.GetBytes 
+                        |> ByteSegment
+                    do! webSocket.send Text byteResponse true
+                
+                | (Close, _, _) ->
+                    let emptyResponse = [||] |> ByteSegment
+                    do! webSocket.send Close emptyResponse true
+                    loop <- false
+                
+                | _ -> ()       
+        }
 
     let setCORSHeaders =
         addHeader  "Access-Control-Allow-Origin" "*" 
@@ -88,6 +92,7 @@ module MessageController =
 
     let messageController (db:MessageRepository) = 
         pathStarts "/api" >=> choose [ 
+            path "/api/webSocket" >=> handShake initWebSocket
             POST >=> setCORSHeaders >=> path "/api/message" >=> (add db)
             GET >=> setCORSHeaders >=> path "/api/messages" >=> (getAll db)
             NOT_FOUND "Route not found"
