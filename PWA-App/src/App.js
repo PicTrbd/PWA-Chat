@@ -72,7 +72,6 @@ class App extends Component {
           <a className="mdl-layout__tab isActive">PWA - Chat</a>
         </div>
       </header>
-
       <div id="chatbox">
         <ol className="chat">
           <ChatBubbleList messages={this.state.messages} userId={this.state.userId}/>
