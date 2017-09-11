@@ -13,7 +13,7 @@ class AddChatBubbleForm extends Component {
             id: guid.raw(),
             date: new Date()
         };
-
+        console.log(this.props);                
         if(typeof newMessage.message === 'string' && newMessage.message.length > 0) {
             this.props.addMessage(newMessage);
             this.refs.chatBubbleForm.reset();
