@@ -28,7 +28,6 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
     console.log('Service Worker and Push is supported');
     navigator.serviceWorker.register('sw.js')
     .then(function(swReg) {
-      console.log('Service Worker is registered', swReg);
       swRegistration = swReg;
       initialiseUI();
     })
@@ -50,16 +49,6 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
     swRegistration.pushManager.getSubscription()
     .then(function(subscription) {
       isSubscribed = !(subscription === null);
-  
-      updateSubscriptionOnServer(subscription);
-  
-      if (isSubscribed) {
-        console.log('User IS subscribed.');
-      } else {
-        console.log('User is NOT subscribed.');
-      }
-  
-      isPermissionRefused();
     });
   }
 }
@@ -71,17 +60,10 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
       applicationServerKey: applicationServerKey
     })
     .then(function(subscription) {
-      console.log('User is subscribed.');
-  
-      updateSubscriptionOnServer(subscription);
-  
       isSubscribed = true;
-  
-      isPermissionRefused();
     })
     .catch(function(err) {
       console.log('Failed to subscribe the user: ', err);
-      isPermissionRefused();
     });
   }
   
@@ -96,25 +78,6 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
       console.log('Error unsubscribing', error);
     })
     .then(function() {
-      updateSubscriptionOnServer(null);
-      console.log('User is unsubscribed.');
       isSubscribed = false;
-      isPermissionRefused();
     });
   }
-  
-  function isPermissionRefused() {
-    if (Notification.permission === 'denied') {
-        console.log("permission denied");
-        updateSubscriptionOnServer(null);
-        return;
-    }
-  }
-  
-  function updateSubscriptionOnServer(subscription) {
-    // send the subscription to the serv
-    if (subscription)
-        console.log("subscription");
-    else
-        console.log("no subscription");
-    }
