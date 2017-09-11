@@ -38,7 +38,6 @@ class App extends Component {
     input.headers = {'Content-Type': 'application/json'}
     var request = fetch("http://localhost:8080/api/" + path, input)
       .then(response => {
-        console.log(response);
         if (response.status === 200)
           return response.json();        
         })
