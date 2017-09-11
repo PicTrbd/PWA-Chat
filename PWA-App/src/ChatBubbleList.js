@@ -14,13 +14,13 @@ class ChatBubbleList extends Component {
       <div className="container">
           {
             this.props.messages.map(function(message) {
-              if (message.sender === this.props.userId) {
+              if (message.UserId === this.props.userId) {
                 return (
-                  <div key={message.id}>
+                  <div key={message.Id}>
                     <li className="self">
                       <div className="msg tri-right talk-bubble round right-in">
-                        <p>{message.message}</p>
-                        <time>{this.getFormattedTimeFromDate(message.date)}</time>
+                        <p>{message.Message}</p>
+                        <time>{this.getFormattedTimeFromDate(message.Date)}</time>
                       </div>
                     </li>
                   </div>
@@ -28,13 +28,13 @@ class ChatBubbleList extends Component {
               }
               else {
                 return (
-                  <div key={message.id}>
+                  <div key={message.Id}>
                     <li className="other">
                       <div className="msg tri-right talk-bubble round left-in">
-                        <p>{message.message}</p>
+                        <p>{message.Message}</p>
                         <div className="bubble-infos">
-                          <time>{this.getFormattedTimeFromDate(message.date)}</time>
-                          <p className="sender">{'#' + message.sender.substr(0, 8)}</p>
+                          <time>{this.getFormattedTimeFromDate(message.Date)}</time>
+                          <p className="sender">{'#' + message.UserId.substr(0, 8)}</p>
                         </div>
                       </div>
                     </li>

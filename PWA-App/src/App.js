@@ -16,17 +16,17 @@ class App extends Component {
     this.connection = hubConnection();
     this.connection.url = 'http://localhost:8080/chat'
     this.hubProxy = this.connection.createHubProxy('chatHub');
-    console.log(this.connection);
     this.hubProxy.on('addMessage', function(json) {
-      console.log(json);
-    });
+      var newMessage = JSON.parse(json);
+      var messageList = this.state.messages;
+      messageList.push(newMessage);
+      this.setState({messages: messageList});
+    }.bind(this));
     
     this.connection.start()
     .done(function()
     { 
       console.log('Now connected, connection ID=' + this.connection.id);
-      console.log(this.hubProxy)
-      this.hubProxy.invoke('sendmessage', "Coucou")
     }.bind(this))
     .fail(function(){ console.log('Could not connect'); });
   }
@@ -40,7 +40,6 @@ class App extends Component {
       cookies.set('pwa-user', pwaUserId, { path: '/' });
     }
     this.setState({userId : pwaUserId });
-    console.log(this.state);    
   }
 
   handleFetch = function(path, input) {
@@ -54,8 +53,6 @@ class App extends Component {
   }
 
   addMessage = function(message) {
-    var newMessages = this.state.messages;
-    newMessages.push(message);
     this.hubProxy.invoke('sendmessage', JSON.stringify(message))
     .done(function(){ console.log('Sent')})
     .fail(function(){ console.log('Fail to send')})
