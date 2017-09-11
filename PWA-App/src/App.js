@@ -4,13 +4,25 @@ import ChatBubbleList from './ChatBubbleList';
 import AddChatBubbleForm from './AddChatBubbleForm';
 import Cookies from 'universal-cookie';
 import guid from 'guid';
+import { hubConnection } from 'signalr-no-jquery';
 
 class App extends Component {
 
   constructor(props)
   {
     super(props);
-    this.state = { messages : [ ], userId : "" };    
+    this.state = { messages : [ ], userId : "" };
+
+    /*var connection = hubConnection('http://localhost:3000');
+    var hubProxy = connection.createHubProxy('pwaChatHub');
+    console.log(connection);
+    hubProxy.on('addmessage', function(json) {
+      console.log(json);
+    });
+    
+    connection.start()
+    .done(function(){ console.log('Now connected, connection ID=' + connection.id); })
+    .fail(function(){ console.log('Could not connect'); });*/
   }
 
   componentDidMount() {
