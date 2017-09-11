@@ -39,18 +39,8 @@ class App extends Component {
       pwaUserId = guid.raw();
       cookies.set('pwa-user', pwaUserId, { path: '/' });
     }
-    this.state = { messages : [ ], userId : pwaUserId };
+    this.setState({userId : pwaUserId });
     console.log(this.state);    
-    //this.retrieveMessages()
-  }
-
-  retrieveMessages = function () {
-    setInterval(function() {
-      this.get("messages", {})
-      .then((value) => {
-        this.setState({ messages: value});
-      })
-    }.bind(this), 1000)
   }
 
   handleFetch = function(path, input) {
@@ -63,25 +53,12 @@ class App extends Component {
     return request;
   }
 
-  get = function(path, body) {
-    return this.handleFetch(path, { method: 'get', mode: 'cors'});
-  };
-
-  post = function(path, body) {
-    return this.handleFetch(path, { method: 'post', mode: 'cors', body: JSON.stringify(body) });
-  };
-
   addMessage = function(message) {
     var newMessages = this.state.messages;
     newMessages.push(message);
-    console.log(message)
     this.hubProxy.invoke('sendmessage', JSON.stringify(message))
     .done(function(){ console.log('Sent')})
     .fail(function(){ console.log('Fail to send')})
-
-    // this.post("message", message).then(() => {
-    //   this.setState({ messages : newMessages });      
-    // });
    };
 
   render() {
