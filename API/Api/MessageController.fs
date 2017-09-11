@@ -4,15 +4,11 @@ open Suave.RequestErrors
 open Suave.Writers
 open Suave.Successful
 open Suave
-open Suave.WebSocket
-open Suave.Sockets
-open Suave.Sockets.Control
 open Newtonsoft.Json
 open Api.Model
 open Suave.Filters
 open Suave.Operators
 open Newtonsoft.Json.Serialization
-open Suave.Sockets.Control.SocketMonad
 
 module Controller = 
 
@@ -58,32 +54,7 @@ module MessageController =
 
     let add db =
         let addDb = db.Add >> (Controller.handleResourceCONFLICT Controller.JSON)
-        request (Controller.getResourceFromReq >> (Controller.handleResourceBADREQUEST addDb))        
-
-    let initWebSocket (webSocket: WebSocket) (context: HttpContext) = 
-        socket {
-            let mutable loop = true
-            
-            while loop do 
-                let! msg = webSocket.read()
-
-                match msg with 
-                | (Text, data, true) ->
-                    let str = UTF8Encoding.UTF8.GetString data
-                    let response = sprintf "response to %s" str
-                    let byteResponse = 
-                        response 
-                        |> System.Text.Encoding.ASCII.GetBytes 
-                        |> ByteSegment
-                    do! webSocket.send Text byteResponse true
-                
-                | (Close, _, _) ->
-                    let emptyResponse = [||] |> ByteSegment
-                    do! webSocket.send Close emptyResponse true
-                    loop <- false
-                
-                | _ -> ()       
-        }
+        request (Controller.getResourceFromReq >> (Controller.handleResourceBADREQUEST addDb))            
 
     let setCORSHeaders =
         addHeader  "Access-Control-Allow-Origin" "*" 
@@ -92,7 +63,6 @@ module MessageController =
 
     let messageController (db:MessageRepository) = 
         pathStarts "/api" >=> choose [ 
-            path "/api/webSocket" >=> handShake initWebSocket
             POST >=> setCORSHeaders >=> path "/api/message" >=> (add db)
             GET >=> setCORSHeaders >=> path "/api/messages" >=> (getAll db)
             NOT_FOUND "Route not found"
