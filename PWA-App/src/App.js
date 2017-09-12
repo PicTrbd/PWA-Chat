@@ -5,13 +5,14 @@ import ChatBubbleList from './ChatBubbleList';
 import AddChatBubbleForm from './AddChatBubbleForm';
 import Cookies from 'universal-cookie';
 import guid from 'guid';
+import { slide as Menu } from 'react-burger-menu'
 
 class App extends Component {
 
   constructor(props)
   {
     super(props);
-    this.state = { messages : [ ], userId : "" };
+    this.state = { messages : [ ], userId : "", users : [] };
   }
 
   componentDidMount() {
@@ -22,7 +23,9 @@ class App extends Component {
       pwaUserId = guid.raw();
       cookies.set('pwa-user', pwaUserId, { path: '/' });
     }
-    this.setState({ messages: [ ], userId : pwaUserId });
+    var userList = this.state.users;
+    userList.push(pwaUserId.substring(0, 8));
+    this.setState({ messages: [ ], userId : pwaUserId, users : userList });
 
     this.socketManager = new WebSocketManager();
     this.socketManager.initialize('http://localhost:8080/chat', 'chatHub', pwaUserId);
@@ -47,6 +50,14 @@ class App extends Component {
           <a className="mdl-layout__tab isActive">PWA - Chat</a>
         </div>
       </header>
+      <Menu right>
+        <span className="user-menu-title">Utilisateurs</span>
+        {
+          this.state.users.map(function(user) {
+            return (<span className="menu-item">{user}</span>);
+          })
+        }
+      </Menu>
       <div id="chatbox">
         <ol className="chat">
           <ChatBubbleList messages={this.state.messages} userId={this.state.userId}/>
