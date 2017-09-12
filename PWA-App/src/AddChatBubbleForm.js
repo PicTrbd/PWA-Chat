@@ -14,7 +14,7 @@ class AddChatBubbleForm extends Component {
             Date: new Date()
         };
         if(typeof newMessage.Message === 'string' && newMessage.Message.length > 0) {
-            this.props.addMessage(newMessage);
+            this.props.sendMessage(newMessage);
             this.refs.chatBubbleForm.reset();
         }
     }
