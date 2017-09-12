@@ -536,3 +536,72 @@ header {
 .bubble-infos time {
   margin-top: 0px !important;
 }
+
+/* Position and sizing of burger button */
+.bm-burger-button {
+  position: relative;
+  float: right;
+  width: 36px;
+  height: 36px;
+  right: 10px;
+  top: -50px;
+  background-image: url("../images/icon-user.png");
+}
+
+/* Color/shape of burger icon bars */
+.bm-burger-bars {
+  background: #373a47;
+  display:none;
+}
+
+.bm-menu-wrap {
+  width:200px !important;
+}
+
+/* Position and sizing of clickable cross button */
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+}
+
+/* Color/shape of close button cross */
+.bm-cross {
+  background: #bdc3c7;
+}
+
+/* General sidebar styles */
+.bm-menu {
+  background: #373a47;
+  padding: 2.5em 1.5em 0;
+  font-size: 1.15em;
+  overflow: hidden !important;  
+}
+
+/* Morph shape necessary with bubble or elastic */
+.bm-morph-shape {
+  fill: #373a47;
+}
+
+/* Wrapper for item list */
+.bm-item-list {
+  color: #b8b7ad;
+  padding: 0.8em;
+}
+
+/* Styling of overlay */
+.bm-overlay {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.menu-item {
+  line-height:25px;
+}
+
+.user-menu-title {
+  font-size:22px;
+  margin-bottom:20px;
+  width:100%;
+  text-align:center;
+  border-bottom:2px solid black;
+  padding-bottom: 10px;
+}
