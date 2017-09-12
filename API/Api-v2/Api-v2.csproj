@@ -76,7 +76,8 @@
     <Compile Include="ChatController.cs" />
     <Compile Include="ChatHub.cs" />
     <Compile Include="Dependencies.cs" />
-    <Compile Include="MessageModel.cs" />
+    <Compile Include="Models\MessageModel.cs" />
+    <Compile Include="Models\RoomModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -6,7 +6,7 @@ class WebSocketManager {
         this.connection = hubConnection();
         this.connection.url = url;
         this.hubProxy = this.connection.createHubProxy(hubName);
-        this.connection.qs = userId;
+        this.connection.qs = 'id='.concat(userId);
     }
 
     addMessage = function(json) {
@@ -17,7 +17,7 @@ class WebSocketManager {
       }
 
     startConnection() {
-        this.connection.start()
+        this.connection.start({transport: 'webSockets'})
         .done(function() { console.log('Now connected with ID : ' + this.connection.id)}.bind(this))
         .fail(function() { console.log('Could not connect')});
     }
