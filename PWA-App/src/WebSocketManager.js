@@ -9,15 +9,18 @@ class WebSocketManager {
         this.connection.qs = 'id='.concat(userId);
     }
 
-    addMessage = function(json) {
-        var newMessage = JSON.parse(json);
+    addMessage = function(newMessage) {
         var messageList = this.state.messages;
         messageList.push(newMessage);
         this.setState({messages: messageList});
-      }
+    }
+
+    getRoomDetails = function(roomDetails) {
+        this.setState({ currentRoom: roomDetails })
+    }
 
     startConnection() {
-        this.connection.start({transport: 'webSockets'})
+        this.connection.start()
         .done(function() { console.log('Now connected with ID : ' + this.connection.id)}.bind(this))
         .fail(function() { console.log('Could not connect')});
     }

@@ -12,7 +12,7 @@ class App extends Component {
   constructor(props)
   {
     super(props);
-    this.state = { messages : [ ], userId : "", users : [] };
+    this.state = { messages : [ ], userId : "", users : [], currentRoom: {} };
   }
 
   componentDidMount() {
@@ -25,16 +25,19 @@ class App extends Component {
     }
     var userList = this.state.users;
     userList.push(pwaUserId.substring(0, 8));
-    this.setState({ messages: [ ], userId : pwaUserId, users : userList });
+    this.setState({ messages: [ ], userId : pwaUserId, users : userList, currentRoom: {} });
 
     this.socketManager = new WebSocketManager();
     this.socketManager.initialize('http://localhost:8080/chat', 'chatHub', pwaUserId);
-    this.socketManager.hubProxy.on('addMessage', this.socketManager.addMessage.bind(this))
+    this.socketManager.hubProxy.on('addMessage', this.socketManager.addMessage.bind(this));
+    this.socketManager.hubProxy.on('GetRoomDetails', this.socketManager.getRoomDetails.bind(this));
     this.socketManager.startConnection();
   }
 
   sendMessage = function(message) {
-    this.socketManager.hubProxy.invoke('sendmessage', JSON.stringify(message))
+    console.log(this.state);
+    console.log(this.state.currentRoom.RoomName);
+    this.socketManager.hubProxy.invoke('sendmessage', this.state.currentRoom.RoomName, JSON.stringify(message))
     .done(function(){ console.log('Sent')})
     .fail(function(){ console.log('Fail to send')})
    };
@@ -54,7 +57,7 @@ class App extends Component {
         <span className="user-menu-title">Utilisateurs</span>
         {
           this.state.users.map(function(user) {
-            return (<span className="menu-item">{user}</span>);
+            return (<span key={user} className="menu-item">{user}</span>);
           })
         }
       </Menu>
