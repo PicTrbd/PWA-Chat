@@ -50,9 +50,11 @@ namespace Api_v2
             Clients.Group(newRoom).NewUserJoinTheRoom(userId);
         }
 
-        public void SendMessage(string roomName, MessageModel msg)
+        public void SendMessage(string roomName, string json)
         {
-            var message = _chatController.AddMessageToRoom(roomName, msg);
+            var message = _chatController.JsonToMessageModel(json);
+
+            _chatController.AddMessageToRoom(roomName, message);
 
             Clients.Group(roomName).AddMessage(message);
         }

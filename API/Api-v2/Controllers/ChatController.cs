@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Api_v2.Models;
+using Newtonsoft.Json;
 
 namespace Api_v2.Controllers
 {
@@ -38,13 +39,9 @@ namespace Api_v2.Controllers
             return _rooms.FirstOrDefault(x => x.RoomName == roomName);
         }
 
-        public MessageModel AddMessageToRoom(string room, MessageModel message)
+        public void AddMessageToRoom(string room, MessageModel message)
         {
-            message.Date = DateTime.UtcNow;
-
             GetRoomFromName(room)?.Messages.Add(message);
-
-            return message;
         }
 
         public void AddUserToRoom(string room, Guid userId, string clientId)
@@ -63,6 +60,14 @@ namespace Api_v2.Controllers
         public void FindUserAndRemoveItFromRooms(string clientId)
         {
             _rooms.ForEach(r => r.Users.RemoveWhere(x => x.Item1 == clientId));
+        }
+
+        public MessageModel JsonToMessageModel(string json)
+        {
+            var message = JsonConvert.DeserializeObject<MessageModel>(json);
+            message.Date = DateTime.UtcNow;
+
+            return message;
         }
 
         public void AddRoom(string roomName)

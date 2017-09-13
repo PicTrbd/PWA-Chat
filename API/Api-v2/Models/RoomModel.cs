@@ -9,6 +9,5 @@ namespace Api_v2.Models
         public string RoomName { get; set; }
         public HashSet<Tuple<string, Guid>> Users { get; set; }
         public ConcurrentBag<MessageModel> Messages { get; set; }
-
     }
 }
