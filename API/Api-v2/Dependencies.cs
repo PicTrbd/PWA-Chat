@@ -1,4 +1,6 @@
-﻿namespace Api_v2
+﻿using Api_v2.Controllers;
+
+namespace Api_v2
 {
     public static class Dependencies
     {

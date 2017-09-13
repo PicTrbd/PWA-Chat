@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Api_v2.Controllers;
 using Api_v2.Models;
 using Microsoft.AspNet.SignalR;
 
@@ -13,8 +14,11 @@ namespace Api_v2
         {
             Console.WriteLine("User {0} is connected !", Context.ConnectionId);
 
-            Groups.Add(Context.ConnectionId, "Main");
-            _chatController.AddUserToRoom("Main", Guid.Parse(Context.QueryString["id"]), Context.ConnectionId);
+            const string defaultRoom = "Main";
+
+            Groups.Add(Context.ConnectionId, defaultRoom);
+            _chatController.AddUserToRoom(defaultRoom, Guid.Parse(Context.QueryString["id"]), Context.ConnectionId);
+            Clients.Caller.GetRoomDetails(_chatController.GetRoom(defaultRoom));
 
             return base.OnConnected();
         }

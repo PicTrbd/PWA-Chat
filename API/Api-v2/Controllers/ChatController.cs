@@ -3,9 +3,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Api_v2.Models;
-using Newtonsoft.Json;
 
-namespace Api_v2
+namespace Api_v2.Controllers
 {
     public class ChatController
     {

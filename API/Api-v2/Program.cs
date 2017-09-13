@@ -1,4 +1,5 @@
 ﻿using System;
+using Api_v2.Controllers;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Microsoft.Owin.Cors;
