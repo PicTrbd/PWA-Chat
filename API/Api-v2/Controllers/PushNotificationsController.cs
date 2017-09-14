@@ -27,7 +27,9 @@ namespace Api_v2.Controllers
 
         public void SendNotifications()
         {
-            var vapidDetails = new VapidDetails(
+			var vapidDetails = VapidHelper.GenerateVapidKeys();
+			vapidDetails.Subject = "Test";
+            var vapidDetails2 = new VapidDetails(
                 @"mailto:paulmonnier75@gmail.com",
                 "BJFz_q_sr7R96bNl8-pubhJccjL1e3M9SHWA8xu_hR6wQ04ZqlSMNOkdLvyqaJnKdWPlzNF10-IJDFqPSbIgAkU",
                 "iVCnBFupyQeiU9j2edOMbnilSozKPdtcSg51sy5i_HM");
