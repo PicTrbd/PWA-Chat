@@ -16,13 +16,22 @@ class WebSocketManager {
     }
 
     getRoomDetails = function(roomDetails) {
+        console.log(roomDetails);
         this.setState({ currentRoom: roomDetails })
     }
 
     startConnection() {
         this.connection.start()
-        .done(function() { console.log('Now connected with ID : ' + this.connection.id)}.bind(this))
+        .done(function() { 
+            console.log('Now connected with ID : ' + this.connection.id)
+            this.retrieveMainRoomDetails()
+        }.bind(this))
         .fail(function() { console.log('Could not connect')});
+    }
+
+    retrieveMainRoomDetails() {
+        console.log("Retrive Main Room Details");
+        this.hubProxy.invoke('retrieveRoomDetails', "Main")
     }
 }
 

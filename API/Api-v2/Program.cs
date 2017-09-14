@@ -16,8 +16,10 @@ namespace Api_v2
         static void Main(string[] args)
         {
             Dependencies.ChatController = new ChatController();
+            Dependencies.NotificationsController = new PushNotificationsController();
 
             string url = "http://localhost:8080";
+
             using (WebApp.Start(url))
             {
                 Console.WriteLine("Server running on {0}", url);
@@ -28,12 +30,17 @@ namespace Api_v2
 
     class Startup
     {
-        public void Configuration(IAppBuilder app)
+        public void Configuration(IAppBuilder appBuilder)
         {
-            app.UseCors(CorsOptions.AllowAll);
-            app.MapSignalR("/chat", new HubConfiguration());
+            appBuilder.UseCors(CorsOptions.AllowAll);
+            appBuilder
+                .MapSignalR("/chat", new HubConfiguration())
+                .UseNancy();
         }
     }
+
+
+
 
 
 }

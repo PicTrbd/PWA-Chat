@@ -18,7 +18,6 @@ namespace Api_v2
 
             Groups.Add(Context.ConnectionId, defaultRoom);
             _chatController.AddUserToRoom(defaultRoom, Guid.Parse(Context.QueryString["id"]), Context.ConnectionId);
-            Clients.Caller.GetRoomDetails(_chatController.GetRoom(defaultRoom));
 
             return base.OnConnected();
         }
@@ -30,6 +29,11 @@ namespace Api_v2
             _chatController.FindUserAndRemoveItFromRooms(Context.ConnectionId);
 
             return base.OnDisconnected(stopCalled);
+        }
+
+        public void RetrieveRoomDetails(string name)
+        {
+            Clients.Caller.GetRoomDetails(_chatController.GetRoom(name));
         }
 
         public void CreateRoom(string roomName)
@@ -57,6 +61,8 @@ namespace Api_v2
             _chatController.AddMessageToRoom(roomName, message);
 
             Clients.Group(roomName).AddMessage(message);
+
+            Dependencies.NotificationsController.SendNotifications();
         }
 
         

@@ -61,6 +61,16 @@ self.addEventListener('fetch', event => {
 
 });
 
+self.registration.showNotification('Notre belle Cyntia a rejoint le chat', {
+  body: "Regardez moi ce corp d'Apollon",
+  image: "https://scontent-cdt1-1.xx.fbcdn.net/v/t1.0-9/530211_509034549111205_1866025720_n.jpg?oh=839e8ef32d8a1af3be37412ecf8b6279&oe=5A52885B",
+  icon: 'images/icons/icon-128x128.png'
+});
+
+self.addEventListener('notificationclose', evt => {
+  console.log("Notif has been closed");
+});
+
 self.addEventListener('push', event => {
   const title = "New notification";
   const options = {

@@ -50,7 +50,19 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
     .then(function(subscription) {
       isSubscribed = !(subscription === null);
     });
+    
   }
+}
+
+function handleFetch(path, input) {
+  input.headers = {'Content-Type': 'application/json'}
+  var request = fetch(path, input)
+    .then(response => {
+      console.log(response);
+      if (response.status === 200)
+        return response.json();        
+      })
+  return request;
 }
   
   function subscribeUser() {
@@ -61,6 +73,7 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
     })
     .then(function(subscription) {
       isSubscribed = true;
+      handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(subscription) });
     })
     .catch(function(err) {
       console.log('Failed to subscribe the user: ', err);

@@ -30,7 +30,7 @@ class App extends Component {
     this.socketManager = new WebSocketManager();
     this.socketManager.initialize('http://localhost:8080/chat', 'chatHub', pwaUserId);
     this.socketManager.hubProxy.on('addMessage', this.socketManager.addMessage.bind(this));
-    this.socketManager.hubProxy.on('GetRoomDetails', this.socketManager.getRoomDetails.bind(this));
+    this.socketManager.hubProxy.on('getroomdetails', this.socketManager.getRoomDetails.bind(this));
     this.socketManager.startConnection();
   }
 
