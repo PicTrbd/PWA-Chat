@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "guid": "0.0.12",
     "react": "^15.6.1",
     "react-burger-menu": "^2.1.6",
     "react-dom": "^15.6.1",
-    "react-scripts": "1.0.12"
+    "react-scripts": "1.0.12",
+    "signalr-no-jquery": "^0.1.8",
+    "universal-cookie": "^2.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

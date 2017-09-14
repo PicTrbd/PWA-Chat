@@ -30,7 +30,6 @@ class WebSocketManager {
     }
 
     retrieveMainRoomDetails() {
-        console.log("Retrive Main Room Details");
         this.hubProxy.invoke('retrieveRoomDetails', "Main")
     }
 }
