@@ -9,11 +9,12 @@ namespace Api_v2.Models
     {
         public string RoomName { get; set; }
         public HashSet<Tuple<string, Guid>> Users { get; set; }
+        private ConcurrentBag<MessageModel> _messages;
 
         public ConcurrentBag<MessageModel> Messages
         {
-            get => new ConcurrentBag<MessageModel>(Messages.OrderBy(x => x.Date).ToList());
-            set => Messages = value;
+            get => new ConcurrentBag<MessageModel>(_messages.OrderBy(x => x.Date).ToList());
+            set => _messages = value;
         }
 
 
