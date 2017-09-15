@@ -4,7 +4,7 @@ import App from './App';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
-const applicationServerPublicKey = 'BHN69JJwAFcESj_leQ2PIO8DhCwu5zwgN4kvzHbG9TB9-xMjQzllA-lBIedNrZklhwnQZMb9vLFlf_AUhTmX9nM';
+const applicationServerPublicKey = 'BMiZDeWBmOzC1PVd4FFK5BKFzF36jzlfsOjq4kOLoDfnEgNIuubR1upxNBwgLm5b5c7RAHppSkG9V6ewntGvenw';
 
 let isSubscribed = false;
 let swRegistration = null;
