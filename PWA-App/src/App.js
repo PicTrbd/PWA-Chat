@@ -42,12 +42,12 @@ class App extends Component {
    };
 
    changeChannel(oldChannel, newChannel) {
-    this.socketManager.hubProxy.invoke('joinroom', oldChannel.RoomName, newChannel.RoomName, this.state.userId);
-    var newUserList = [];
-    newChannel.Users.forEach(function(element) {
-      newUserList.push(element.Item2.substring(0, 8));
-    }, this);
-    this.setState({ currentChannel : newChannel, users : newUserList, messages : newChannel.Messages });
+      this.socketManager.hubProxy.invoke('joinroom', oldChannel.RoomName, newChannel.RoomName, this.state.userId);
+      var newUserList = [];
+      newChannel.Users.forEach(function(element) {
+        newUserList.push(element.Item2.substring(0, 8));
+      }, this);
+      this.setState({ currentChannel : newChannel, users : newUserList, messages : newChannel.Messages });
    }
 
   render() {

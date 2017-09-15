@@ -23,12 +23,9 @@ namespace Api_v2.Controllers
                 },
 				new RoomModel()
 				{
-					RoomName = "Gang Bang Cynthia",
+					RoomName = "Kid Channel",
 					Messages = new List<MessageModel>(),
 					Users = new HashSet<Tuple<string, Guid>>()
-					{
-						Tuple.Create("123", Guid.NewGuid())
-					}
 				}
             };
         }

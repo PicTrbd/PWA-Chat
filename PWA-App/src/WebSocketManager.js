@@ -16,7 +16,11 @@ class WebSocketManager {
     }
 
     retrieveRoomDetails = function(roomDetails) {
-        this.setState({ currentChannel: roomDetails, messages: roomDetails.Messages });
+        var newUserList = [];
+        roomDetails.Users.forEach(function(element) {
+          newUserList.push(element.Item2.substring(0, 8));
+        }, this);
+        this.setState({ currentChannel: roomDetails, messages: roomDetails.Messages, users: newUserList });
     }
 
     retrieveAllRooms = function(rooms) {
