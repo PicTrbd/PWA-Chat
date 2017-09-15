@@ -15,7 +15,7 @@ namespace Api_v2
                 Console.WriteLine("New user subscribed to notifications !");
                 var subs = this.Bind<SubscriptionDetails>();
                 Dependencies.NotificationsController.AddClientSubscription(subs.endpoint, subs.keys.p256dh, subs.keys.auth);
-                return "{}";
+                return "OK";
             };
         }
 

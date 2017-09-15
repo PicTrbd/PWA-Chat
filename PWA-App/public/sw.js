@@ -61,21 +61,24 @@ self.addEventListener('fetch', event => {
 
 });
 
-self.registration.showNotification('Notre belle Cyntia a rejoint le chat', {
-  body: "Regardez moi ce corp d'Apollon",
-  image: "https://scontent-cdt1-1.xx.fbcdn.net/v/t1.0-9/530211_509034549111205_1866025720_n.jpg?oh=839e8ef32d8a1af3be37412ecf8b6279&oe=5A52885B",
-  icon: 'images/icons/icon-128x128.png'
-});
+// self.registration.showNotification('Notre belle Cyntia a rejoint le chat', {
+//   body: "Regardez moi ce corp d'Apollon",
+//   image: "https://scontent-cdt1-1.xx.fbcdn.net/v/t1.0-9/530211_509034549111205_1866025720_n.jpg?oh=839e8ef32d8a1af3be37412ecf8b6279&oe=5A52885B",
+//   icon: 'images/icons/icon-128x128.png'
+// });
 
 self.addEventListener('notificationclose', evt => {
   console.log("Notif has been closed");
 });
 
 self.addEventListener('push', event => {
-  const title = "New notification";
-  const options = {
-    body: event.data.text(),
+  var payload = event.data.json(),
+   options = {
+    body: "\nOwner : "
+          .concat(payload.ChannelOwner)
+          .concat("\nChannel Name : ")
+          .concat(payload.ChannelName),              
+    icon: payload.Icon,
   }
-  if (Notification.permission === 'granted')
-    event.waitUntil(self.registration.showNotification(title, options));
+  event.waitUntil(self.registration.showNotification("A new channel has been created !", options));
 });

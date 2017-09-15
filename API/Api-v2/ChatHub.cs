@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Api_v2.Controllers;
 using Api_v2.Models;
 using Microsoft.AspNet.SignalR;
+using Newtonsoft.Json;
 
 namespace Api_v2
 {
@@ -41,6 +42,16 @@ namespace Api_v2
             _chatController.AddRoom(roomName);
 
             Clients.All.AddRoom(_chatController.GetRooms());
+
+            const string iconUrl = "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678092-sign-add-128.png";
+            var data = JsonConvert.SerializeObject(
+                new
+                {
+                    ChannelName = roomName,
+                    ChannelOwner = $"Pablo ({Context.ConnectionId})",
+                    Icon = iconUrl
+                });
+            Dependencies.NotificationsController.SendNotifications(data);
         }
 
         public void JoinRoom(string oldRoom, string newRoom, Guid userId)
@@ -61,8 +72,6 @@ namespace Api_v2
             _chatController.AddMessageToRoom(roomName, message);
 
             Clients.Group(roomName).AddMessage(message);
-
-            Dependencies.NotificationsController.SendNotifications();
         }
 
         
