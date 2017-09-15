@@ -12,7 +12,7 @@ class App extends Component {
   constructor(props)
   {
     super(props);
-    this.state = { messages : [ ], userId : "", users : [], currentRoom: {} };
+    this.state = { messages : [ ], userId : "", users : [], channels : [], currentChannel: {} };
   }
 
   componentDidMount() {
@@ -25,7 +25,8 @@ class App extends Component {
     }
     var userList = this.state.users;
     userList.push(pwaUserId.substring(0, 8));
-    this.setState({ messages: [ ], userId : pwaUserId, users : userList, currentRoom: {} });
+    this.setState({ messages: [ ], userId : pwaUserId, users : userList, currentChannel: {},
+    channels : [ "Main", "Test", "Last" ] });
 
     this.socketManager = new WebSocketManager();
     this.socketManager.initialize('http://localhost:8080/chat', 'chatHub', pwaUserId);
@@ -35,12 +36,16 @@ class App extends Component {
   }
 
   sendMessage = function(message) {
-    console.log(this.state);
-    console.log(this.state.currentRoom.RoomName);
-    this.socketManager.hubProxy.invoke('sendmessage', this.state.currentRoom.RoomName, JSON.stringify(message))
+    this.socketManager.hubProxy.invoke('sendmessage', this.state.currentChannel.RoomName, JSON.stringify(message))
     .done(function(){ console.log('Sent')})
     .fail(function(){ console.log('Fail to send')})
    };
+
+   changeChannel(oldChannel, newChannel) {
+     // join and then
+     oldChannel.RoomName = newChannel;
+     this.setState({ currentChannel : oldChannel, messages : [ ] });
+   }
 
   render() {
     return (
@@ -54,7 +59,22 @@ class App extends Component {
         </div>
       </header>
       <Menu right>
-        <span className="user-menu-title">Utilisateurs</span>
+        <div className="title-div">
+          <img className="title-icon" alt="icon-channel" src={require('./images/icon-channel.png')}/>
+          <span className="channel-menu-title">Channels</span>
+        </div>
+        {
+          this.state.channels.map(function(channel) {
+            if (channel === this.state.currentChannel.RoomName)
+              return (<span key={channel} className="menu-item selected-channel">{channel}</span>);
+            return (<a href="#" key={channel} onClick={() => this.changeChannel(this.state.currentChannel, channel)} className="menu-item menu-link">{channel}</a>);
+          }.bind(this))
+        }
+        <br/>
+        <div className="title-div">
+          <img className="title-icon" alt="icon-user" src={require('./images/icon-user.png')}/>
+          <span className="user-menu-title">Utilisateurs</span>
+        </div>
         {
           this.state.users.map(function(user) {
             return (<span key={user} className="menu-item">{user}</span>);
