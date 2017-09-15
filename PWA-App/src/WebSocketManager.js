@@ -15,8 +15,12 @@ class WebSocketManager {
         this.setState({messages: messageList});
     }
 
-    getRoomDetails = function(roomDetails) {
-        this.setState({ currentChannel: roomDetails })
+    retrieveRoomDetails = function(roomDetails) {
+        this.setState({ currentChannel: roomDetails, messages: roomDetails.Messages });
+    }
+
+    retrieveAllRooms = function(rooms) {
+        this.setState({ channels : rooms });
     }
 
     startConnection() {
@@ -24,12 +28,13 @@ class WebSocketManager {
         .done(function() { 
             console.log('Now connected with ID : ' + this.connection.id)
             this.retrieveMainRoomDetails()
+            this.hubProxy.invoke('getAllRooms');
         }.bind(this))
         .fail(function() { console.log('Could not connect')});
     }
 
     retrieveMainRoomDetails() {
-        this.hubProxy.invoke('retrieveRoomDetails', "Main")
+        this.hubProxy.invoke('getRoomDetails', "Main")
     }
 }
 

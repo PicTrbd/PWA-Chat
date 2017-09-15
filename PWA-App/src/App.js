@@ -25,13 +25,13 @@ class App extends Component {
     }
     var userList = this.state.users;
     userList.push(pwaUserId.substring(0, 8));
-    this.setState({ messages: [ ], userId : pwaUserId, users : userList, currentChannel: {},
-    channels : [ "Main", "Test", "Last" ] });
+    this.setState({ messages: [ ], userId : pwaUserId, users : userList, currentChannel: {}});
 
     this.socketManager = new WebSocketManager();
     this.socketManager.initialize('http://localhost:8080/chat', 'chatHub', pwaUserId);
     this.socketManager.hubProxy.on('addMessage', this.socketManager.addMessage.bind(this));
-    this.socketManager.hubProxy.on('getroomdetails', this.socketManager.getRoomDetails.bind(this));
+    this.socketManager.hubProxy.on('retrieveroomdetails', this.socketManager.retrieveRoomDetails.bind(this));
+    this.socketManager.hubProxy.on('retrieveallrooms', this.socketManager.retrieveAllRooms.bind(this));
     this.socketManager.startConnection();
   }
 
@@ -42,9 +42,12 @@ class App extends Component {
    };
 
    changeChannel(oldChannel, newChannel) {
-     // join and then
-     oldChannel.RoomName = newChannel;
-     this.setState({ currentChannel : oldChannel, messages : [ ] });
+    this.socketManager.hubProxy.invoke('joinroom', oldChannel.RoomName, newChannel.RoomName, this.state.userId);
+    var newUserList = [];
+    newChannel.Users.forEach(function(element) {
+      newUserList.push(element.Item2.substring(0, 8));
+    }, this);
+    this.setState({ currentChannel : newChannel, users : newUserList, messages : newChannel.Messages });
    }
 
   render() {
@@ -65,9 +68,9 @@ class App extends Component {
         </div>
         {
           this.state.channels.map(function(channel) {
-            if (channel === this.state.currentChannel.RoomName)
-              return (<span key={channel} className="menu-item selected-channel">{channel}</span>);
-            return (<a href="#" key={channel} onClick={() => this.changeChannel(this.state.currentChannel, channel)} className="menu-item menu-link">{channel}</a>);
+            if (channel.RoomName === this.state.currentChannel.RoomName)
+              return (<span key={channel.RoomName} className="menu-item selected-channel">{channel.RoomName}</span>);
+            return (<a href="#" key={channel.RoomName} onClick={() => this.changeChannel(this.state.currentChannel, channel)} className="menu-item menu-link">{channel.RoomName}</a>);
           }.bind(this))
         }
         <br/>

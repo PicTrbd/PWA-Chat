@@ -20,7 +20,16 @@ namespace Api_v2.Controllers
                     RoomName = "Main",
                     Messages = new ConcurrentBag<MessageModel>(),
                     Users = new HashSet<Tuple<string, Guid>>()
-                }
+                },
+				new RoomModel()
+				{
+					RoomName = "Deux",
+					Messages = new ConcurrentBag<MessageModel>(),
+					Users = new HashSet<Tuple<string, Guid>>()
+					{
+						Tuple.Create("123", Guid.NewGuid())
+					}
+				}
             };
         }
 

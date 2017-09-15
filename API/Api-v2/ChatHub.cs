@@ -71,7 +71,8 @@ namespace Api_v2
             _chatController.AddUserToRoom(newRoom, userId, Context.ConnectionId);
 
             Clients.Caller.RetrieveRoomDetails(_chatController.GetRoom(newRoom));
-            Clients.Group(newRoom).NewUserJoinTheRoom(userId);
+			Clients.All.RetrieveAllRooms(_chatController.GetRooms());
+			Clients.Group(newRoom).NewUserJoinTheRoom(userId);
         }
 
         public void SendMessage(string roomName, string json)
