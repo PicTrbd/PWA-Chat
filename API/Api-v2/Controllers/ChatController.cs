@@ -18,13 +18,13 @@ namespace Api_v2.Controllers
                 new RoomModel()
                 {
                     RoomName = "Main",
-                    Messages = new ConcurrentBag<MessageModel>(),
+                    Messages = new List<MessageModel>(),
                     Users = new HashSet<Tuple<string, Guid>>()
                 },
 				new RoomModel()
 				{
-					RoomName = "Deux",
-					Messages = new ConcurrentBag<MessageModel>(),
+					RoomName = "Gang Bang Cynthia",
+					Messages = new List<MessageModel>(),
 					Users = new HashSet<Tuple<string, Guid>>()
 					{
 						Tuple.Create("123", Guid.NewGuid())
@@ -50,7 +50,8 @@ namespace Api_v2.Controllers
 
         public void AddMessageToRoom(string room, MessageModel message)
         {
-            GetRoomFromName(room)?.Messages.Add(message);
+            var channel = GetRoomFromName(room);
+            channel.Messages.Add(message);
         }
 
         public string GetUserRoomFromId(string connectionId)
@@ -90,7 +91,7 @@ namespace Api_v2.Controllers
             _rooms.Add(new RoomModel()
             {
                 RoomName = roomName,
-                Messages = new ConcurrentBag<MessageModel>(),
+                Messages = new List<MessageModel>(),
                 Users = new HashSet<Tuple<string, Guid>>()
             });
         }
