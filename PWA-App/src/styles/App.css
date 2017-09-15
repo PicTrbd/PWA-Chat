@@ -541,11 +541,11 @@ header {
 .bm-burger-button {
   position: relative;
   float: right;
-  width: 36px;
+  width: 32px;
   height: 36px;
-  right: 10px;
-  top: -50px;
-  background-image: url("../images/icon-user.png");
+  right: 15px;
+  top: -52px;
+  background-image: url("../images/icon-menu.png");
 }
 
 /* Color/shape of burger icon bars */
@@ -597,11 +597,28 @@ header {
   line-height:25px;
 }
 
-.user-menu-title {
-  font-size:22px;
-  margin-bottom:20px;
+.user-menu-title,
+.channel-menu-title {
+  font-size:20px;
   width:100%;
+  line-height:21px;
   text-align:center;
+  padding-left: 5px;
+}
+
+.title-div {
   border-bottom:2px solid black;
-  padding-bottom: 10px;
+  margin-bottom:10px;
+  padding-bottom:10px;
+  width:100%;
+}
+
+.title-icon {
+  width:21px;
+  color: #b8b7ad;
+  float:left;
+}
+
+.selected-channel {
+  color:white;
 }

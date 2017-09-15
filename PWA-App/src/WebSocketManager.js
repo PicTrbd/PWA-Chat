@@ -16,8 +16,7 @@ class WebSocketManager {
     }
 
     getRoomDetails = function(roomDetails) {
-        console.log(roomDetails);
-        this.setState({ currentRoom: roomDetails })
+        this.setState({ currentChannel: roomDetails })
     }
 
     startConnection() {
