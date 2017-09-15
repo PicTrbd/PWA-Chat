@@ -29,7 +29,16 @@ namespace Api_v2
 
             _chatController.FindUserAndRemoveItFromRooms(Context.ConnectionId);
 
+            var room = _chatController.GetUserRoomFromId(Context.ConnectionId);
+            if (room != null)
+                Groups.Remove(Context.ConnectionId, room);
+
             return base.OnDisconnected(stopCalled);
+        }
+
+        public void GetAllRooms()
+        {
+            Clients.Caller.RetrieveAllRooms(_chatController.GetRooms());
         }
 
         public void RetrieveRoomDetails(string name)
@@ -40,8 +49,7 @@ namespace Api_v2
         public void CreateRoom(string roomName)
         {
             _chatController.AddRoom(roomName);
-
-            Clients.All.AddRoom(_chatController.GetRooms());
+            Clients.All.RetrieveAllRooms(_chatController.GetRooms());
 
             const string iconUrl = "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678092-sign-add-128.png";
             var data = JsonConvert.SerializeObject(
@@ -51,6 +59,7 @@ namespace Api_v2
                     ChannelOwner = $"Pablo ({Context.ConnectionId})",
                     Icon = iconUrl
                 });
+
             Dependencies.NotificationsController.SendNotifications(data);
         }
 

@@ -44,6 +44,12 @@ namespace Api_v2.Controllers
             GetRoomFromName(room)?.Messages.Add(message);
         }
 
+        public string GetUserRoomFromId(string connectionId)
+        {
+            var rooms = _rooms.Where(r => r.Users.Any(user => user.Item1 == connectionId));
+            return rooms.Any() ? rooms.First().RoomName : null;
+        }
+
         public void AddUserToRoom(string room, Guid userId, string clientId)
         {
             _rooms.ForEach(r => r.Users.RemoveWhere(x => x.Item2 == userId || x.Item1 == clientId));
