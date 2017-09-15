@@ -41,9 +41,9 @@ namespace Api_v2
             Clients.Caller.RetrieveAllRooms(_chatController.GetRooms());
         }
 
-        public void RetrieveRoomDetails(string name)
+        public void GetRoomDetails(string name)
         {
-            Clients.Caller.GetRoomDetails(_chatController.GetRoom(name));
+            Clients.Caller.RetrieveRoomDetails(_chatController.GetRoom(name));
         }
 
         public void CreateRoom(string roomName)
@@ -70,7 +70,7 @@ namespace Api_v2
 
             _chatController.AddUserToRoom(newRoom, userId, Context.ConnectionId);
 
-            Clients.Caller.GetRoomDetails(_chatController.GetRoom(newRoom));
+            Clients.Caller.RetrieveRoomDetails(_chatController.GetRoom(newRoom));
             Clients.Group(newRoom).NewUserJoinTheRoom(userId);
         }
 
