@@ -41,6 +41,12 @@ class App extends Component {
     .fail(function(){ console.log('Fail to send')})
    };
 
+   changeChannel(oldChannel, newChannel) {
+     // join and then
+     oldChannel.RoomName = newChannel;
+     this.setState({ currentChannel : oldChannel, messages : [ ] });
+   }
+
   render() {
     return (
       <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -61,7 +67,7 @@ class App extends Component {
           this.state.channels.map(function(channel) {
             if (channel === this.state.currentChannel.RoomName)
               return (<span key={channel} className="menu-item selected-channel">{channel}</span>);
-            return (<span key={channel} className="menu-item">{channel}</span>);
+            return (<a href="#" key={channel} onClick={() => this.changeChannel(this.state.currentChannel, channel)} className="menu-item menu-link">{channel}</a>);
           }.bind(this))
         }
         <br/>

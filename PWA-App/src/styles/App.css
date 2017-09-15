@@ -619,6 +619,14 @@ header {
   float:left;
 }
 
+.menu-link,
+.menu-link:hover,
+.menu-link:focus,
+.menu-link:active {
+  color:#b8b7ad;
+  text-decoration: none;
+}
+
 .selected-channel {
   color:white;
 }
