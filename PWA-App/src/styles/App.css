@@ -585,7 +585,7 @@ header {
 /* Wrapper for item list */
 .bm-item-list {
   color: #b8b7ad;
-  padding: 0.8em;
+  padding: 0.8em 0.3em 0.8em 0.3em;
 }
 
 /* Styling of overlay */
@@ -603,6 +603,7 @@ header {
   width:100%;
   line-height:21px;
   text-align:center;
+  vertical-align: middle;
   padding-left: 5px;
 }
 
@@ -616,7 +617,7 @@ header {
 .title-icon {
   width:21px;
   color: #b8b7ad;
-  float:left;
+  vertical-align:middle;
 }
 
 .menu-link,
@@ -629,4 +630,14 @@ header {
 
 .selected-channel {
   color:white;
+}
+
+#add-channel {
+  background-color: #373a47;
+  border: 2px solid #b8b7ad;
+  border-radius: 25px;
+  color: #b8b7ad;
+  font-size: 14px;
+  margin-left: 5px;
+  outline: none;
 }

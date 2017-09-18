@@ -39,16 +39,23 @@ class App extends Component {
     this.socketManager.hubProxy.invoke('sendmessage', this.state.currentChannel.RoomName, JSON.stringify(message))
     .done(function(){ console.log('Sent')})
     .fail(function(){ console.log('Fail to send')})
-   };
+  };
 
-   changeChannel(oldChannel, newChannel) {
-      this.socketManager.hubProxy.invoke('joinroom', oldChannel.RoomName, newChannel.RoomName, this.state.userId);
-      var newUserList = [];
-      newChannel.Users.forEach(function(element) {
-        newUserList.push(element.Item2.substring(0, 8));
-      }, this);
-      this.setState({ currentChannel : newChannel, users : newUserList, messages : newChannel.Messages });
-   }
+  changeChannel(oldChannel, newChannel) {
+    this.socketManager.hubProxy.invoke('joinroom', oldChannel.RoomName, newChannel.RoomName, this.state.userId);
+    var newUserList = [];
+    newChannel.Users.forEach(function(element) {
+      newUserList.push(element.Item2.substring(0, 8));
+    }, this);
+    this.setState({ currentChannel : newChannel, users : newUserList, messages : newChannel.Messages });
+  }
+
+  createChannel() {
+    var channelName = prompt("Entre un nom pour votre channel :");
+    if (channelName != null && channelName !== "") {
+        this.socketManager.hubProxy.invoke('createroom', channelName);
+    }
+  }
 
   render() {
     return (
@@ -65,6 +72,7 @@ class App extends Component {
         <div className="title-div">
           <img className="title-icon" alt="icon-channel" src={require('./images/icon-channel.png')}/>
           <span className="channel-menu-title">Channels</span>
+          <input id="add-channel" type="button" value="+" onClick={this.createChannel.bind(this)} />
         </div>
         {
           this.state.channels.map(function(channel) {
