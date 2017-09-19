@@ -595,6 +595,7 @@ header {
 
 .menu-item {
   line-height:25px;
+  display:block;
 }
 
 .user-menu-title,

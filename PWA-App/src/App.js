@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import './styles/App.css';
 import WebSocketManager from './WebSocketManager';
-import ChatBubbleList from './ChatBubbleList';
-import AddChatBubbleForm from './AddChatBubbleForm';
 import Cookies from 'universal-cookie';
 import guid from 'guid';
 import { slide as Menu } from 'react-burger-menu'
+import ChatBubbleList from './components/ChatBubbleList';
+import AddChatBubbleForm from './components/AddChatBubbleForm';
+import Header from './components/Header';
+import ChannelUsers from './components/ChannelUsers';
+import ChannelList from './components/ChannelList';
 
 class App extends Component {
 
@@ -62,46 +65,21 @@ class App extends Component {
   render() {
     return (
       <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-      <header>
-        <div className="mdl-layout--large-screen-only top-bar">
-          <h3>Progressive Web App - Chat</h3>
+        <Header />
+        <Menu right>
+          <ChannelList channels={this.state.channels} createChannel={this.createChannel.bind(this)} 
+                changeChannel={this.changeChannel.bind(this)} currentChannel={this.state.currentChannel} />
+          <br/>
+          <ChannelUsers users={this.state.users} />
+        </Menu>
+        <div id="chatbox">
+          <ol className="chat">
+            <ChatBubbleList messages={this.state.messages} userId={this.state.userId}/>
+          </ol>
+          <div id="bottom-area">
+            <AddChatBubbleForm sendMessage={this.sendMessage.bind(this)} userId={this.state.userId}/>
+          </div>
         </div>
-        <div className="tab-bar mdl-layout__tab-bar">
-          <a className="mdl-layout__tab isActive">PWA - Chat</a>
-        </div>
-      </header>
-      <Menu right>
-        <div className="title-div">
-          <img className="title-icon" alt="icon-channel" src={require('./images/icon-channel.png')}/>
-          <span className="channel-menu-title">Channels</span>
-          <input id="add-channel" type="button" value="+" onClick={this.createChannel.bind(this)} />
-        </div>
-        {
-          this.state.channels.map(function(channel) {
-            if (channel.RoomName === this.state.currentChannel.RoomName)
-              return (<span key={channel.RoomName} className="menu-item selected-channel">{channel.RoomName}</span>);
-            return (<a href="#" key={channel.RoomName} onClick={() => this.changeChannel(this.state.currentChannel, channel)} className="menu-item menu-link">{channel.RoomName}</a>);
-          }.bind(this))
-        }
-        <br/>
-        <div className="title-div">
-          <img className="title-icon" alt="icon-user" src={require('./images/icon-user.png')}/>
-          <span className="user-menu-title">Utilisateurs</span>
-        </div>
-        {
-          this.state.users.map(function(user) {
-            return (<span key={user} className="menu-item">{user}</span>);
-          })
-        }
-      </Menu>
-      <div id="chatbox">
-        <ol className="chat">
-          <ChatBubbleList messages={this.state.messages} userId={this.state.userId}/>
-        </ol>
-        <div id="bottom-area">
-          <AddChatBubbleForm sendMessage={this.sendMessage.bind(this)} userId={this.state.userId}/>
-        </div>
-      </div>
     </div>
     );
   }

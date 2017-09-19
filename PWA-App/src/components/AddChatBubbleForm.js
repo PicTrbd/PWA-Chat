@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './styles/App.css';
 import * as guid from 'guid'
 
 class AddChatBubbleForm extends Component {
