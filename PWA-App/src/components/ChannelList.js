@@ -13,8 +13,8 @@ class ChannelList extends Component
                 {
                     this.props.channels.map(function(channel) {
                         if (channel.RoomName === this.props.currentChannel.RoomName)
-                            return (<span key={channel.RoomName} className="menu-item selected-channel">{channel.RoomName}</span>);
-                        return (<a href="#" key={channel.RoomName} onClick={() => this.props.changeChannel(this.props.currentChannel, channel)} className="menu-item menu-link">{channel.RoomName}</a>);
+                            return (<input type="button" disabled key={channel.RoomName} className="menu-item selected-channel" value={channel.RoomName}/>);
+                        return (<input type="button" key={channel.RoomName} onClick={() => this.props.changeChannel(this.props.currentChannel, channel)} className="menu-item menu-link" value={channel.RoomName}/>);
                     }.bind(this))
                 }
             </div>
