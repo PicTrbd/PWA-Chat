@@ -21,9 +21,9 @@ class AddChatBubbleForm extends Component {
     render() {
         return(
         <form className="form-inline" ref="chatBubbleForm" onSubmit={this.createMessage.bind(this)}>
-            <input id="submit-button" type="button" value="Envoyer" onClick={this.createMessage.bind(this)} />
+            <input id="submit-button" type="button" value="Send" onClick={this.createMessage.bind(this)} />
             <div id="textarea-container">
-                <input className="textarea" type="text" ref="bubbleText" placeholder="Tapez ici votre message"/>
+                <input className="textarea" type="text" ref="bubbleText" placeholder="Type your new message"/>
             </div>
         </form>
         )

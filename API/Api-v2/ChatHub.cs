@@ -55,8 +55,9 @@ namespace Api_v2
             var data = JsonConvert.SerializeObject(
                 new
                 {
+					Type = "NewChannel",
                     ChannelName = roomName,
-                    ChannelOwner = $"Pablo ({Context.ConnectionId})",
+                    ChannelOwner = Context.ConnectionId,
                     Icon = iconUrl
                 });
 
@@ -82,7 +83,17 @@ namespace Api_v2
             _chatController.AddMessageToRoom(roomName, message);
 
             Clients.Group(roomName).AddMessage(message);
-        }
+
+			const string iconUrl = "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678092-sign-add-128.png";
+			var data = JsonConvert.SerializeObject(
+			new
+			{
+				Type = "NewMessage",
+				Sender = message.UserId.ToString().Substring(0, 8),
+				Icon = iconUrl
+			});
+			Dependencies.NotificationsController.SendNotifications(data);
+		}
 
         
 

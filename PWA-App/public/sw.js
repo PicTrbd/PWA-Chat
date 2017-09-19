@@ -5,13 +5,23 @@ self.addEventListener('notificationclose', event => {
 });
 
 self.addEventListener('push', event => {
-  var payload = event.data.json(),
-   options = {
-    body: "\nOwner : "
-          .concat(payload.ChannelOwner)
-          .concat("\nChannel Name : ")
-          .concat(payload.ChannelName),              
-    icon: payload.Icon,
+  var payload = event.data.json();
+  if (payload.Type === "NewChannel") {
+    var options = {
+      body: "\nOwner : "
+            .concat(payload.ChannelOwner)
+            .concat("\nChannel Name : ")
+            .concat(payload.ChannelName),              
+      icon: payload.Icon,
+    }
+    event.waitUntil(self.registration.showNotification("A new channel has been created !", options));
   }
-  event.waitUntil(self.registration.showNotification("A new channel has been created !", options));
+  if (payload.Type === "NewMessage") {
+    var options = {
+      body: "\nSender : "
+            .concat(payload.Sender),         
+      icon: payload.Icon,
+    }
+    event.waitUntil(self.registration.showNotification("You have a new message !", options));
+  }
 });

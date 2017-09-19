@@ -7,7 +7,7 @@ class ChannelUsers extends Component
             <div>
                 <div className="title-div">
                     <img className="title-icon" alt="icon-user" src={require('../images/icon-user.png')}/>
-                    <span className="user-menu-title">Utilisateurs</span>
+                    <span className="user-menu-title">Users</span>
                 </div>
                 {
                     this.props.users.map(function(user) {
