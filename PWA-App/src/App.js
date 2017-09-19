@@ -35,10 +35,12 @@ class App extends Component {
     this.socketManager.startConnection();
   }
 
-  sendMessage = function(message) {
-    this.socketManager.hubProxy.invoke('sendmessage', this.state.currentChannel.RoomName, JSON.stringify(message))
-    .done(function(){ console.log('Sent')})
-    .fail(function(){ console.log('Fail to send')})
+  async sendMessage(message) {
+    try {
+      await this.socketManager.hubProxy.invoke('sendmessage', this.state.currentChannel.RoomName, JSON.stringify(message));
+    } catch (error) {
+      console.log("Fail to send");
+    }
   };
 
   changeChannel(oldChannel, newChannel) {

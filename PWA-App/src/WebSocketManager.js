@@ -27,14 +27,16 @@ class WebSocketManager {
         this.setState({ channels : rooms });
     }
 
-    startConnection() {
-        this.connection.start()
-        .done(function() { 
+    async startConnection() {
+        try {
+            await this.connection.start()
             console.log('Now connected with ID : ' + this.connection.id)
             this.retrieveMainRoomDetails()
             this.hubProxy.invoke('getAllRooms');
-        }.bind(this))
-        .fail(function() { console.log('Could not connect')});
+        }
+        catch (error) {
+            console.log("Could not connect");
+        }
     }
 
     retrieveMainRoomDetails() {

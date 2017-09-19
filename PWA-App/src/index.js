@@ -11,10 +11,7 @@ let swRegistration = null;
 
 function urlB64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding)
-    .replace(/-/g, '+')
-    .replace(/_/g, '/');
-
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);
 
@@ -24,73 +21,65 @@ function urlB64ToUint8Array(base64String) {
   return outputArray;
 }
 
-if ('serviceWorker' in navigator && 'PushManager' in window) {
-    console.log('Service Worker and Push is supported');
-    navigator.serviceWorker.register('sw.js')
-    .then(function(swReg) {
+async function registerServiceWorker() {
+  if ('serviceWorker' in navigator && 'PushManager' in window) {
+    try {
+      var swReg = await navigator.serviceWorker.register('sw.js')
       swRegistration = swReg;
       initialiseUI();
-    })
-    .catch(function(error) {
-      console.error('Service Worker Error', error);
-    });
-  } 
-  else {
-    console.warn('Push messaging is not supported');
-  }
-  
-  function initialiseUI() {
-      if (isSubscribed) {
-        unsubscribeUser();
-      } else {
-        subscribeUser();
-  
-    // Set the initial subscription value
-    swRegistration.pushManager.getSubscription()
-    .then(function(subscription) {
-      isSubscribed = !(subscription === null);
-    });
-    
+    } catch (error) {
+      console.log('ServiceWorker Error', error);
+    }
   }
 }
 
-function handleFetch(path, input) {
+async function initialiseUI() {
+  if (isSubscribed) {
+    unsubscribeUser();
+  } 
+  else {
+    subscribeUser();
+    var subscription = await swRegistration.pushManager.getSubscription();
+    isSubscribed = !(subscription === null);
+  }
+}
+    
+async function handleFetch(path, input) {
   input.headers = {'Content-Type': 'application/json'}
-  var request = fetch(path, input)
-    .then(response => {
-      console.log(response);
-      if (response.status === 200)
-        return response;        
-      })
-  return request;
+  try {
+    var response = await fetch(path, input);
+    if (response.status === 200)
+      return response;        
+  } catch (error) {
+    console.log(error);
+  }
+  return response;
 }
   
-  function subscribeUser() {
-    const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
-    swRegistration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: applicationServerKey
-    })
-    .then(function(subscription) {
-      isSubscribed = true;
-      handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(subscription) });
-    })
-    .catch(function(err) {
-      console.log('Failed to subscribe the user: ', err);
-    });
+async function subscribeUser() {
+  var applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
+  try {
+  var subscription = await swRegistration.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: applicationServerKey
+  });
+  isSubscribed = true;
+  handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(subscription) });
+  } catch (error) {
+    console.log("Failed to subscribe the user : ", error);
   }
+}
   
-  function unsubscribeUser() {
-    swRegistration.pushManager.getSubscription()
-    .then(function(subscription) {
-      if (subscription) {
-        return subscription.unsubscribe();
-      }
-    })
-    .catch(function(error) {
-      console.log('Error unsubscribing', error);
-    })
-    .then(function() {
+async function unsubscribeUser() {
+  try {
+    var subscription = await swRegistration.pushManager.getSubscription()
+    if (subscription) {
       isSubscribed = false;
-    });
+      return subscription.unsubscribe();
+    }
+  } catch (error) {
+    console.log('Error unsubscribing', error);
   }
+}
+
+registerServiceWorker();
