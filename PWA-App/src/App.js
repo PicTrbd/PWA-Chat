@@ -55,10 +55,14 @@ class App extends Component {
     this.setState({ currentChannel : newChannel, users : newUserList, messages : newChannel.Messages });
   }
 
-  createChannel() {
+  async createChannel() {
     var channelName = prompt("Entre un nom pour votre channel :");
     if (channelName != null && channelName !== "") {
-        this.socketManager.hubProxy.invoke('createroom', channelName);
+      try {
+        await this.socketManager.hubProxy.invoke('createroom', channelName);
+      } catch (error) {
+        console.log("No signalR connection initialized");
+      }
     }
   }
 
