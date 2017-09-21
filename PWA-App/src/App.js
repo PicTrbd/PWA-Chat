@@ -9,16 +9,24 @@ import AddChatBubbleForm from './components/AddChatBubbleForm';
 import Header from './components/Header';
 import ChannelUsers from './components/ChannelUsers';
 import ChannelList from './components/ChannelList';
+import pwaChat from './reducers/index';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import { retrieveUserId, changeChannel } from './actions';
+
+let store = createStore(pwaChat);
+
+let unsubscribe = store.subscribe(() => {
+  console.log("Modification du state : ");
+  console.log(store.getState());
+})
 
 class App extends Component {
 
-  constructor(props)
-  {
-    super(props);
-    this.state = { messages : [ ], userId : "", users : [], channels : [], currentChannel: {} };
-  }
 
   componentDidMount() {
+    this.setState({});
+    
     var cookies = new Cookies();
     var pwaUserId = cookies.get('pwa-user');
     if (pwaUserId === undefined)
@@ -26,33 +34,31 @@ class App extends Component {
       pwaUserId = guid.raw();
       cookies.set('pwa-user', pwaUserId, { path: '/' });
     }
-    var userList = this.state.users;
-    userList.push(pwaUserId.substring(0, 8));
-    this.setState({ messages: [ ], userId : pwaUserId, users : userList, currentChannel: {}});
+    store.dispatch(retrieveUserId(pwaUserId));
 
     this.socketManager = new WebSocketManager();
     this.socketManager.initialize('http://localhost:8080/chat', 'chatHub', pwaUserId);
-    this.socketManager.hubProxy.on('addMessage', this.socketManager.addMessage.bind(this));
-    this.socketManager.hubProxy.on('retrieveroomdetails', this.socketManager.retrieveRoomDetails.bind(this));
-    this.socketManager.hubProxy.on('retrieveallrooms', this.socketManager.retrieveAllRooms.bind(this));
+    this.socketManager.hubProxy.on('addMessage', this.socketManager.addMessage);
+    this.socketManager.hubProxy.on('retrieveroomdetails', this.socketManager.retrieveRoomDetails);
+    this.socketManager.hubProxy.on('retrieveallrooms', this.socketManager.retrieveAllRooms);
     this.socketManager.startConnection();
   }
 
   async sendMessage(message) {
     try {
-      await this.socketManager.hubProxy.invoke('sendmessage', this.state.currentChannel.RoomName, JSON.stringify(message));
+      await this.socketManager.hubProxy.invoke('sendmessage', store.getState().currentChannel.RoomName, JSON.stringify(message));
     } catch (error) {
-      console.log("Fail to send");
+      console.log(error);
     }
   };
 
   changeChannel(oldChannel, newChannel) {
-    this.socketManager.hubProxy.invoke('joinroom', oldChannel.RoomName, newChannel.RoomName, this.state.userId);
+    this.socketManager.hubProxy.invoke('joinroom', oldChannel.RoomName, newChannel.RoomName, store.getState().userId);
     var newUserList = [];
     newChannel.Users.forEach(function(element) {
       newUserList.push(element.Item2.substring(0, 8));
     }, this);
-    this.setState({ currentChannel : newChannel, users : newUserList, messages : newChannel.Messages });
+    store.dispatch(changeChannel(newChannel, newUserList, newChannel.Messages));
   }
 
   async createChannel() {
@@ -68,25 +74,28 @@ class App extends Component {
 
   render() {
     return (
-      <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-        <Header />
-        <Menu right>
-          <ChannelList channels={this.state.channels} createChannel={this.createChannel.bind(this)} 
-                changeChannel={this.changeChannel.bind(this)} currentChannel={this.state.currentChannel} />
-          <br/>
-          <ChannelUsers users={this.state.users} />
-        </Menu>
-        <div id="chatbox">
-          <ol className="chat">
-            <ChatBubbleList messages={this.state.messages} userId={this.state.userId}/>
-          </ol>
-          <div id="bottom-area">
-            <AddChatBubbleForm sendMessage={this.sendMessage.bind(this)} userId={this.state.userId}/>
+      <Provider store={store}>      
+        <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+          <Header />
+          <Menu right>
+            <ChannelList channels={store.getState().channels} createChannel={this.createChannel.bind(this)} 
+                  changeChannel={this.changeChannel.bind(this)} currentChannel={store.getState().currentChannel} />
+            <br/>
+            <ChannelUsers users={store.getState().users} />
+          </Menu>
+          <div id="chatbox">
+            <ol className="chat">
+              <ChatBubbleList messages={store.getState().messages} userId={store.getState().userId}/>
+            </ol>
+            <div id="bottom-area">
+              <AddChatBubbleForm sendMessage={this.sendMessage.bind(this)} userId={store.getState().userId}/>
+            </div>
           </div>
-        </div>
-    </div>
+      </div>
+    </Provider>
     );
   }
 }
 
+export { store };
 export default App;

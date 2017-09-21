@@ -1,4 +1,6 @@
 import { hubConnection } from 'signalr-no-jquery';
+import { store } from './App'
+import { allChannelsRetrieved, singleChannelRetrieved, updateMessageList } from './actions'
 
 class WebSocketManager {
 
@@ -10,21 +12,20 @@ class WebSocketManager {
     }
 
     addMessage = function(newMessage) {
-        var messageList = this.state.messages;
-        messageList.push(newMessage);
-        this.setState({messages: messageList});
+        var messageList = [...store.getState().messages, newMessage];
+        store.dispatch(updateMessageList(messageList));
     }
 
-    retrieveRoomDetails = function(roomDetails) {
+    retrieveRoomDetails = function(channelDetails) {
         var newUserList = [];
-        roomDetails.Users.forEach(function(element) {
+        channelDetails.Users.forEach(function(element) {
           newUserList.push(element.Item2.substring(0, 8));
         }, this);
-        this.setState({ currentChannel: roomDetails, messages: roomDetails.Messages, users: newUserList });
+        store.dispatch(singleChannelRetrieved(channelDetails, channelDetails.Messages, newUserList));
     }
 
-    retrieveAllRooms = function(rooms) {
-        this.setState({ channels : rooms });
+    retrieveAllRooms = function(channels) {
+        store.dispatch(allChannelsRetrieved(channels));
     }
 
     async startConnection() {
