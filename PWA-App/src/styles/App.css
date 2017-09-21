@@ -643,3 +643,8 @@ header {
   margin-left: 5px;
   outline: none;
 }
+
+::-webkit-scrollbar {
+  box-shadow:inset 0px 50px 0px rgba(229, 229, 229, 0.9), inset 0px -52px 0px #fafafa !important;
+  -webkit-box-shadow:inset 0px 50px 0px rgba(229, 229, 229, 0.9), inset 0px -52px 0px #fafafa !important;
+}
