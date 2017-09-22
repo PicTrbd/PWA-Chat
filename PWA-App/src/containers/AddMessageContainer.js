@@ -16,7 +16,6 @@ async function sendMessage(userId, message, currentChannel, socketManager) {
             Id: guid.raw(),
             Date: new Date()
         };
-        console.log(newMessage);
         await socketManager.hubProxy.invoke('sendmessage', currentChannel.RoomName, JSON.stringify(newMessage));
     } catch (error) {
       console.log(error);

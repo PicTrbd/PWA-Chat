@@ -94,9 +94,5 @@ namespace Api_v2
 			});
 			Dependencies.NotificationsController.SendNotifications(data);
 		}
-
-        
-
-
     }
 }
