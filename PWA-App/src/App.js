@@ -17,11 +17,6 @@ import AddMessageContainer from './containers/AddMessageContainer';
 let store = createStore(pwaChat);
 let socketManager = new WebSocketManager();
 
-store.subscribe(() => {
-  console.log("Modification du state : ");
-  console.log(store.getState());
-})
-
 class App extends Component {
 
   componentDidMount() {
