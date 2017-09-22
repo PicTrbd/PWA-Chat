@@ -6,7 +6,7 @@ function getFormattedTimeFromDate(dateStr) {
     return timeStr;
 }
 
-const ChatBubbleList = ({ messages, userId }) => (
+const MessageList = ({ messages, userId }) => (
     <div className="container">
     {
         messages.map(message => {
@@ -42,4 +42,4 @@ const ChatBubbleList = ({ messages, userId }) => (
     </div>
 )
 
-export default ChatBubbleList
+export default MessageList

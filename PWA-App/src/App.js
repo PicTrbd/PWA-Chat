@@ -4,15 +4,15 @@ import WebSocketManager from './WebSocketManager';
 import Cookies from 'universal-cookie';
 import guid from 'guid';
 import { slide as Menu } from 'react-burger-menu'
-import AddChatBubbleForm from './components/AddChatBubbleForm';
 import Header from './components/Header';
 import pwaChat from './reducers/index';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { retrieveUserId } from './actions';
-import ChatBubbleListContainer from './containers/ChatBubbleListContainer';
+import MessageListContainer from './containers/MessageListContainer';
 import ChannelUsersContainer from './containers/ChannelUsersContainer';
 import ChannelListContainer from './containers/ChannelListContainer';
+import AddMessageContainer from './containers/AddMessageContainer';
 
 let store = createStore(pwaChat);
 let socketManager = new WebSocketManager();
@@ -43,14 +43,6 @@ class App extends Component {
     socketManager.startConnection();
   }
 
-  async sendMessage(message) {
-    try {
-      await socketManager.hubProxy.invoke('sendmessage', store.getState().currentChannel.RoomName, JSON.stringify(message));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   render() {
     return (
       <Provider store={store}>      
@@ -63,10 +55,10 @@ class App extends Component {
           </Menu>
           <div id="chatbox">
             <ol className="chat">
-              <ChatBubbleListContainer/>
+              <MessageListContainer/>
             </ol>
             <div id="bottom-area">
-              <AddChatBubbleForm sendMessage={this.sendMessage.bind(this)} userId={store.getState().userId}/>
+              <AddMessageContainer socketManager={socketManager}/>
             </div>
           </div>
       </div>

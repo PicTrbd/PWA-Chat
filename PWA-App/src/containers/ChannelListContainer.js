@@ -1,5 +1,4 @@
 import React from 'react'
-import { store } from '../App'
 import { connect } from 'react-redux'
 import ChannelList from '../components/ChannelList'
 import { changeChannel } from '../actions'
@@ -20,8 +19,8 @@ async function onCreateChannel(socketManager) {
   }
 }
 
-function onChangeChannel(oldChannel, newChannel, dispatch, socketManager) {
-    socketManager.hubProxy.invoke('joinroom', oldChannel.RoomName, newChannel.RoomName, store.getState().userId);
+function onChangeChannel(oldChannel, newChannel, userId, dispatch, socketManager) {
+    socketManager.hubProxy.invoke('joinroom', oldChannel.RoomName, newChannel.RoomName, userId);
     var newUserList = [];
     newChannel.Users.forEach(function(element) {
       newUserList.push(element.Item2.substring(0, 8));
@@ -31,7 +30,8 @@ function onChangeChannel(oldChannel, newChannel, dispatch, socketManager) {
 
 const mapStateToProps = state => ({
   channels: state.channels,
-  currentChannel: state.currentChannel
+  currentChannel: state.currentChannel,
+  userId: state.userId
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -39,8 +39,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       onCreateChannel: () => {
         onCreateChannel(ownProps.socketManager);
       },
-      onChangeChannel: (oldChannel, newChannel) => {
-        onChangeChannel(oldChannel, newChannel, dispatch, ownProps.socketManager);
+      onChangeChannel: (oldChannel, newChannel, userId) => {
+        onChangeChannel(oldChannel, newChannel, userId, dispatch, ownProps.socketManager);
       }
     };
 };
