@@ -14,6 +14,7 @@ const ChannelList = ({ channels, currentChannel, userId, onCreateChannel, onChan
                 return (<input type="button" key={channel.RoomName} onClick={() => onChangeChannel(currentChannel, channel, userId)} className="menu-item menu-link" value={channel.RoomName}/>);
             })
         }
+    <br/>
     </div>
 )
 

@@ -1,8 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import App from './components/App';
+import pwaChat from './reducers/index';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import Cookies from 'universal-cookie';
+import guid from 'guid';
+import { retrieveUserId } from './actions';
+import WebSocketManager from './WebSocketManager';
 
 const applicationServerPublicKey = 'BMiZDeWBmOzC1PVd4FFK5BKFzF36jzlfsOjq4kOLoDfnEgNIuubR1upxNBwgLm5b5c7RAHppSkG9V6ewntGvenw';
 
@@ -83,3 +89,33 @@ async function unsubscribeUser() {
 }
 
 registerServiceWorker();
+
+let store = createStore(pwaChat);
+let socketManager = new WebSocketManager();
+
+function initialiseApp() {
+  var cookies = new Cookies();
+  var pwaUserId = cookies.get('pwa-user');
+  if (pwaUserId === undefined)
+  {
+    pwaUserId = guid.raw();
+    cookies.set('pwa-user', pwaUserId, { path: '/' });
+  }
+  store.dispatch(retrieveUserId(pwaUserId));
+  
+  socketManager.initialize('http://localhost:8080/chat', 'chatHub', pwaUserId);
+  socketManager.hubProxy.on('addMessage', socketManager.addMessage);
+  socketManager.hubProxy.on('retrieveroomDetails', socketManager.retrieveRoomDetails);
+  socketManager.hubProxy.on('retrieveallRooms', socketManager.retrieveAllRooms);
+  socketManager.startConnection();
+
+  ReactDOM.render(
+    <Provider store={store}>
+      <App />
+    </Provider>, document.getElementById('root'));
+}
+
+initialiseApp();
+
+export { socketManager };
+export { store };

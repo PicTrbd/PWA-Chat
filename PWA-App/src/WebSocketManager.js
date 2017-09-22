@@ -1,5 +1,5 @@
 import { hubConnection } from 'signalr-no-jquery';
-import { store } from './App'
+import { store } from './index'
 import { allChannelsRetrieved, singleChannelRetrieved, updateMessageList } from './actions'
 
 class WebSocketManager {

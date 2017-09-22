@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Api_v2.Controllers;
-using Api_v2.Models;
 using Microsoft.AspNet.SignalR;
 using Newtonsoft.Json;
 
