@@ -1,8 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import App from './components/App';
+import pwaChat from './reducers/index';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import Cookies from 'universal-cookie';
+import guid from 'guid';
+import { retrieveUserId } from './actions';
+import WebSocketManager from './WebSocketManager';
 
 const applicationServerPublicKey = 'BMiZDeWBmOzC1PVd4FFK5BKFzF36jzlfsOjq4kOLoDfnEgNIuubR1upxNBwgLm5b5c7RAHppSkG9V6ewntGvenw';
 
@@ -11,10 +17,7 @@ let swRegistration = null;
 
 function urlB64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding)
-    .replace(/-/g, '+')
-    .replace(/_/g, '/');
-
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);
 
@@ -24,87 +27,95 @@ function urlB64ToUint8Array(base64String) {
   return outputArray;
 }
 
-if ('serviceWorker' in navigator && 'PushManager' in window) {
-    console.log('Service Worker and Push is supported');
-    navigator.serviceWorker.register('sw.js')
-    .then(function(swReg) {
+async function registerServiceWorker() {
+  if ('serviceWorker' in navigator && 'PushManager' in window) {
+    try {
+      var swReg = await navigator.serviceWorker.register('sw.js')
       swRegistration = swReg;
       initialiseUI();
-    })
-    .catch(function(error) {
-      console.error('Service Worker Error', error);
-    });
+    } catch (error) {
+      console.log('ServiceWorker Error', error);
+    }
+  }
+}
+
+async function initialiseUI() {
+  if (isSubscribed) {
+    unsubscribeUser();
   } 
   else {
-    console.warn('Push messaging is not supported');
+    subscribeUser();
+    var subscription = await swRegistration.pushManager.getSubscription();
+    isSubscribed = !(subscription === null);
   }
-  
-  function initialiseUI() {
-      if (isSubscribed) {
-        unsubscribeUser();
-      } else {
-        subscribeUser();
-  
-    // Set the initial subscription value
-    swRegistration.pushManager.getSubscription()
-    .then(function(subscription) {
-      isSubscribed = !(subscription === null);
-    });
+}
     
-  }
-}
-
-function handleFetch(path, input) {
+async function handleFetch(path, input) {
   input.headers = {'Content-Type': 'application/json'}
-  var request = fetch(path, input)
-    .then(response => {
-      console.log(response);
-      if (response.status === 200)
-        return response;        
-      })
-  return request;
-}
-
-function arrayBufferToString(buffer){
-  var arr = new Uint8Array(buffer);
-  var str = String.fromCharCode.apply(String, arr);
-  if(/[\u0080-\uffff]/.test(str)){
-      throw new Error("this string seems to contain (still encoded) multibytes");
+  try {
+    var response = await fetch(path, input);
+    if (response.status === 200)
+      return response;        
+  } catch (error) {
+    console.log(error);
   }
-  return str;
+  return response;
 }
-
-function subscribeUser() {
-    const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
-    swRegistration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: applicationServerKey
-    })
-    .then(function(subscription) {
-      isSubscribed = true;
-      console.log(subscription)
-      var subJSObject = JSON.parse(JSON.stringify(subscription)); 
-      var auth = subJSObject.keys.auth; 
-      var p256dh = subJSObject.keys.p256dh;
-      var sub = {endpoint: subscription.endpoint, p256dh: p256dh, auth: auth}
-      handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
-    })
-    .catch(function(err) {
-      console.log('Failed to subscribe the user: ', err);
-    });
-  }
   
-  function unsubscribeUser() {
-    swRegistration.pushManager.getSubscription()
-    .then(function(subscription) {
-      if (subscription) {
-        return subscription.unsubscribe();
-      }
-    })
-    .catch(function(error) {
-      console.log('Error unsubscribing', error);
-    })
-    .then(function() {
-      isSubscribed = false;
-    });
+async function subscribeUser() {
+  var applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
+  try {
+  var subscription = await swRegistration.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: applicationServerKey
+  });
+  isSubscribed = true;
+  handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(subscription) });
+  } catch (error) {
+    console.log("Failed to subscribe the user : ", error);
   }
+}
+  
+async function unsubscribeUser() {
+  try {
+    var subscription = await swRegistration.pushManager.getSubscription()
+    if (subscription) {
+      isSubscribed = false;
+      return subscription.unsubscribe();
+    }
+  } catch (error) {
+    console.log('Error unsubscribing', error);
+  }
+}
+
+registerServiceWorker();
+
+let store = createStore(pwaChat);
+let socketManager = new WebSocketManager();
+
+function initialiseApp() {
+  var cookies = new Cookies();
+  var pwaUserId = cookies.get('pwa-user');
+  if (pwaUserId === undefined)
+  {
+    pwaUserId = guid.raw();
+    cookies.set('pwa-user', pwaUserId, { path: '/' });
+  }
+  store.dispatch(retrieveUserId(pwaUserId));
+  
+  socketManager.initialize('http://localhost:8080/chat', 'chatHub', pwaUserId);
+  socketManager.hubProxy.on('addMessage', socketManager.addMessage);
+  socketManager.hubProxy.on('retrieveroomDetails', socketManager.retrieveRoomDetails);
+  socketManager.hubProxy.on('retrieveallRooms', socketManager.retrieveAllRooms);
+  socketManager.startConnection();
+
+  ReactDOM.render(
+    <Provider store={store}>
+      <App />
+    </Provider>, document.getElementById('root'));
+}
+
+initialiseApp();
+
+export { socketManager };
+export { store };
