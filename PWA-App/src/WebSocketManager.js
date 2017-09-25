@@ -7,13 +7,12 @@ class WebSocketManager {
 
     initialize(url, hubName, userId) {
         var transportType = signalR.TransportType.WebSockets;
-        var http = new signalR.HttpConnection(url, { transport: transportType, test: '1' });
+        var http = new signalR.HttpConnection(url, { transport: transportType });
         this.connection = new signalR.HubConnection(http);
-        console.log(this.connection);
         //this.connection = hubConnection();
         //this.connection.url = url;
         //this.hubProxy = this.connection.createHubProxy(hubName);
-        //this.connection.qs = 'id='.concat(userId);
+        //this.connection.qs = 'id='.concat(userId);        
     }
 
     addMessage = function(newMessage) {
@@ -36,10 +35,11 @@ class WebSocketManager {
     async startConnection() {
         try {
             await this.connection.start()
+            console.log(this.connection);
             console.log('Now connected with ID : ' + this.connection.connection.connectionId);
             //console.log('Now connected with ID : ' + this.connection.id)
-            //this.retrieveMainRoomDetails()
-            //this.hubProxy.invoke('getAllRooms');
+            this.retrieveMainRoomDetails()
+            this.connection.invoke('getAllRooms');
         }
         catch (error) {
             console.log(error);
@@ -48,7 +48,7 @@ class WebSocketManager {
     }
 
     retrieveMainRoomDetails() {
-        this.hubProxy.invoke('getRoomDetails', "Main")
+        this.connection.invoke('getRoomDetails', "Main")
     }
 }
 

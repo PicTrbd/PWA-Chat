@@ -107,9 +107,9 @@ function initialiseApp() {
   store.dispatch(retrieveUserId(pwaUserId));
   
   socketManager.initialize('http://localhost:8080/chat', 'chatHub', pwaUserId);
-  //socketManager.hubProxy.on('addMessage', socketManager.addMessage);
-  //socketManager.hubProxy.on('retrieveroomDetails', socketManager.retrieveRoomDetails);
-  //socketManager.hubProxy.on('retrieveallRooms', socketManager.retrieveAllRooms);
+  socketManager.connection.on('addMessage', socketManager.addMessage);
+  socketManager.connection.on('retrieveroomDetails', socketManager.retrieveRoomDetails);
+  socketManager.connection.on('retrieveallRooms', socketManager.retrieveAllRooms);
   socketManager.startConnection();
 
   ReactDOM.render(
