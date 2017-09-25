@@ -1,28 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Threading.Tasks;
+using Api_v2.Models;
+using Api_v2.Repositories;
 using WebPush;
 
 namespace Api_v2.Controllers
 {
     public class PushNotificationsController
     {
-
-        private readonly List<Tuple<string, string, string>> _subscriptions;
+        //private readonly List<(string, string, string DSDDF)> _subscriptions;
+        private readonly IPushSubscriptionRepository _repository;
 
         public PushNotificationsController()
         {
-            _subscriptions = new List<Tuple<string, string, string>>();
+            //_subscriptions = new List<Tuple<string, string, string>>();
+            _repository = new PushSubscriptionRepository();
         }
 
-        public void AddClientSubscription(string endpoint, string p256Dh, string auth)
+        public async Task AddClientSubscription(PushSubscriptionModel subscription)
         {
-            var isAlreadySubscribed = _subscriptions.Any(x => (x.Item1 == endpoint)
-                                                           && (x.Item2 == p256Dh)
-                                                           && (x.Item3 == auth));
+            IEnumerable<PushSubscriptionModel> subscriptions = null;
+
+            await Task.Run(() =>
+            {
+                subscriptions = _repository.GetSubscriptions();
+            });
+
+            var isAlreadySubscribed = subscriptions != null && subscriptions
+                                          .Any(x => (x.Endpoint == subscription.Endpoint)
+                                                    && (x.P256Dh == subscription.P256Dh)
+                                                    && (x.Auth == subscription.Auth));
+            //overide Equals
+            //var isAlreadySubscribed = _subscriptions.Any(x => (x.Item1 == endpoint)
+            //                                               && (x.Item2 == p256Dh)
+            //                                               && (x.Item3 == auth));
             if (!isAlreadySubscribed)
-                _subscriptions.Add(Tuple.Create(endpoint, p256Dh, auth));
+                _repository.AddSubscription(subscription);
         }
 
         public void SendNotifications(string json)
@@ -36,9 +51,9 @@ namespace Api_v2.Controllers
 
                 var webPushClient = new WebPushClient();
 
-                _subscriptions.ForEach(x => webPushClient.SendNotification(
-                    new PushSubscription(x.Item1, x.Item2, x.Item3),
-                    json, vapidDetails));
+                //_subscriptions.ForEach(x => webPushClient.SendNotification(
+                //    new PushSubscription(x.Item1, x.Item2, x.Item3),
+                //    json, vapidDetails));
             }
             catch (Exception e)
             {

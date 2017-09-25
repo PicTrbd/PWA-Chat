@@ -34,11 +34,11 @@ class WebSocketManager {
             this.retrieveMainRoomDetails()
             this.hubProxy.invoke('getAllRooms');
         }.bind(this))
-        .fail(function() { console.log('Could not connect')});
+        .fail(function(e) { console.log(e)});
     }
 
     retrieveMainRoomDetails() {
-        this.hubProxy.invoke('getRoomDetails', "Main")
+        this.hubProxy.getRoomDetails("Main")
     }
 }
 

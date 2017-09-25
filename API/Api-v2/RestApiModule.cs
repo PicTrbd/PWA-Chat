@@ -13,8 +13,8 @@ namespace Api_v2
             Post["/subscribe"] = param =>
             {
                 Console.WriteLine("New user subscribed to notifications !");
-                var subs = this.Bind<SubscriptionDetails>();
-                Dependencies.NotificationsController.AddClientSubscription(subs.endpoint, subs.keys.p256dh, subs.keys.auth);
+                var subs = this.Bind<PushSubscriptionModel>();
+                Dependencies.NotificationsController.AddClientSubscription(subs);
                 return "OK";
             };
         }

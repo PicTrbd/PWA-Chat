@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Api_v2.Models
+namespace ChatHexagone.Models
 {
-    public class RoomModel
+    public class Chanel
     {
         public Guid Id { get; set; }
+        private List<Message> _messages;
         public string RoomName { get; set; }
-        private List<MessageModel> _messages;
-        public HashSet<Tuple<string, Guid>> Users { get; set; }
+        public List<User> Users { get; set; }
 
         //Trier ailleurs
-        public List<MessageModel> Messages
+        public List<Message> Messages
         {
             get => _messages = _messages.OrderBy(x => x.Date).ToList();
             set => _messages = value;

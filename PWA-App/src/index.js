@@ -64,8 +64,17 @@ function handleFetch(path, input) {
       })
   return request;
 }
-  
-  function subscribeUser() {
+
+function arrayBufferToString(buffer){
+  var arr = new Uint8Array(buffer);
+  var str = String.fromCharCode.apply(String, arr);
+  if(/[\u0080-\uffff]/.test(str)){
+      throw new Error("this string seems to contain (still encoded) multibytes");
+  }
+  return str;
+}
+
+function subscribeUser() {
     const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
     swRegistration.pushManager.subscribe({
       userVisibleOnly: true,
@@ -73,7 +82,12 @@ function handleFetch(path, input) {
     })
     .then(function(subscription) {
       isSubscribed = true;
-      handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(subscription) });
+      console.log(subscription)
+      var subJSObject = JSON.parse(JSON.stringify(subscription)); 
+      var auth = subJSObject.keys.auth; 
+      var p256dh = subJSObject.keys.p256dh;
+      var sub = {endpoint: subscription.endpoint, p256dh: p256dh, auth: auth}
+      handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
     })
     .catch(function(err) {
       console.log('Failed to subscribe the user: ', err);
