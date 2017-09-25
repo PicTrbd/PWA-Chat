@@ -6,9 +6,9 @@ import * as signalR from '@aspnet/signalr-client'
 class WebSocketManager {
 
     initialize(url, hubName, userId) {
-        var transportType = signalR.TransportType.WebSockets;
-        var http = new signalR.HttpConnection(url, { transport: transportType });
-        this.connection = new signalR.HubConnection(http);
+        var params = "?UserId=" + userId;
+        this.connection = new signalR.HubConnection(url + params);
+
         //this.connection = hubConnection();
         //this.connection.url = url;
         //this.hubProxy = this.connection.createHubProxy(hubName);
