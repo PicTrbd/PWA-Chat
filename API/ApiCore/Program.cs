@@ -1,4 +1,6 @@
-﻿using ApiCore.Infrastructure;
+﻿using System;
+using System.Diagnostics;
+using ApiCore.Infrastructure;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
@@ -13,9 +15,10 @@ namespace ApiCore
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
+		public static IWebHost BuildWebHost(string[] args) =>
+			WebHost.CreateDefaultBuilder(args)
+				.UseStartup<Startup>()
+                .UseUrls("http://localhost:8080/")
+				.Build();
     }
 }
