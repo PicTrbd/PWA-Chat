@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.Linq;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +24,10 @@ namespace ApiCore
 
         private void SetSecrets()
         {
-            DatabaseSecrets.UserId = Configuration["UserId"];
+            var firstOrDefault = Configuration.Providers.FirstOrDefault();
+            if (firstOrDefault == null || !firstOrDefault.TryGet("UserId", out var userId))
+                throw new Exception("You need to fill your settings file with your DB secrets !");
+            DatabaseSecrets.UserId = userId;
             DatabaseSecrets.Password = Configuration["Password"];
             DatabaseSecrets.ServerURL = Configuration["ServerURL"];
             DatabaseSecrets.DatabaseName = Configuration["Database"];
