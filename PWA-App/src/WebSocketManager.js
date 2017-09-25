@@ -1,14 +1,19 @@
-import { hubConnection } from 'signalr-no-jquery';
+//import { hubConnection } from 'signalr-no-jquery';
 import { store } from './index'
 import { allChannelsRetrieved, singleChannelRetrieved, updateMessageList } from './actions'
+import * as signalR from '@aspnet/signalr-client'
 
 class WebSocketManager {
 
     initialize(url, hubName, userId) {
-        this.connection = hubConnection();
-        this.connection.url = url;
-        this.hubProxy = this.connection.createHubProxy(hubName);
-        this.connection.qs = 'id='.concat(userId);
+        var transportType = signalR.TransportType.WebSockets;
+        var http = new signalR.HttpConnection(url, { transport: transportType, test: '1' });
+        this.connection = new signalR.HubConnection(http);
+        console.log(this.connection);
+        //this.connection = hubConnection();
+        //this.connection.url = url;
+        //this.hubProxy = this.connection.createHubProxy(hubName);
+        //this.connection.qs = 'id='.concat(userId);
     }
 
     addMessage = function(newMessage) {
@@ -31,11 +36,13 @@ class WebSocketManager {
     async startConnection() {
         try {
             await this.connection.start()
-            console.log('Now connected with ID : ' + this.connection.id)
-            this.retrieveMainRoomDetails()
-            this.hubProxy.invoke('getAllRooms');
+            console.log('Now connected with ID : ' + this.connection.connection.connectionId);
+            //console.log('Now connected with ID : ' + this.connection.id)
+            //this.retrieveMainRoomDetails()
+            //this.hubProxy.invoke('getAllRooms');
         }
         catch (error) {
+            console.log(error);
             console.log("Could not connect");
         }
     }

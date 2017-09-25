@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@aspnet/signalr-client": "^1.0.0-alpha1-final",
     "guid": "0.0.12",
     "react": "^15.6.1",
     "react-burger-menu": "^2.1.6",
