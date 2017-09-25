@@ -69,8 +69,11 @@ async function subscribeUser() {
     userVisibleOnly: true,
     applicationServerKey: applicationServerKey
   });
-  isSubscribed = true;
-  handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(subscription) });
+  var subJSObject = JSON.parse(JSON.stringify(subscription)); 
+  var auth = subJSObject.keys.auth; 
+  var p256dh = subJSObject.keys.p256dh;
+  var sub = {endpoint: subscription.endpoint, p256dh: p256dh, auth: auth}
+  handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
   } catch (error) {
     console.log("Failed to subscribe the user : ", error);
   }

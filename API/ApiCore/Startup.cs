@@ -27,6 +27,7 @@ namespace ApiCore
             var firstOrDefault = Configuration.Providers.FirstOrDefault();
             if (firstOrDefault == null || !firstOrDefault.TryGet("UserId", out var userId))
                 throw new Exception("You need to fill your settings file with your DB secrets !");
+
             DatabaseSecrets.UserId = userId;
             DatabaseSecrets.Password = Configuration["Password"];
             DatabaseSecrets.ServerURL = Configuration["ServerURL"];
