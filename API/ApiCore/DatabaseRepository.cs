@@ -1,13 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using ChatHexagone.Models;
+using System.Collections.Generic;
 
 namespace ApiCore
 {
     public interface IDatabaseRepository
     {
         void AddSubscription(PushSubscription subscription);
-        IEnumerable<PushSubscription> GetSubscriptions();
+        List<PushSubscription> GetSubscriptions();
+        List<Channel> GetChanels();
+        void TryCreateMainChanel();
+        void CreateChannel(Channel channel);
     }
 
     public class DatabaseRepository : IDatabaseRepository
@@ -26,12 +29,43 @@ namespace ApiCore
             }
         }
 
-        public IEnumerable<PushSubscription> GetSubscriptions()
+        public List<PushSubscription> GetSubscriptions()
         {
             using (var db = new DataAccess())
             {
-                var list = db.Set<PushSubscription>().ToList();
-                return list;
+                var subscriptions = db.Set<PushSubscription>();
+                return subscriptions.ToList();
+            }
+        }
+
+        public List<Channel> GetChanels()
+        {
+            using (var db = new DataAccess())
+            {
+                var channels = db.Set<Channel>();
+                return channels.ToList();
+            }
+        }
+
+        public void TryCreateMainChanel()
+        {
+            using (var db = new DataAccess())
+            {
+                var channels = db.Set<Channel>();
+                if (channels.All(x => x.ChannelName != "Main"))
+                {
+                    db.Chanels.Add(new Channel() { ChannelName = "Main", Messages = new List<Message>() });
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        public void CreateChannel(Channel channel)
+        {
+            using (var db = new DataAccess())
+            {
+                db.Chanels.Add(channel);
+                db.SaveChanges();
             }
         }
     }

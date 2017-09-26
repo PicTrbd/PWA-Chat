@@ -7,5 +7,8 @@ namespace ChatHexagone.Adapters.RightSide
     {
         void AddSubscription(PushSubscription subscription);
         List<PushSubscription> GetSubscriptions();
+        void CreateChannel(Channel channel);
+        void TryCreateMainChanel();
+        List<Channel> GetChanels();
     }
 }

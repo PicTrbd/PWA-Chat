@@ -22,6 +22,7 @@ namespace ChatHexagone.Services
         {
             if (Subscriptions.Contains(subscription))
                 return false;
+
             Subscriptions.Add(subscription);
             return true;
         }

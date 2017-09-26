@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using ChatHexagone.Models;
+﻿using ChatHexagone.Models;
 using System.Collections.Generic;
 using ChatHexagone.Adapters.RightSide;
 
@@ -16,6 +15,16 @@ namespace ApiCore.Adapters.RightSide
             => _databaseRepository.AddSubscription(subscription);
 
         public List<PushSubscription> GetSubscriptions()
-            => _databaseRepository.GetSubscriptions().ToList();
+            => _databaseRepository.GetSubscriptions();
+
+        public List<Channel> GetChanels()
+            => _databaseRepository.GetChanels();
+
+        public void CreateChannel(Channel channel)
+            => _databaseRepository.CreateChannel(channel);
+
+        public void TryCreateMainChanel()
+            => _databaseRepository.TryCreateMainChanel();
+
     }
 }

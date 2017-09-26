@@ -6,10 +6,11 @@ import * as signalR from '@aspnet/signalr-client'
 class WebSocketManager {
 
     initialize(url, hubName, userId) {
+        //url = url + "?token=" + userId
         var transportType = signalR.TransportType.WebSockets;
-        var http = new signalR.HttpConnection(url, { transport: transportType, test: '1' });
+        var http = new signalR.HttpConnection(url, { transport: transportType, coocu: "foo"});
         this.connection = new signalR.HubConnection(http);
-        console.log(this.connection);
+        this.connection.qs = "vfdjokvo<"
         //this.connection = hubConnection();
         //this.connection.url = url;
         //this.hubProxy = this.connection.createHubProxy(hubName);
@@ -35,6 +36,7 @@ class WebSocketManager {
 
     async startConnection() {
         try {
+            console.log(this.connection)
             await this.connection.start()
             console.log('Now connected with ID : ' + this.connection.connection.connectionId);
             //console.log('Now connected with ID : ' + this.connection.id)

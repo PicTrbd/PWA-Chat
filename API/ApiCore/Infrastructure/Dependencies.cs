@@ -27,7 +27,7 @@ namespace ApiCore.Infrastructure
 
             // Left Side Adapters
             _builder.RegisterType<PushSubscriptionAdapter>().As<ISubscriptionAdapter>().SingleInstance();
-            _builder.RegisterType<ChanelAdapter>().As<IChanelAdapter>().SingleInstance();
+            _builder.RegisterType<ChannelAdapter>().As<IChannelAdapter>().SingleInstance();
 
             return Instance;
         }

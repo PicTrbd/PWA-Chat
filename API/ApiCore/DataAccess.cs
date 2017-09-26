@@ -1,5 +1,4 @@
-﻿using System;
-using ChatHexagone.Models;
+﻿using ChatHexagone.Models;
 using System.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,12 +6,8 @@ namespace ApiCore
 {
     public class DataAccess : DbContext
     {
-        private volatile Type _dependency;
-
         public DataAccess() : base(new DbContextOptionsBuilder().UseSqlServer(GetBuiltConnectionString()).Options)
-        {
-            
-        }
+        { }
 
         private static string GetBuiltConnectionString()
         {
@@ -28,7 +23,7 @@ namespace ApiCore
             return builder.ToString();
         }
 
-        public DbSet<Chanel> Chanels { get; set; }
+        public DbSet<Channel> Chanels { get; set; }
         public DbSet<PushSubscription> Subscriptions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

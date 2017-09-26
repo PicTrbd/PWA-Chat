@@ -12,7 +12,7 @@ namespace ApiCore
 
         private static void MapEntityDbEntry(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Chanel>().ToTable("Chanels");
+            modelBuilder.Entity<Channel>().ToTable("Chanels");
             modelBuilder.Entity<PushSubscription>().ToTable("PushSubscriptions");
         }
     }
