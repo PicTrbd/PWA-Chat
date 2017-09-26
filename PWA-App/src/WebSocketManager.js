@@ -7,12 +7,7 @@ class WebSocketManager {
 
     initialize(url, hubName, userId) {
         var params = "?UserId=" + userId;
-        this.connection = new signalR.HubConnection(url + params);
-
-        //this.connection = hubConnection();
-        //this.connection.url = url;
-        //this.hubProxy = this.connection.createHubProxy(hubName);
-        //this.connection.qs = 'id='.concat(userId);        
+        this.connection = new signalR.HubConnection(url + params);   
     }
 
     addMessage = function(newMessage) {
@@ -35,14 +30,11 @@ class WebSocketManager {
     async startConnection() {
         try {
             await this.connection.start()
-            console.log(this.connection);
             console.log('Now connected with ID : ' + this.connection.connection.connectionId);
-            //console.log('Now connected with ID : ' + this.connection.id)
             this.retrieveMainRoomDetails()
             this.connection.invoke('getAllRooms');
         }
         catch (error) {
-            console.log(error);
             console.log("Could not connect");
         }
     }
