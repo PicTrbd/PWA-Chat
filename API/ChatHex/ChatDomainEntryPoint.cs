@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ChatHexagone.Services;
 using ChatHexagone.Adapters.RightSide;
+using ChatHexagone.Models;
 
 namespace ChatHexagone
 {
@@ -28,8 +31,19 @@ namespace ChatHexagone
             _databaseAdapter.TryCreateMainChanel();
             RetrieveSavedSubscriptions();
             RetrieveSavedChanels();
-
+            CheckIfChannelsPropertiesAreNull();
             _isStartUp = false;
+        }
+
+        private void CheckIfChannelsPropertiesAreNull()
+        {
+            foreach (var channel in _channelService.Chanels)
+            {
+                if (channel.Users == null)
+                    channel.Users = new List<User>();
+                if (channel.Messages == null)
+                    channel.Messages = new List<Message>();
+            }
         }
 
         private void RetrieveSavedSubscriptions()
