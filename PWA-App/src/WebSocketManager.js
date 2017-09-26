@@ -6,15 +6,8 @@ import * as signalR from '@aspnet/signalr-client'
 class WebSocketManager {
 
     initialize(url, hubName, userId) {
-        //url = url + "?token=" + userId
-        var transportType = signalR.TransportType.WebSockets;
-        var http = new signalR.HttpConnection(url, { transport: transportType, coocu: "foo"});
-        this.connection = new signalR.HubConnection(http);
-        this.connection.qs = "vfdjokvo<"
-        //this.connection = hubConnection();
-        //this.connection.url = url;
-        //this.hubProxy = this.connection.createHubProxy(hubName);
-        //this.connection.qs = 'id='.concat(userId);
+        var params = "?UserId=" + userId;
+        this.connection = new signalR.HubConnection(url + params);   
     }
 
     addMessage = function(newMessage) {
@@ -36,21 +29,18 @@ class WebSocketManager {
 
     async startConnection() {
         try {
-            console.log(this.connection)
             await this.connection.start()
             console.log('Now connected with ID : ' + this.connection.connection.connectionId);
-            //console.log('Now connected with ID : ' + this.connection.id)
-            //this.retrieveMainRoomDetails()
-            //this.hubProxy.invoke('getAllRooms');
+            this.retrieveMainRoomDetails()
+            this.connection.invoke('getAllRooms');
         }
         catch (error) {
-            console.log(error);
             console.log("Could not connect");
         }
     }
 
     retrieveMainRoomDetails() {
-        this.hubProxy.invoke('getRoomDetails', "Main")
+        this.connection.invoke('getRoomDetails', "Main")
     }
 }
 

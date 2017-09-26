@@ -13,7 +13,7 @@ async function onCreateChannel(socketManager) {
   var channelName = prompt("Entre un nom pour votre banane :");
   if (channelName != null && channelName !== "") {
     try {
-      await socketManager.hubProxy.invoke('createroom', channelName);
+      await socketManager.connection.invoke('createroom', channelName);
     } catch (error) {
       console.log("No signalR connection initialized");
     }
