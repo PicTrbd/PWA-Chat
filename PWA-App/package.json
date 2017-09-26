@@ -11,7 +11,6 @@
     "react-redux": "^5.0.6",
     "react-scripts": "1.0.12",
     "redux": "^3.7.2",
-    "signalr-no-jquery": "^0.1.8",
     "universal-cookie": "^2.1.0"
   },
   "scripts": {
