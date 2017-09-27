@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
 import Cookies from 'universal-cookie';
-import guid from 'guid';
 import { retrieveUserId } from './actions';
 import WebSocketManager from './WebSocketManager';
 
@@ -14,6 +13,7 @@ const applicationServerPublicKey = 'BMiZDeWBmOzC1PVd4FFK5BKFzF36jzlfsOjq4kOLoDfn
 
 let isSubscribed = false;
 let swRegistration = null;
+let clientId = "";
 
 function urlB64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
@@ -53,9 +53,9 @@ async function initialiseUI() {
 async function handleFetch(path, input) {
   input.headers = {'Content-Type': 'application/json'}
   try {
-    var response = await fetch(path, input);
+    var response = await fetch(path, input);    
     if (response.status === 200)
-      return response;        
+      return response.json();    
   } catch (error) {
     console.log(error);
   }
@@ -73,10 +73,12 @@ async function subscribeUser() {
   var auth = subJSObject.keys.auth; 
   var p256dh = subJSObject.keys.p256dh;
   var sub = {endpoint: subscription.endpoint, p256dh: p256dh, auth: auth}
-  handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
+  var subscriptionResult = await handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
+  clientId = subscriptionResult.clientId;
   } catch (error) {
     console.log("Failed to subscribe the user : ", error);
   }
+  initialiseApp();    
 }
   
 async function unsubscribeUser() {
@@ -101,7 +103,7 @@ function initialiseApp() {
   var pwaUserId = cookies.get('pwa-user');
   if (pwaUserId === undefined)
   {
-    pwaUserId = guid.raw();
+    pwaUserId = clientId;
     cookies.set('pwa-user', pwaUserId, { path: '/' });
   }
   store.dispatch(retrieveUserId(pwaUserId));
@@ -118,7 +120,6 @@ function initialiseApp() {
     </Provider>, document.getElementById('root'));
 }
 
-initialiseApp();
 
 export { socketManager };
 export { store };
