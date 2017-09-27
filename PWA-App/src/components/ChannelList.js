@@ -9,9 +9,9 @@ const ChannelList = ({ channels, currentChannel, userId, onCreateChannel, onChan
         </div>
         {
             channels.map(function(channel) {
-                if (channel.RoomName === currentChannel.RoomName)
-                    return (<input type="button" disabled key={channel.RoomName} className="menu-item selected-channel" value={channel.RoomName}/>);
-                return (<input type="button" key={channel.RoomName} onClick={() => onChangeChannel(currentChannel, channel, userId)} className="menu-item menu-link" value={channel.RoomName}/>);
+                if (channel.ChannelName === currentChannel.ChannelName)
+                    return (<input type="button" disabled key={channel.ChannelName + channel.id.substring(0, 1)} className="menu-item selected-channel" value={channel.ChannelName}/>);
+                return (<input type="button" key={channel.ChannelName + channel.id.substring(0, 1)} onClick={() => onChangeChannel(currentChannel, channel, userId)} className="menu-item menu-link" value={channel.ChannelName}/>);
             })
         }
     <br/>

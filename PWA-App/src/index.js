@@ -108,8 +108,8 @@ function initialiseApp() {
   
   socketManager.initialize('http://localhost:8080/chat', 'chatHub', pwaUserId);
   socketManager.connection.on('addMessage', socketManager.addMessage);
-  socketManager.connection.on('retrieveroomDetails', socketManager.retrieveRoomDetails);
-  socketManager.connection.on('retrieveallRooms', socketManager.retrieveAllRooms);
+  socketManager.connection.on('retrievechanneldetails', socketManager.retrieveChannelDetails);
+  socketManager.connection.on('retrieveallchannels', socketManager.retrieveAllChannels);
   socketManager.startConnection();
 
   ReactDOM.render(
