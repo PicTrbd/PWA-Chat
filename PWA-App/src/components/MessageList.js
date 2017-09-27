@@ -16,7 +16,7 @@ const MessageList = ({ messages, userId }) => (
                         <div key={message.Id}>
                             <li className="self">
                                 <div className="msg tri-right talk-bubble round right-in">
-                                <p>{message.Message}</p>
+                                <p>{message.Text}</p>
                                 <time>{getFormattedTimeFromDate(message.Date)}</time>
                                 </div>
                             </li>
@@ -28,7 +28,7 @@ const MessageList = ({ messages, userId }) => (
                         <div key={message.Id}>
                             <li className="other">
                                 <div className="msg tri-right talk-bubble round left-in">
-                                <p>{message.Message}</p>
+                                <p>{message.Text}</p>
                                 <div className="bubble-infos">
                                     <time>{getFormattedTimeFromDate(message.Date)}</time>
                                     <p className="sender">{'#' + message.UserId.substr(0, 8)}</p>

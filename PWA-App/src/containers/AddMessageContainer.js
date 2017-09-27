@@ -11,7 +11,7 @@ async function sendMessage(userId, message, currentChannel, socketManager) {
     try {
         var newMessage = 
         {
-            Message: message,
+            Text: message,
             UserId: userId,
             Id: guid.raw(),
             Date: new Date()

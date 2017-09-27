@@ -10,7 +10,7 @@ const ChannelListContainer = ({ channels, currentChannel, userId, onCreateChanne
 )
 
 async function onCreateChannel(socketManager) {
-  var channelName = prompt("Entre un nom pour votre banane :");
+  var channelName = prompt("Entre un nom pour votre channel :");
   if (channelName != null && channelName !== "") {
     try {
       await socketManager.connection.invoke('createchannel', channelName);
@@ -22,10 +22,10 @@ async function onCreateChannel(socketManager) {
 
 async function onChangeChannel(oldChannel, newChannel, userId, dispatch, socketManager) {
   try {
-    await socketManager.hubProxy.invoke('joinchannel', oldChannel.ChannelName, newChannel.ChannelName, new guid(userId));
-    var newUserList = [];
+    await socketManager.connection.invoke('joinchannel', oldChannel.ChannelName, newChannel.ChannelName, new guid(userId));
+    var newUserList = [userId.substring(0,8)];
     newChannel.Users.forEach(function(element) {
-      newUserList.push(element.Item2.substring(0, 8));
+      newUserList.push(element.ClientId.substring(0, 8));
     }, this);
     dispatch(changeChannel(newChannel, newUserList, newChannel.Messages));
   } catch (error) {
