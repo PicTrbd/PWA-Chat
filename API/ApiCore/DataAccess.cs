@@ -24,7 +24,7 @@ namespace ApiCore
         }
 
         public DbSet<Channel> Chanels { get; set; }
-        public DbSet<PushSubscription> Subscriptions { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

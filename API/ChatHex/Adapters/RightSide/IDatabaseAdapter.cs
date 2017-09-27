@@ -5,8 +5,8 @@ namespace ChatHexagone.Adapters.RightSide
 {
     public interface IDatabaseAdapter
     {
-        void AddSubscription(PushSubscription subscription);
-        List<PushSubscription> GetSubscriptions();
+        void AddUser(User user);
+        List<User> GetUsers();
         void CreateChannel(Channel channel);
         void TryCreateMainChanel();
         List<Channel> GetChanels();

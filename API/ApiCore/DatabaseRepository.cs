@@ -6,8 +6,8 @@ namespace ApiCore
 {
     public interface IDatabaseRepository
     {
-        void AddSubscription(PushSubscription subscription);
-        List<PushSubscription> GetSubscriptions();
+        void AddUser(User user);
+        List<User> GetUsers();
         List<Channel> GetChanels();
         void TryCreateMainChanel();
         void CreateChannel(Channel channel);
@@ -20,21 +20,21 @@ namespace ApiCore
             new DataAccess().Database.EnsureCreated();
         }
 
-        public void AddSubscription(PushSubscription subscription)
+        public void AddUser(User user)
         {
             using (var db = new DataAccess())
             {
-                db.Subscriptions.Add(subscription);
+                db.Users.Add(user);
                 db.SaveChanges();
             }
         }
 
-        public List<PushSubscription> GetSubscriptions()
+        public List<User> GetUsers()
         {
             using (var db = new DataAccess())
             {
-                var subscriptions = db.Set<PushSubscription>();
-                return subscriptions.ToList();
+                var users = db.Set<User>();
+                return users.ToList();
             }
         }
 

@@ -8,6 +8,6 @@ namespace ChatHexagone.Models
         [Key]
         public Guid ClientId { get; set; }
         public string SocketId { get; set; }
-        //public PushSubscription PushSubscription { get; set; }
+        public PushSubscription PushSubscription { get; set; }
     }
 }

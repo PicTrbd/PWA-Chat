@@ -2,6 +2,7 @@
 using ApiCore.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using ChatHexagone.Adapters.LeftSide;
+using Newtonsoft.Json;
 
 namespace ApiCore.Controllers
 {
@@ -10,10 +11,10 @@ namespace ApiCore.Controllers
         private readonly ISubscriptionAdapter _adapter = Dependencies.Resolve<ISubscriptionAdapter>();
         
         [HttpPost][Route("subscribe")]
-        public IActionResult Post([FromBody]PushSubscription subscription)
+        public string Post([FromBody]PushSubscription subscription)
         {
-            _adapter.AddNewPushSuscription(subscription);
-            return Accepted();
+            var clientId = _adapter.AddNewPushSuscription(subscription);
+            return JsonConvert.SerializeObject(new { clientId = clientId });
         }
 
     }

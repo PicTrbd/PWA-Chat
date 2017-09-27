@@ -7,40 +7,40 @@ namespace ChatHexagone.Services
 {
     public interface IChannelService
     {
-        List<Channel> Chanels { get; set; }
-        Channel GetChanel(string channelName);
+        List<Channel> Channels { get; set; }
+        Channel GetChannel(string channelName);
         bool CreateChannel(string channelName);
         void RemoveUserFromChannel(string socketId);
         void AddMessageToChannel(string channelName, Message message);
-        void AddUserToChanel(string room, Guid clientId, string socketId);
+        void AddUserToChannel(string room, Guid clientId, string socketId);
         Channel FindUserChannel(string socketId);
     }
 
     public class ChannelService : IChannelService
     {
-        public List<Channel> Chanels { get; set; }
+        public List<Channel> Channels { get; set; }
 
         public ChannelService()
-            => Chanels = new List<Channel>();
+            => Channels = new List<Channel>();
 
-        public Channel GetChanel(string channelName)
-            => Chanels.FirstOrDefault(x => x.ChannelName == channelName);
+        public Channel GetChannel(string channelName)
+            => Channels.FirstOrDefault(x => x.ChannelName == channelName);
 
         private Channel GetRoomFromName(string channelName)
-            => Chanels.FirstOrDefault(x => x.ChannelName == channelName);
+            => Channels.FirstOrDefault(x => x.ChannelName == channelName);
 
         public void RemoveUserFromChannel(string socketId)
-            => Chanels.ForEach(r => r.Users.RemoveAll(x => x.SocketId == socketId));
+            => Channels.ForEach(r => r.Users.RemoveAll(x => x.SocketId == socketId));
 
-        public void AddUserToChanel(string room, Guid clientId, string socketId)
+        public void AddUserToChannel(string room, Guid clientId, string socketId)
         {
-            Chanels.ForEach(channel => channel.Users.RemoveAll(u => u.ClientId == clientId || u.SocketId == socketId));
-            GetChanel(room).Users.Add(new User(){ ClientId = clientId, SocketId = socketId});            
+            Channels.ForEach(channel => channel.Users.RemoveAll(u => u.ClientId == clientId || u.SocketId == socketId));
+            GetChannel(room).Users.Add(new User(){ ClientId = clientId, SocketId = socketId});            
         }
 
         public Channel FindUserChannel(string socketId)
         {
-            var channel = Chanels.Where(r => r.Users.Any(user => user.SocketId == socketId));
+            var channel = Channels.Where(r => r.Users.Any(user => user.SocketId == socketId));
             return channel.Any() ? channel.First() : null;
         } 
 
@@ -52,7 +52,7 @@ namespace ChatHexagone.Services
 
         public bool CreateChannel(string channelName)
         {
-            if (Chanels.Any(x => x.ChannelName == channelName))
+            if (Channels.Any(x => x.ChannelName == channelName))
                 return false;
 
             var channel = new Channel()
@@ -62,7 +62,7 @@ namespace ChatHexagone.Services
                 Users = new List<User>()
             };
 
-            Chanels.Add(channel);
+            Channels.Add(channel);
             return true;
         } 
 

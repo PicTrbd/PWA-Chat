@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using ChatHexagone.Services;
 using ChatHexagone.Adapters.RightSide;
 using ChatHexagone.Models;
+using ChatHexagone.Services;
 
 namespace ChatHexagone
 {
     public interface IChatDomainEntryPoint
     {
-        ChatEvents HandleActions(ChatAct act);
+        ChatEvent HandleActions(ChatAct act);
     }
 
     public class ChatDomainEntryPoint : IChatDomainEntryPoint
@@ -17,11 +16,11 @@ namespace ChatHexagone
         private bool _isStartUp = true;
         private readonly IChannelService _channelService;
         private readonly IDatabaseAdapter _databaseAdapter;
-        private readonly ISubscriptionService _subscriptionService;
+        private readonly IUserService _userService;
 
         public ChatDomainEntryPoint(IDatabaseAdapter databaseAdapter)
         {
-            _subscriptionService = new SubscriptionService();
+            _userService = new UserService();
             _channelService = new ChannelService();
             _databaseAdapter = databaseAdapter;
         }
@@ -37,7 +36,7 @@ namespace ChatHexagone
 
         private void CheckIfChannelsPropertiesAreNull()
         {
-            foreach (var channel in _channelService.Chanels)
+            foreach (var channel in _channelService.Channels)
             {
                 if (channel.Users == null)
                     channel.Users = new List<User>();
@@ -47,15 +46,15 @@ namespace ChatHexagone
         }
 
         private void RetrieveSavedSubscriptions()
-            => _subscriptionService.Subscriptions = _databaseAdapter.GetSubscriptions();
+            => _userService.Users = _databaseAdapter.GetUsers();
 
         private void RetrieveSavedChanels()
-            => _channelService.Chanels = _databaseAdapter.GetChanels();
+            => _channelService.Channels = _databaseAdapter.GetChanels();
 
-        private ChanelEvents HandleChanelActions(ChanelAct act)
+        private ChanelEvent HandleChanelActions(ChanelAct act)
         {
             if (act is GetAllChanels)
-                return new ChanelsRetrieved(_channelService.Chanels);
+                return new ChanelsRetrieved(_channelService.Channels);
             if (act is RemoveUserFromChannel removeUserAct)
                 _channelService.RemoveUserFromChannel(removeUserAct.SocketId);
             if (act is FindUserChannel findUserChannelAct)
@@ -63,33 +62,36 @@ namespace ChatHexagone
             if (act is AddMessageToChannel addMessageAct)
                 _channelService.AddMessageToChannel(addMessageAct.ChannelName, addMessageAct.Message);
             if (act is GetChanelDetails channelDetailAct)
-                return new ChanelDetailsRetrieved(_channelService.GetChanel(channelDetailAct.ChanelName));
+                return new ChanelDetailsRetrieved(_channelService.GetChannel(channelDetailAct.ChanelName));
             if (act is CreateChannel createChannelAct)
                 if (_channelService.CreateChannel(createChannelAct.ChannelName))
-                    _databaseAdapter.CreateChannel(_channelService.GetChanel(createChannelAct.ChannelName));
+                    _databaseAdapter.CreateChannel(_channelService.GetChannel(createChannelAct.ChannelName));
             if (act is AddUserToChanel addUserToChannel)
-                _channelService.AddUserToChanel(addUserToChannel.ChanelName, addUserToChannel.UserId, addUserToChannel.UserSocketId);
+                _channelService.AddUserToChannel(addUserToChannel.ChanelName, addUserToChannel.UserId, addUserToChannel.UserSocketId);
             return null;
         }
 
-        private void HandleSubscriptionActions(SubscribtionAct act)
+        private SubscriptionEvent HandleSubscriptionActions(SubscribtionAct act)
         {
             if (act is CreateSubscription createSubscription)
-                if (_subscriptionService.AddSubscription(createSubscription.Subscription))
-                    _databaseAdapter.AddSubscription(createSubscription.Subscription);
+            {
+                var (subscriptionWasAdded, user) = _userService.AddUserSubscription(createSubscription.Subscription);
+                if (subscriptionWasAdded)
+                    _databaseAdapter.AddUser(user);
+                return new UserSubscriptionCreated(user.ClientId);
+            }
+            return null;
         }
 
-        public ChatEvents HandleActions(ChatAct act)
+        public ChatEvent HandleActions(ChatAct act)
         {
             if (_isStartUp)
                 InitializeFirstLaunch();
             if (act is ChanelAct channelAct)
                 return HandleChanelActions(channelAct);
             if (act is SubscribtionAct subscribtionAct)
-                HandleSubscriptionActions(subscribtionAct);
-            else
-                throw new Exception("Act not handled");
-            return null;
+                return HandleSubscriptionActions(subscribtionAct);
+            throw new Exception("Act not handled");
         }
     }
 }

@@ -11,11 +11,11 @@ namespace ApiCore.Adapters.RightSide
         public DatabaseAdapter()
             => _databaseRepository = new DatabaseRepository();
 
-        public void AddSubscription(PushSubscription subscription)
-            => _databaseRepository.AddSubscription(subscription);
+        public void AddUser(User user)
+            => _databaseRepository.AddUser(user);
 
-        public List<PushSubscription> GetSubscriptions()
-            => _databaseRepository.GetSubscriptions();
+        public List<User> GetUsers()
+            => _databaseRepository.GetUsers();
 
         public List<Channel> GetChanels()
             => _databaseRepository.GetChanels();
