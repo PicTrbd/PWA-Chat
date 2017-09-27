@@ -10,5 +10,6 @@ namespace ChatHexagone.Adapters.RightSide
         void CreateChannel(Channel channel);
         void TryCreateMainChanel();
         List<Channel> GetChanels();
+        void AddMessageToChannel(string channel, Message message);
     }
 }

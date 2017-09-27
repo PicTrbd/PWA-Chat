@@ -20,6 +20,9 @@ namespace ApiCore.Adapters.RightSide
         public List<Channel> GetChanels()
             => _databaseRepository.GetChanels();
 
+        public void AddMessageToChannel(string channel, Message message)
+            => _databaseRepository.AddMessageToChannel(channel, message);
+
         public void CreateChannel(Channel channel)
             => _databaseRepository.CreateChannel(channel);
 

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using ChatHexagone.Models;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace ApiCore
         List<Channel> GetChanels();
         void TryCreateMainChanel();
         void CreateChannel(Channel channel);
+        void AddMessageToChannel(string channel, Message message);
     }
 
     public class DatabaseRepository : IDatabaseRepository
@@ -69,6 +71,25 @@ namespace ApiCore
             {
                 db.Chanels.Add(channel);
                 db.SaveChanges();
+            }
+        }
+
+        public void AddMessageToChannel(string channel, Message message)
+        {
+            try
+            {
+
+                using (var db = new DataAccess())
+                {
+                    var channels = db.Chanels.Include(c => c.Messages).SingleOrDefault(x => x.ChannelName == channel);
+                    channels.Messages.Add(message);
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
         }
     }

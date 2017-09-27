@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using ChatHexagone.Adapters.RightSide;
 using ChatHexagone.Models;
 using ChatHexagone.Services;
+using System.Collections.Generic;
+using ChatHexagone.Adapters.RightSide;
 
 namespace ChatHexagone
 {
@@ -62,8 +61,6 @@ namespace ChatHexagone
                 _channelService.RemoveUserFromChannel(removeUserAct.SocketId);
             if (act is FindUserChannel findUserChannelAct)
                 return new UserChannelFounded(_channelService.FindUserChannel(findUserChannelAct.SocketId));
-            if (act is AddMessageToChannel addMessageAct)
-                _channelService.AddMessageToChannel(addMessageAct.ChannelName, addMessageAct.Message);
             if (act is GetChanelDetails channelDetailAct)
                 return new ChanelDetailsRetrieved(_channelService.GetChannel(channelDetailAct.ChanelName));
             if (act is CreateChannel createChannelAct)
@@ -71,12 +68,16 @@ namespace ChatHexagone
                     _databaseAdapter.CreateChannel(_channelService.GetChannel(createChannelAct.ChannelName));
             if (act is AddUserToChanel addUserToChannel)
                 _channelService.AddUserToChannel(addUserToChannel.ChanelName, addUserToChannel.UserId, addUserToChannel.UserSocketId);
+            if (act is AddMessageToChannel addMessageAct)
+            {
+                _channelService.AddMessageToChannel(addMessageAct.ChannelName, addMessageAct.Message);
+                _databaseAdapter.AddMessageToChannel(addMessageAct.ChannelName, addMessageAct.Message);
+            }
             return null;
         }
 
         private SubscriptionEvent HandleSubscriptionActions(SubscribtionAct act)
         {
-            Debug.WriteLine("ACT");
             if (act is CreateSubscription createSubscription)
             {
                 var (subscriptionWasAdded, user) = _userService.AddUserSubscription(createSubscription.Subscription);
