@@ -16,7 +16,7 @@ async function sendMessage(userId, message, currentChannel, socketManager) {
             Id: guid.raw(),
             Date: new Date()
         };
-        await socketManager.connection.invoke('sendmessage', currentChannel.RoomName, JSON.stringify(newMessage));
+        await socketManager.connection.invoke('sendmessage', currentChannel.ChannelName, JSON.stringify(newMessage));
     } catch (error) {
       console.log(error);
     }

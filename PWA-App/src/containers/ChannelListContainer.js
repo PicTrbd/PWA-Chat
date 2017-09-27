@@ -13,7 +13,7 @@ async function onCreateChannel(socketManager) {
   var channelName = prompt("Entre un nom pour votre banane :");
   if (channelName != null && channelName !== "") {
     try {
-      await socketManager.connection.invoke('createroom', channelName);
+      await socketManager.connection.invoke('createchannel', channelName);
     } catch (error) {
       console.log("No signalR connection initialized");
     }
@@ -22,7 +22,7 @@ async function onCreateChannel(socketManager) {
 
 async function onChangeChannel(oldChannel, newChannel, userId, dispatch, socketManager) {
   try {
-    await socketManager.hubProxy.invoke('joinroom', oldChannel.RoomName, newChannel.RoomName, new guid(userId));
+    await socketManager.hubProxy.invoke('joinchannel', oldChannel.ChannelName, newChannel.ChannelName, new guid(userId));
     var newUserList = [];
     newChannel.Users.forEach(function(element) {
       newUserList.push(element.Item2.substring(0, 8));

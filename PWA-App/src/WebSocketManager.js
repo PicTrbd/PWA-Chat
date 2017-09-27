@@ -15,15 +15,15 @@ class WebSocketManager {
         store.dispatch(updateMessageList(messageList));
     }
 
-    retrieveRoomDetails = function(channelDetails) {
+    retrieveChannelDetails = function(channelDetails) {
         var newUserList = [];
         channelDetails.Users.forEach(function(element) {
-          newUserList.push(element.Item2.substring(0, 8));
+          newUserList.push(element.ClientId.substring(0, 8));
         }, this);
         store.dispatch(singleChannelRetrieved(channelDetails, channelDetails.Messages, newUserList));
     }
 
-    retrieveAllRooms = function(channels) {
+    retrieveAllChannels = function(channels) {
         store.dispatch(allChannelsRetrieved(channels));
     }
 
@@ -31,16 +31,16 @@ class WebSocketManager {
         try {
             await this.connection.start()
             console.log('Now connected with ID : ' + this.connection.connection.connectionId);
-            this.retrieveMainRoomDetails()
-            this.connection.invoke('getAllRooms');
+            this.retrieveMainChannelDetails()
+            this.connection.invoke('getAllChannels');
         }
         catch (error) {
             console.log("Could not connect");
         }
     }
 
-    retrieveMainRoomDetails() {
-        this.connection.invoke('getRoomDetails', "Main")
+    retrieveMainChannelDetails() {
+        this.connection.invoke('getChannelDetails', "Main")
     }
 }
 
