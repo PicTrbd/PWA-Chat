@@ -21,7 +21,7 @@ namespace ChatHexagone.Services
         public (bool, User) AddUserSubscription(PushSubscription subscription)
         {
             if (Users.Any(x => x.PushSubscription.Equals(subscription)))
-                return (false, null);
+                return (false, Users.FirstOrDefault(x => x.PushSubscription.Equals(subscription)));
 
             var user = new User() { ClientId = Guid.NewGuid(), PushSubscription = subscription };
             Users.Add(user);
