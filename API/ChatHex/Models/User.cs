@@ -7,7 +7,10 @@ namespace ChatHexagone.Models
     {
         [Key]
         public Guid ClientId { get; set; }
+
         public string SocketId { get; set; }
+
+        //[ForeignKey("PushSubscription")]
         public PushSubscription PushSubscription { get; set; }
     }
 }

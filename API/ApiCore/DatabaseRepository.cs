@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using ChatHexagone.Models;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApiCore
 {
@@ -33,7 +34,8 @@ namespace ApiCore
         {
             using (var db = new DataAccess())
             {
-                var users = db.Set<User>();
+                var users = db.Set<User>()
+                    .Include(u => u.PushSubscription);
                 return users.ToList();
             }
         }
@@ -42,7 +44,8 @@ namespace ApiCore
         {
             using (var db = new DataAccess())
             {
-                var channels = db.Set<Channel>();
+                var channels = db.Set<Channel>()
+                    .Include(c => c.Messages);
                 return channels.ToList();
             }
         }

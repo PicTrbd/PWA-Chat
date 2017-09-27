@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using ChatHexagone.Adapters.RightSide;
 using ChatHexagone.Models;
 using ChatHexagone.Services;
@@ -28,13 +29,13 @@ namespace ChatHexagone
         private void InitializeFirstLaunch()
         {
             _databaseAdapter.TryCreateMainChanel();
-            RetrieveSavedSubscriptions();
+            RetrieveSavedSubscribedUsers();
             RetrieveSavedChanels();
-            CheckIfChannelsPropertiesAreNull();
+            CheckIfPropertiesAreNull();
             _isStartUp = false;
         }
 
-        private void CheckIfChannelsPropertiesAreNull()
+        private void CheckIfPropertiesAreNull()
         {
             foreach (var channel in _channelService.Channels)
             {
@@ -43,9 +44,11 @@ namespace ChatHexagone
                 if (channel.Messages == null)
                     channel.Messages = new List<Message>();
             }
+            if (_userService.Users == null)
+                _userService.Users = new List<User>();
         }
 
-        private void RetrieveSavedSubscriptions()
+        private void RetrieveSavedSubscribedUsers()
             => _userService.Users = _databaseAdapter.GetUsers();
 
         private void RetrieveSavedChanels()
@@ -73,6 +76,7 @@ namespace ChatHexagone
 
         private SubscriptionEvent HandleSubscriptionActions(SubscribtionAct act)
         {
+            Debug.WriteLine("ACT");
             if (act is CreateSubscription createSubscription)
             {
                 var (subscriptionWasAdded, user) = _userService.AddUserSubscription(createSubscription.Subscription);
