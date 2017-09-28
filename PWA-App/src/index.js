@@ -4,7 +4,7 @@ import App from './components/App';
 import pwaChat from './reducers/index';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-
+import guid from 'guid';
 import Cookies from 'universal-cookie';
 import { retrieveUserId } from './actions';
 import WebSocketManager from './WebSocketManager';
@@ -68,25 +68,27 @@ async function handleFetch(path, input) {
 async function subscribeUser() {
   var applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
   try {
-  var subscription = await swRegistration.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey: applicationServerKey
-  });
-  var subJSObject = JSON.parse(JSON.stringify(subscription)); 
-  var auth = subJSObject.keys.auth; 
-  var p256dh = subJSObject.keys.p256dh;
-  var sub = {endpoint: subscription.endpoint, p256dh: p256dh, auth: auth}
-  var subscriptionResult = await handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
-  clientId = subscriptionResult.clientId;
-  
-  var pwaUserId = cookies.get('pwa-user');
-  if (pwaUserId === undefined || pwaUserId === '')
-  {    
-    console.log("in the eye");
-    pwaUserId = clientId;
-    initialiseApp(pwaUserId);
-  }  
-  console.log("end sub");
+    var subscription = await swRegistration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: applicationServerKey
+    });
+    var subJSObject = JSON.parse(JSON.stringify(subscription)); 
+    var auth = subJSObject.keys.auth; 
+    var p256dh = subJSObject.keys.p256dh;
+    var sub = {endpoint: subscription.endpoint, p256dh: p256dh, auth: auth}
+    var subscriptionResult = await handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
+    if (subscriptionResult !== undefined) {
+      clientId = subscriptionResult.clientId;
+    }
+    else
+      clientId = guid.raw();
+    
+    var pwaUserId = cookies.get('pwa-user');
+    if (pwaUserId === undefined || pwaUserId === '')
+    {    
+      pwaUserId = clientId;
+      initialiseApp(pwaUserId);
+    }  
   } catch (error) {
     console.log("Failed to subscribe the user : ", error);
   }
@@ -124,7 +126,6 @@ function initialiseApp(pwaUserId) {
 var pwaUserId = cookies.get('pwa-user');
 if (pwaUserId !== undefined && pwaUserId !== '')
 {    
-  console.log("of the tornado");
   initialiseApp(pwaUserId);
 }
 
