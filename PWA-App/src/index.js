@@ -101,13 +101,12 @@ let socketManager = new WebSocketManager();
 function initialiseApp() {
   var cookies = new Cookies();
   var pwaUserId = cookies.get('pwa-user');
-  if (pwaUserId === undefined)
-  {
+  if (pwaUserId === undefined || pwaUserId === '')
+  {    
     pwaUserId = clientId;
     cookies.set('pwa-user', pwaUserId, { path: '/' });
   }
   store.dispatch(retrieveUserId(pwaUserId));
-  
   socketManager.initialize('http://localhost:8080/chat', 'chatHub', pwaUserId);
   socketManager.connection.on('addMessage', socketManager.addMessage);
   socketManager.connection.on('retrievechanneldetails', socketManager.retrieveChannelDetails);
