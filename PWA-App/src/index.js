@@ -14,6 +14,9 @@ const applicationServerPublicKey = 'BMiZDeWBmOzC1PVd4FFK5BKFzF36jzlfsOjq4kOLoDfn
 let isSubscribed = false;
 let swRegistration = null;
 let clientId = "";
+let store = createStore(pwaChat);
+let socketManager = new WebSocketManager();
+let cookies = new Cookies();
 
 function urlB64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
@@ -32,7 +35,7 @@ async function registerServiceWorker() {
     try {
       var swReg = await navigator.serviceWorker.register('sw.js')
       swRegistration = swReg;
-      initialiseUI();
+      navigator.serviceWorker.ready.then(x => initialiseUI());
     } catch (error) {
       console.log('ServiceWorker Error', error);
     }
@@ -75,10 +78,18 @@ async function subscribeUser() {
   var sub = {endpoint: subscription.endpoint, p256dh: p256dh, auth: auth}
   var subscriptionResult = await handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
   clientId = subscriptionResult.clientId;
+  
+  var pwaUserId = cookies.get('pwa-user');
+  if (pwaUserId === undefined || pwaUserId === '')
+  {    
+    console.log("in the eye");
+    pwaUserId = clientId;
+    initialiseApp(pwaUserId);
+  }  
+  console.log("end sub");
   } catch (error) {
     console.log("Failed to subscribe the user : ", error);
   }
-  initialiseApp();    
 }
   
 async function unsubscribeUser() {
@@ -95,17 +106,8 @@ async function unsubscribeUser() {
 
 registerServiceWorker();
 
-let store = createStore(pwaChat);
-let socketManager = new WebSocketManager();
-
-function initialiseApp() {
-  var cookies = new Cookies();
-  var pwaUserId = cookies.get('pwa-user');
-  if (pwaUserId === undefined || pwaUserId === '')
-  {    
-    pwaUserId = clientId;
-    cookies.set('pwa-user', pwaUserId, { path: '/' });
-  }
+function initialiseApp(pwaUserId) {
+  cookies.set('pwa-user', pwaUserId, { path: '/' });
   store.dispatch(retrieveUserId(pwaUserId));
   socketManager.initialize('http://localhost:8080/chat', 'chatHub', pwaUserId);
   socketManager.connection.on('addMessage', socketManager.addMessage);
@@ -119,6 +121,12 @@ function initialiseApp() {
     </Provider>, document.getElementById('root'));
 }
 
+var pwaUserId = cookies.get('pwa-user');
+if (pwaUserId !== undefined && pwaUserId !== '')
+{    
+  console.log("of the tornado");
+  initialiseApp(pwaUserId);
+}
 
 export { socketManager };
 export { store };
