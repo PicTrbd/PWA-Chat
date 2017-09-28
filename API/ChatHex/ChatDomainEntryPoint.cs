@@ -14,15 +14,17 @@ namespace ChatHexagone
     public class ChatDomainEntryPoint : IChatDomainEntryPoint
     {
         private bool _isStartUp = true;
+        private readonly IUserService _userService;
         private readonly IChannelService _channelService;
         private readonly IDatabaseAdapter _databaseAdapter;
-        private readonly IUserService _userService;
+        private readonly IPushNotificationAdapter _pushNotificationAdapter;
 
-        public ChatDomainEntryPoint(IDatabaseAdapter databaseAdapter)
+        public ChatDomainEntryPoint(IDatabaseAdapter databaseAdapter, IPushNotificationAdapter pushNotificationAdapter)
         {
             _userService = new UserService();
-            _channelService = new ChannelService();
             _databaseAdapter = databaseAdapter;
+            _channelService = new ChannelService();
+            _pushNotificationAdapter = pushNotificationAdapter;
         }
 
         private void InitializeFirstLaunch()
@@ -72,6 +74,10 @@ namespace ChatHexagone
             {
                 _channelService.AddMessageToChannel(addMessageAct.ChannelName, addMessageAct.Message);
                 _databaseAdapter.AddMessageToChannel(addMessageAct.ChannelName, addMessageAct.Message);
+                var channelUsers =
+                    _channelService.GetChannelUsersWithoutTheSender(addMessageAct.ChannelName,
+                        addMessageAct.Message.UserId);
+                _pushNotificationAdapter.SendNewMessageNotification(channelUsers, addMessageAct.Message.UserId);
             }
             return null;
         }

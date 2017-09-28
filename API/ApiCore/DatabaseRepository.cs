@@ -76,20 +76,11 @@ namespace ApiCore
 
         public void AddMessageToChannel(string channel, Message message)
         {
-            try
+            using (var db = new DataAccess())
             {
-
-                using (var db = new DataAccess())
-                {
-                    var channels = db.Chanels.Include(c => c.Messages).SingleOrDefault(x => x.ChannelName == channel);
-                    channels.Messages.Add(message);
-                    db.SaveChanges();
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
+                var channels = db.Chanels.Include(c => c.Messages).SingleOrDefault(x => x.ChannelName == channel);
+                channels.Messages.Add(message);
+                db.SaveChanges();
             }
         }
     }

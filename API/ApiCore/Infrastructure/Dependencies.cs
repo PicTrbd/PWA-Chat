@@ -20,10 +20,12 @@ namespace ApiCore.Infrastructure
 
             // Right Side Adapters
             _builder.RegisterType<DatabaseAdapter>().As<IDatabaseAdapter>().SingleInstance();
+            _builder.RegisterType<PushNotificationAdapter>().As<IPushNotificationAdapter>().SingleInstance();
 
             // Hexagone
             _builder.Register((c, p) 
-                => new ChatDomainEntryPoint(c.Resolve<IDatabaseAdapter>())).As<IChatDomainEntryPoint>().SingleInstance();
+                => new ChatDomainEntryPoint(c.Resolve<IDatabaseAdapter>(), c.Resolve<IPushNotificationAdapter>()))
+                .As<IChatDomainEntryPoint>().SingleInstance();
 
             // Left Side Adapters
             _builder.RegisterType<PushSubscriptionAdapter>().As<ISubscriptionAdapter>().SingleInstance();

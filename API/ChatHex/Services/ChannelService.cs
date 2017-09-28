@@ -10,10 +10,11 @@ namespace ChatHexagone.Services
         List<Channel> Channels { get; set; }
         Channel GetChannel(string channelName);
         bool CreateChannel(string channelName);
+        Channel FindUserChannel(string socketId);
         void RemoveUserFromChannel(string socketId);
         void AddMessageToChannel(string channelName, Message message);
         void AddUserToChannel(string room, Guid clientId, string socketId);
-        Channel FindUserChannel(string socketId);
+        List<User> GetChannelUsersWithoutTheSender(string channelName, Guid senderId);
     }
 
     public class ChannelService : IChannelService
@@ -32,17 +33,20 @@ namespace ChatHexagone.Services
         public void RemoveUserFromChannel(string socketId)
             => Channels.ForEach(r => r.Users.RemoveAll(x => x.SocketId == socketId));
 
+        public List<User> GetChannelUsersWithoutTheSender(string channelName, Guid senderId)
+            => Channels.FirstOrDefault(c => c.ChannelName == channelName)?.Users.Where(u => u.ClientId != senderId).ToList();
+
         public void AddUserToChannel(string room, Guid clientId, string socketId)
         {
             Channels.ForEach(channel => channel.Users.RemoveAll(u => u.ClientId == clientId || u.SocketId == socketId));
-            GetChannel(room).Users.Add(new User(){ ClientId = clientId, SocketId = socketId});            
+            GetChannel(room).Users.Add(new User() { ClientId = clientId, SocketId = socketId });
         }
 
         public Channel FindUserChannel(string socketId)
         {
             var channel = Channels.Where(r => r.Users.Any(user => user.SocketId == socketId));
             return channel.Any() ? channel.First() : null;
-        } 
+        }
 
         public void AddMessageToChannel(string channelName, Message message)
         {
@@ -64,7 +68,7 @@ namespace ChatHexagone.Services
 
             Channels.Add(channel);
             return true;
-        } 
+        }
 
 
     }

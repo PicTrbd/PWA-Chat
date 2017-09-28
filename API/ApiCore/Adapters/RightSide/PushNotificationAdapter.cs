@@ -1,17 +1,21 @@
 ﻿using System;
+using WebPush;
+using ChatHexagone.Models;
 using System.Collections.Generic;
 using ChatHexagone.Adapters.RightSide;
-using WebPush;
-using PushSubscription = ChatHexagone.Models.PushSubscription;
+using Newtonsoft.Json;
+using PushSubscription = WebPush.PushSubscription;
 
 namespace ApiCore.Adapters.RightSide
 {
     public class PushNotificationAdapter : IPushNotificationAdapter
     {
-        public void SendNotification(List<PushSubscription> clients, string data)
+        public void SendNewMessageNotification(List<User> users, Guid senderId)
         {
             try
             {
+                var data = JsonConvert.SerializeObject(new { From = senderId.ToString() });
+
                 var vapidDetails = new VapidDetails(
                     @"mailto:paulmonnier75@gmail.com",
                     "BMiZDeWBmOzC1PVd4FFK5BKFzF36jzlfsOjq4kOLoDfnEgNIuubR1upxNBwgLm5b5c7RAHppSkG9V6ewntGvenw",
@@ -19,8 +23,9 @@ namespace ApiCore.Adapters.RightSide
 
                 var webPushClient = new WebPushClient();
 
-                clients.ForEach(x 
-                    => webPushClient.SendNotification(new WebPush.PushSubscription(x.Endpoint, x.P256dh, x.Auth), data,vapidDetails));
+                users.ForEach(x => webPushClient.SendNotification(
+                    new PushSubscription(x.PushSubscription.Endpoint, x.PushSubscription.P256dh, x.PushSubscription.Auth)
+                    , data, vapidDetails));
             }
             catch (Exception e)
             {
