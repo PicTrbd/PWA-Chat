@@ -29,6 +29,7 @@ class WebSocketManager {
 
     async startConnection() {
         try {
+            console.log(this.connection)
             await this.connection.start()
             console.log('Now connected with ID : ' + this.connection.connection.connectionId);
             this.retrieveMainChannelDetails()
