@@ -4,7 +4,7 @@ import App from './components/App';
 import pwaChat from './reducers/index';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-
+import guid from 'guid';
 import Cookies from 'universal-cookie';
 import { retrieveUserId } from './actions';
 import WebSocketManager from './WebSocketManager';
@@ -14,6 +14,9 @@ const applicationServerPublicKey = 'BMiZDeWBmOzC1PVd4FFK5BKFzF36jzlfsOjq4kOLoDfn
 let isSubscribed = false;
 let swRegistration = null;
 let clientId = "";
+let store = createStore(pwaChat);
+let socketManager = new WebSocketManager();
+let cookies = new Cookies();
 
 function urlB64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
@@ -32,7 +35,7 @@ async function registerServiceWorker() {
     try {
       var swReg = await navigator.serviceWorker.register('sw.js')
       swRegistration = swReg;
-      initialiseUI();
+      navigator.serviceWorker.ready.then(x => initialiseUI());
     } catch (error) {
       console.log('ServiceWorker Error', error);
     }
@@ -65,20 +68,30 @@ async function handleFetch(path, input) {
 async function subscribeUser() {
   var applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
   try {
-  var subscription = await swRegistration.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey: applicationServerKey
-  });
-  var subJSObject = JSON.parse(JSON.stringify(subscription)); 
-  var auth = subJSObject.keys.auth; 
-  var p256dh = subJSObject.keys.p256dh;
-  var sub = {endpoint: subscription.endpoint, p256dh: p256dh, auth: auth}
-  var subscriptionResult = await handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
-  clientId = subscriptionResult.clientId;
+    var subscription = await swRegistration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: applicationServerKey
+    });
+    var subJSObject = JSON.parse(JSON.stringify(subscription)); 
+    var auth = subJSObject.keys.auth; 
+    var p256dh = subJSObject.keys.p256dh;
+    var sub = {endpoint: subscription.endpoint, p256dh: p256dh, auth: auth}
+    var subscriptionResult = await handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
+    if (subscriptionResult !== undefined) {
+      clientId = subscriptionResult.clientId;
+    }
+    else
+      clientId = guid.raw();
+    
+    var pwaUserId = cookies.get('pwa-user');
+    if (pwaUserId === undefined || pwaUserId === '')
+    {    
+      pwaUserId = clientId;
+      initialiseApp(pwaUserId);
+    }  
   } catch (error) {
     console.log("Failed to subscribe the user : ", error);
   }
-  initialiseApp();    
 }
   
 async function unsubscribeUser() {
@@ -95,19 +108,9 @@ async function unsubscribeUser() {
 
 registerServiceWorker();
 
-let store = createStore(pwaChat);
-let socketManager = new WebSocketManager();
-
-function initialiseApp() {
-  var cookies = new Cookies();
-  var pwaUserId = cookies.get('pwa-user');
-  if (pwaUserId === undefined)
-  {
-    pwaUserId = clientId;
-    cookies.set('pwa-user', pwaUserId, { path: '/' });
-  }
+function initialiseApp(pwaUserId) {
+  cookies.set('pwa-user', pwaUserId, { path: '/' });
   store.dispatch(retrieveUserId(pwaUserId));
-  
   socketManager.initialize('http://localhost:8080/chat', 'chatHub', pwaUserId);
   socketManager.connection.on('addMessage', socketManager.addMessage);
   socketManager.connection.on('retrievechanneldetails', socketManager.retrieveChannelDetails);
@@ -120,6 +123,11 @@ function initialiseApp() {
     </Provider>, document.getElementById('root'));
 }
 
+var pwaUserId = cookies.get('pwa-user');
+if (pwaUserId !== undefined && pwaUserId !== '')
+{    
+  initialiseApp(pwaUserId);
+}
 
 export { socketManager };
 export { store };

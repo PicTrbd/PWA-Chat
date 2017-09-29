@@ -18,8 +18,8 @@ self.addEventListener('push', event => {
   }
   if (payload.Type === "NewMessage") {
     var options = {
-      body: "\nSender : "
-            .concat(payload.Sender),         
+      body: "\nFrom : "
+            .concat(payload.From),         
       icon: payload.Icon,
     }
     event.waitUntil(self.registration.showNotification("You have a new message !", options));
