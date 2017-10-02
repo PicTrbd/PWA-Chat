@@ -13,10 +13,10 @@ const applicationServerPublicKey = 'BMiZDeWBmOzC1PVd4FFK5BKFzF36jzlfsOjq4kOLoDfn
 
 let isSubscribed = false;
 let swRegistration = null;
-let clientId = "";
 let store = createStore(pwaChat);
 let socketManager = new WebSocketManager();
 let cookies = new Cookies();
+let clientId = "";
 
 function urlB64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
