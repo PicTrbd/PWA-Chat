@@ -10,12 +10,12 @@ class WebSocketManager {
         this.connection = new signalR.HubConnection(url + params);   
     }
 
-    addMessage = function(newMessage) {
+    addMessage(newMessage) {
         var messageList = [...store.getState().messages, newMessage];
         store.dispatch(updateMessageList(messageList));
     }
 
-    retrieveChannelDetails = function(channelDetails) {
+    retrieveChannelDetails(channelDetails) {
         var newUserList = [];
         channelDetails.Users.forEach(function(element) {
           newUserList.push(element.ClientId.substring(0, 8));
@@ -23,7 +23,7 @@ class WebSocketManager {
         store.dispatch(singleChannelRetrieved(channelDetails, channelDetails.Messages, newUserList));
     }
 
-    retrieveAllChannels = function(channels) {
+    retrieveAllChannels(channels) {
         store.dispatch(allChannelsRetrieved(channels));
     }
 

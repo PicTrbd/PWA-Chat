@@ -9,6 +9,7 @@ import Cookies from 'universal-cookie';
 import { retrieveUserId } from './actions';
 import WebSocketManager from './WebSocketManager';
 
+
 const applicationServerPublicKey = 'BMiZDeWBmOzC1PVd4FFK5BKFzF36jzlfsOjq4kOLoDfnEgNIuubR1upxNBwgLm5b5c7RAHppSkG9V6ewntGvenw';
 
 let isSubscribed = false;
