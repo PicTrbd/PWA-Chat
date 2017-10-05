@@ -118,8 +118,6 @@ function initialiseApp(pwaUserId) {
   socketManager.connection.on('retrieveallchannels', socketManager.retrieveAllChannels);
   socketManager.startConnection();
 
-  var test = document.getElementById('root');
-  console.log(test);
   ReactDOM.render(
     <Provider store={store}>
       <App />
