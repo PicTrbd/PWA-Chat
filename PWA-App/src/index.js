@@ -112,7 +112,7 @@ registerServiceWorker();
 function initialiseApp(pwaUserId) {
   cookies.set('pwa-user', pwaUserId, { path: '/' });
   store.dispatch(retrieveUserId(pwaUserId));
-  socketManager.initialize('http://pwachatpush-api.azurewebsites.net/chat', 'chatHub', pwaUserId);
+  socketManager.initialize('https://pwachatpush-api.azurewebsites.net/chat', 'chatHub', pwaUserId);
   socketManager.connection.on('addMessage', socketManager.addMessage);
   socketManager.connection.on('retrievechanneldetails', socketManager.retrieveChannelDetails);
   socketManager.connection.on('retrieveallchannels', socketManager.retrieveAllChannels);
