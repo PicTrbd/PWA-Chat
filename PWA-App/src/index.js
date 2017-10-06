@@ -125,8 +125,8 @@ function initialiseApp(pwaUserId) {
       <App socketManager={socketManager}/>
     </Provider>, document.getElementById('root'));
 
-var scrolldiv = document.getElementById("bottom-div-scroll");
-scrolldiv.scrollIntoView({ behavior: "smooth" });
+  var scrolldiv = document.getElementById("bottom-div-scroll");
+  scrolldiv.scrollIntoView({ behavior: "smooth" });
 }
 
 var pwaUserId = cookies.get('pwa-user');

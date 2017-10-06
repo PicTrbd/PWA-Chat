@@ -13,6 +13,9 @@ class WebSocketManager {
     addMessage(newMessage) {
         var messageList = [...store.getState().messages, newMessage];
         store.dispatch(updateMessageList(messageList));
+
+        var scrolldiv = document.getElementById("bottom-div-scroll");
+        scrolldiv.scrollIntoView({ behavior: "smooth" });
     }
 
     retrieveChannelDetails(channelDetails) {
