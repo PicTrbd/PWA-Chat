@@ -49,17 +49,6 @@ namespace ApiCore
         {
             _channelAdapter.CreateChannel(roomName);
             Clients.All.InvokeAsync("RetrieveAllChannels",_channelAdapter.GetAllChanels());
-
-            //const string iconUrl = "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678092-sign-add-128.png";
-            //var data = JsonConvert.SerializeObject(
-            //    new
-            //    {
-            //        SocketId = roomName,
-            //        ChannelOwner = $"Pablo ({Context.ConnectionId})",
-            //        Icon = iconUrl
-            //    });
-
-            //Dependencies.NotificationsController.SendNotifications(data);
         }
 
         public async void JoinChannel(string oldRoom, string newRoom, Guid userId)
