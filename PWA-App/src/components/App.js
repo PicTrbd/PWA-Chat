@@ -24,8 +24,4 @@ const App = (props) => (
   </div>
 )
 
-const mapStateToProps = (state, ownProps) => ({
-
-})
-
-export default connect(mapStateToProps)(App)
+export default App;

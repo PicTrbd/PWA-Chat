@@ -122,8 +122,6 @@ header {
     margin: 0;
     padding: 0 0 50px 0;
     margin-bottom: 10px;
-
-    overflow-x:scroll;
 }
 .chat li {
     padding: 0.5rem;
@@ -621,6 +619,7 @@ header {
 /* Styling of overlay */
 .bm-overlay {
   background: rgba(0, 0, 0, 0.3);
+  position: fixed !important;
 }
 
 .menu-item {

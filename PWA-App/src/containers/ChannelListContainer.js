@@ -28,6 +28,8 @@ async function onChangeChannel(oldChannel, newChannel, userId, dispatch, socketM
       newUserList.push(element.ClientId.substring(0, 8));
     }, this);
     dispatch(changeChannel(newChannel, newUserList, newChannel.Messages));
+    var scrolldiv = document.getElementById("bottom-div-scroll");
+    scrolldiv.scrollIntoView({ behavior: "smooth" });
   } catch (error) {
     console.log(error);
   }
