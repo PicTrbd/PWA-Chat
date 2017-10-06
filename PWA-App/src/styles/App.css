@@ -30,6 +30,11 @@ header {
 /*---------------------------------------*/
 /*---------------------------------------*/
 
+.bm-menu-wrap,
+.bm-overlay {
+  position:absolute!important;
+}
+
 .menu {
     position: fixed;
     top: 0px;
