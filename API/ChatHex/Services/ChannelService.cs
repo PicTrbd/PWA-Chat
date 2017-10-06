@@ -14,7 +14,8 @@ namespace ChatHexagone.Services
         void RemoveUserFromChannel(string socketId);
         void AddMessageToChannel(string channelName, Message message);
         void AddUserToChannel(string room, Guid clientId, string socketId);
-        List<User> GetChannelUsersWithoutTheSender(string channelName, Guid senderId);
+        void MatchSubscribedUsersWithChannelUsers(List<User> subscribedUsers);
+        List<User> GetChannelUsersWithoutTheSender(string channelName, Guid senderId);       
     }
 
     public class ChannelService : IChannelService
@@ -40,6 +41,31 @@ namespace ChatHexagone.Services
         {
             Channels.ForEach(channel => channel.Users.RemoveAll(u => u.ClientId == clientId || u.SocketId == socketId));
             GetChannel(room).Users.Add(new User() { ClientId = clientId, SocketId = socketId });
+        }
+
+        public void MatchSubscribedUsersWithChannelUsers(List<User> subscribedUsers)
+        {
+            //Channels.SelectMany(channel => channel.Users)
+            //    .Where(x => x.PushSubscription == null)
+            //    .SelectMany(x => subscribedUsers, (user, subscription) => new {user, subscription})
+            //    .Where(x => x.subscription.ClientId == x.user.ClientId)
+            //    .ToList().ForEach(x => x.user.PushSubscription = x.subscription.PushSubscription);
+
+
+            foreach (var channel in Channels)
+            {
+                foreach (var channelUser in channel.Users)
+                {
+                    if (channelUser.PushSubscription == null)
+                    {
+                        foreach (var subscribedUser in subscribedUsers)
+                        {
+                            if (subscribedUser.ClientId == channelUser.ClientId)
+                                channelUser.PushSubscription = subscribedUser.PushSubscription;
+                        }
+                    }
+                }
+            }
         }
 
         public Channel FindUserChannel(string socketId)

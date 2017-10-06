@@ -2,6 +2,7 @@
 using ChatHexagone.Models;
 using ChatHexagone.Services;
 using System.Collections.Generic;
+using System.Diagnostics;
 using ChatHexagone.Adapters.RightSide;
 
 namespace ChatHexagone
@@ -69,7 +70,11 @@ namespace ChatHexagone
                 if (_channelService.CreateChannel(createChannelAct.ChannelName))
                     _databaseAdapter.CreateChannel(_channelService.GetChannel(createChannelAct.ChannelName));
             if (act is AddUserToChanel addUserToChannel)
+            {
+                Debug.WriteLine("User id = " + addUserToChannel.UserId);
                 _channelService.AddUserToChannel(addUserToChannel.ChanelName, addUserToChannel.UserId, addUserToChannel.UserSocketId);
+                _channelService.MatchSubscribedUsersWithChannelUsers(_userService.Users);
+            }
             if (act is AddMessageToChannel addMessageAct)
             {
                 _channelService.AddMessageToChannel(addMessageAct.ChannelName, addMessageAct.Message);
@@ -89,6 +94,7 @@ namespace ChatHexagone
                 var (subscriptionWasAdded, user) = _userService.AddUserSubscription(createSubscription.Subscription);
                 if (subscriptionWasAdded)
                     _databaseAdapter.AddUser(user);
+                Debug.WriteLine("User id = " + user.ClientId);
                 return new UserSubscriptionCreated(user.ClientId);
             }
             return null;
