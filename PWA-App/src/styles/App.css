@@ -19,6 +19,7 @@ header {
 
 .tab-bar {
   background-color:#1B3866;
+  max-height:67px !important;
 }
 
 .isActive {

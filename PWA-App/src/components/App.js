@@ -20,6 +20,7 @@ const App = (props) => (
       <MessageListContainer/>
       <AddMessageContainer socketManager={props.socketManager}/>
     </div>
+    <div id="bottom-div-scroll"/>
   </div>
 )
 
