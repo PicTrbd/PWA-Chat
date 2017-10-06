@@ -77,10 +77,11 @@ async function subscribeUser() {
     var auth = subJSObject.keys.auth; 
     var p256dh = subJSObject.keys.p256dh;
     var sub = {endpoint: subscription.endpoint, p256dh: p256dh, auth: auth}
-    
+    console.log("test");
     var subscriptionResult = await handleFetch("https://pwachatpush-api.azurewebsites.net/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
     //var subscriptionResult = await handleFetch("http://http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
-    
+    console.log(subscriptionResult);
+    console.log("result");
     if (subscriptionResult !== undefined) {
       clientId = subscriptionResult.clientId;
     }
@@ -115,6 +116,8 @@ registerServiceWorker();
 function initialiseApp(pwaUserId) {
   cookies.set('pwa-user', pwaUserId, { path: '/' });
   store.dispatch(retrieveUserId(pwaUserId));
+  console.log(pwaUserId);
+  console.log("------");
   socketManager.initialize('https://pwachatpush-api.azurewebsites.net/chat', 'chatHub', pwaUserId);
   //socketManager.initialize('http://localhost:8080/chat', 'chatHub', pwaUserId);
   socketManager.connection.on('addMessage', socketManager.addMessage);

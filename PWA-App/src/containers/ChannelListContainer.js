@@ -22,6 +22,8 @@ async function onCreateChannel(socketManager) {
 
 async function onChangeChannel(oldChannel, newChannel, userId, dispatch, socketManager) {
   try {
+    console.log(userId);
+    console.log("in join");
     await socketManager.connection.invoke('joinchannel', oldChannel.ChannelName, newChannel.ChannelName, userId);
     var newUserList = [userId.substring(0,8)];
     newChannel.Users.forEach(function(element) {
