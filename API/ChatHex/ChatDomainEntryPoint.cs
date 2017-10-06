@@ -71,7 +71,7 @@ namespace ChatHexagone
                     _databaseAdapter.CreateChannel(_channelService.GetChannel(createChannelAct.ChannelName));
             if (act is AddUserToChanel addUserToChannel)
             {
-                Debug.WriteLine("User id = " + addUserToChannel.UserId);
+                Debug.WriteLine("JOIN User id = " + addUserToChannel.UserId);
                 _channelService.AddUserToChannel(addUserToChannel.ChanelName, addUserToChannel.UserId, addUserToChannel.UserSocketId);
                 _channelService.MatchSubscribedUsersWithChannelUsers(_userService.Users);
             }
@@ -94,7 +94,7 @@ namespace ChatHexagone
                 var (subscriptionWasAdded, user) = _userService.AddUserSubscription(createSubscription.Subscription);
                 if (subscriptionWasAdded)
                     _databaseAdapter.AddUser(user);
-                Debug.WriteLine("User id = " + user.ClientId);
+                Debug.WriteLine("SUBSCRIBE User id = " + user.ClientId);
                 return new UserSubscriptionCreated(user.ClientId);
             }
             return null;
