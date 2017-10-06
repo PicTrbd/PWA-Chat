@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace ChatHexagone.Models
 {
@@ -17,12 +18,18 @@ namespace ChatHexagone.Models
         [NotMapped]
         public List<User> Users { get; set; }
 
-        //Trier ailleurs
         public List<Message> Messages
         {
-            get => _messages; /*= _messages.OrderBy(x => x.Date).ToList();*/
+            get
+            {
+                _messages = SortMessages();
+                return _messages;
+            }
             set => _messages = value;
         }
+
+        private List<Message> SortMessages()
+            => _messages.OrderBy(x => x.Date).ToList();
 
     }
 }
