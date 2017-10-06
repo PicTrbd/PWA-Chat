@@ -22,7 +22,8 @@ namespace ChatHexagone.Models
         {
             get
             {
-                _messages = SortMessages();
+                if (_messages != null)
+                    _messages = SortMessages();
                 return _messages;
             }
             set => _messages = value;
