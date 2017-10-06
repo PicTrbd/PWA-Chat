@@ -22,7 +22,7 @@ async function onCreateChannel(socketManager) {
 
 async function onChangeChannel(oldChannel, newChannel, userId, dispatch, socketManager) {
   try {
-    await socketManager.connection.invoke('joinchannel', oldChannel.ChannelName, newChannel.ChannelName, new guid(userId));
+    await socketManager.connection.invoke('joinchannel', oldChannel.ChannelName, newChannel.ChannelName, userId);
     var newUserList = [userId.substring(0,8)];
     newChannel.Users.forEach(function(element) {
       newUserList.push(element.ClientId.substring(0, 8));

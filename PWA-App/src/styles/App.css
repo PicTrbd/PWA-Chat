@@ -19,6 +19,7 @@ header {
 
 .tab-bar {
   background-color:#1B3866;
+  max-height:67px !important;
 }
 
 .isActive {
@@ -28,6 +29,15 @@ header {
 
 /*---------------------------------------*/
 /*---------------------------------------*/
+
+.bm-menu-wrap,
+.bm-overlay {
+  position:absolute!important;
+}
+
+.mdl-layout {
+  overflow:hidden !important;
+}
 
 .menu {
     position: fixed;
@@ -555,7 +565,7 @@ header {
 }
 
 .bm-menu-wrap {
-  width:200px !important;
+  width:250px !important;
 }
 
 /* Position and sizing of clickable cross button */
