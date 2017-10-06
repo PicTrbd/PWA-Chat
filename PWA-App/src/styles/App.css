@@ -35,6 +35,10 @@ header {
   position:absolute!important;
 }
 
+.mdl-layout {
+  overflow:hidden !important;
+}
+
 .menu {
     position: fixed;
     top: 0px;
