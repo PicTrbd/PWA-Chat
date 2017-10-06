@@ -120,7 +120,7 @@ function initialiseApp(pwaUserId) {
 
   ReactDOM.render(
     <Provider store={store}>
-      <App />
+      <App socketManager={socketManager}/>
     </Provider>, document.getElementById('root'));
 }
 
@@ -130,5 +130,4 @@ if (pwaUserId !== undefined && pwaUserId !== '')
   initialiseApp(pwaUserId);
 }
 
-export { socketManager };
 export { store };
