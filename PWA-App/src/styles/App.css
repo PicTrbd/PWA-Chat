@@ -8,6 +8,10 @@ html, body {
 header {
   background-color:#325181;
   color:white;
+
+  position:fixed;
+  width:100%;
+  z-index:8;
 }
 
 .top-bar {
@@ -105,12 +109,21 @@ header {
 
 /* M E S S A G E S */
 
+#chatbox {
+  z-index:0;
+  margin-top:185px;
+  width:100%;
+  height:100%;
+}
+
 .chat {
     list-style: none;
     background: none;
     margin: 0;
     padding: 0 0 50px 0;
     margin-bottom: 10px;
+
+    overflow-x:scroll;
 }
 .chat li {
     padding: 0.5rem;
@@ -549,12 +562,15 @@ header {
 
 /* Position and sizing of burger button */
 .bm-burger-button {
-  position: relative;
+  /*position: relative;
+  top: -52px;*/
+  position:fixed;
+  top:123px;
+  z-index:10 !important;
   float: right;
   width: 32px;
   height: 36px;
   right: 15px;
-  top: -52px;
   background-image: url("../images/icon-menu.png");
 }
 
@@ -566,6 +582,10 @@ header {
 
 .bm-menu-wrap {
   width:250px !important;
+
+  position:fixed !important;
+  margin-top:174px;
+  z-index:2;
 }
 
 /* Position and sizing of clickable cross button */
