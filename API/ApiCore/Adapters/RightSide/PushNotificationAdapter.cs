@@ -2,6 +2,7 @@
 using WebPush;
 using ChatHexagone.Models;
 using System.Collections.Generic;
+using System.Text;
 using ChatHexagone.Adapters.RightSide;
 using Newtonsoft.Json;
 using PushSubscription = WebPush.PushSubscription;
@@ -14,7 +15,7 @@ namespace ApiCore.Adapters.RightSide
         {
             try
             {
-                var data = JsonConvert.SerializeObject(new { Type = "New Message", From = senderId.ToString() });
+                var data = JsonConvert.SerializeObject(new {From = senderId.ToString() });
 
                 var vapidDetails = new VapidDetails(
                     @"mailto:paulmonnier75@gmail.com",
