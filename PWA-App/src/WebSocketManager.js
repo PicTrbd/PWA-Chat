@@ -7,15 +7,12 @@ class WebSocketManager {
 
     initialize(url, hubName, userId) {
         var params = "?UserId=" + userId;
-        this.connection = new signalR.HubConnection(url + params);   
+        this.connection = new signalR.HubConnection(url + params);
     }
 
     addMessage(newMessage) {
         var messageList = [...store.getState().messages, newMessage];
         store.dispatch(updateMessageList(messageList));
-
-        var scrolldiv = document.getElementById("bottom-div-scroll");
-        scrolldiv.scrollIntoView({ behavior: "smooth" });
     }
 
     retrieveChannelDetails(channelDetails) {
@@ -24,6 +21,8 @@ class WebSocketManager {
           newUserList.push(element.ClientId.substring(0, 8));
         }, this);
         store.dispatch(singleChannelRetrieved(channelDetails, channelDetails.Messages, newUserList));
+        var scrolldiv = document.getElementById("bottom-div-scroll");
+        scrolldiv.scrollIntoView({ behavior: "smooth" });
     }
 
     retrieveAllChannels(channels) {
