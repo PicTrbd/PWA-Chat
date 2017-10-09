@@ -18,6 +18,8 @@ async function sendMessage(userId, message, currentChannel, socketManager) {
             Date: new Date()
         };
         await socketManager.connection.invoke('sendmessage', currentChannel.ChannelName, JSON.stringify(newMessage));
+        var scrolldiv = document.getElementById("bottom-div-scroll");
+        scrolldiv.scrollIntoView({ behavior: "smooth" });
     } catch (error) {
       console.log(error);
     }
