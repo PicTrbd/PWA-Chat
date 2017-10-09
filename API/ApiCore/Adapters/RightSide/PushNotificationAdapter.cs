@@ -30,7 +30,7 @@ namespace ApiCore.Adapters.RightSide
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                throw e;
             }
         }
     }
