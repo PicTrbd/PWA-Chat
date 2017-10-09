@@ -76,9 +76,10 @@ namespace ChatHexagone
             }
             if (act is AddMessageToChannel addMessageAct)
             {
+                RetrieveSavedSubscribedUsers();
+                _channelService.MatchSubscribedUsersWithChannelUsers(_userService.Users);
                 _channelService.AddMessageToChannel(addMessageAct.ChannelName, addMessageAct.Message);
                 _databaseAdapter.AddMessageToChannel(addMessageAct.ChannelName, addMessageAct.Message);
-                _channelService.MatchSubscribedUsersWithChannelUsers(_userService.Users);
                 var channelUsers =
                     _channelService.GetChannelUsersWithoutTheSender(addMessageAct.ChannelName,
                         addMessageAct.Message.UserId);
