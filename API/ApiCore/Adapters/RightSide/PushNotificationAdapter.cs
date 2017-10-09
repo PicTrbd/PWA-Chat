@@ -14,7 +14,7 @@ namespace ApiCore.Adapters.RightSide
         {
             try
             {
-                var data = JsonConvert.SerializeObject(new { From = senderId.ToString() });
+                var data = JsonConvert.SerializeObject(new { Type = "New Message", From = senderId.ToString() });
 
                 var vapidDetails = new VapidDetails(
                     @"mailto:paulmonnier75@gmail.com",
