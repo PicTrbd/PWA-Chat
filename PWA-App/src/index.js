@@ -81,19 +81,13 @@ async function subscribeUser() {
     //var subscriptionResult = await handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
     if (subscriptionResult !== undefined) {
       clientId = subscriptionResult.clientId;
-      console.log("Old user ID retrieved : " + clientId);
     }
     else {
       clientId = guid.raw();
-      console.log("New user ID generated : " + clientId);      
     }
     
-    /*var pwaUserId = cookies.get('pwa-user');
-    if (pwaUserId === undefined || pwaUserId === '')
-    {    
-      pwaUserId = clientId;*/
-      initialiseApp(clientId);
-    /*}  */
+    initialiseApp(clientId);
+
   } catch (error) {
     console.log("Failed to subscribe the user : ", error);
   }
@@ -128,11 +122,5 @@ function initialiseApp(pwaUserId) {
       <App socketManager={socketManager}/>
     </Provider>, document.getElementById('root'));
 }
-
-/*var pwaUserId = cookies.get('pwa-user');
-if (pwaUserId !== undefined && pwaUserId !== '')
-{
-  initialiseApp(pwaUserId);
-}*/
 
 export { store };
