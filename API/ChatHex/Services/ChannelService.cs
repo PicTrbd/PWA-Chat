@@ -34,8 +34,10 @@ namespace ChatHexagone.Services
         public void RemoveUserFromChannel(string socketId)
             => Channels.ForEach(r => r.Users.RemoveAll(x => x.SocketId == socketId));
 
+
+        //&& u.PushSubscription != null
         public List<User> GetChannelUsersWithoutTheSender(string channelName, Guid senderId)
-            => Channels.FirstOrDefault(c => c.ChannelName == channelName)?.Users.Where(u => u.ClientId != senderId && u.PushSubscription != null).ToList();
+            => Channels.FirstOrDefault(c => c.ChannelName == channelName)?.Users.Where(u => u.ClientId != senderId).ToList();
 
         public void AddUserToChannel(string room, Guid clientId, string socketId)
         {
