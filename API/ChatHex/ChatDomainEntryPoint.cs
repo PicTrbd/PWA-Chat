@@ -83,6 +83,8 @@ namespace ChatHexagone
                 var channelUsers =
                     _channelService.GetChannelUsersWithoutTheSender(addMessageAct.ChannelName,
                         addMessageAct.Message.UserId);
+                if (_pushNotificationAdapter == null)
+                    throw new Exception("push notification adapter is null");
                 _pushNotificationAdapter.SendNewMessageNotification(channelUsers, addMessageAct.Message.UserId);
             }
             return null;
