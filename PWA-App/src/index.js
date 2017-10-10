@@ -88,13 +88,12 @@ async function subscribeUser() {
       console.log("New user ID generated : " + clientId);      
     }
     
-    var pwaUserId = cookies.get('pwa-user');
+    /*var pwaUserId = cookies.get('pwa-user');
     if (pwaUserId === undefined || pwaUserId === '')
     {    
-      pwaUserId = clientId;
-      console.log("User ID set : " + pwaUserId);
-      initialiseApp(pwaUserId);
-    }  
+      pwaUserId = clientId;*/
+      initialiseApp(clientId);
+    /*}  */
   } catch (error) {
     console.log("Failed to subscribe the user : ", error);
   }
@@ -130,10 +129,10 @@ function initialiseApp(pwaUserId) {
     </Provider>, document.getElementById('root'));
 }
 
-var pwaUserId = cookies.get('pwa-user');
+/*var pwaUserId = cookies.get('pwa-user');
 if (pwaUserId !== undefined && pwaUserId !== '')
-{    
+{
   initialiseApp(pwaUserId);
-}
+}*/
 
 export { store };
