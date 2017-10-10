@@ -76,15 +76,13 @@ namespace ChatHexagone
             }
             if (act is AddMessageToChannel addMessageAct)
             {
-                RetrieveSavedSubscribedUsers();
+                //RetrieveSavedSubscribedUsers();
                 _channelService.MatchSubscribedUsersWithChannelUsers(_userService.Users);
                 _channelService.AddMessageToChannel(addMessageAct.ChannelName, addMessageAct.Message);
                 _databaseAdapter.AddMessageToChannel(addMessageAct.ChannelName, addMessageAct.Message);
                 var channelUsers =
                     _channelService.GetChannelUsersWithoutTheSender(addMessageAct.ChannelName,
                         addMessageAct.Message.UserId);
-                if (_pushNotificationAdapter == null)
-                    throw new Exception("push notification adapter is null");
                 _pushNotificationAdapter.SendNewMessageNotification(channelUsers, addMessageAct.Message.UserId);
             }
             return null;
