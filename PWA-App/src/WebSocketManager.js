@@ -1,4 +1,3 @@
-//import { hubConnection } from 'signalr-no-jquery';
 import { store } from './index'
 import { allChannelsRetrieved, singleChannelRetrieved, updateMessageList } from './actions'
 import * as signalR from '@aspnet/signalr-client'
