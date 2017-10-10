@@ -81,14 +81,18 @@ async function subscribeUser() {
     //var subscriptionResult = await handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
     if (subscriptionResult !== undefined) {
       clientId = subscriptionResult.clientId;
+      console.log("Old user ID retrieved : " + clientId);
     }
-    else
+    else {
       clientId = guid.raw();
+      console.log("New user ID generated : " + clientId);      
+    }
     
     var pwaUserId = cookies.get('pwa-user');
     if (pwaUserId === undefined || pwaUserId === '')
     {    
       pwaUserId = clientId;
+      console.log("User ID set : " + pwaUserId);
       initialiseApp(pwaUserId);
     }  
   } catch (error) {
