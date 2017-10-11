@@ -24,7 +24,8 @@ var config = {
         { from: './public/manifest.json', to: BUILD_DIR },
         { from: './public/sw.js', to: BUILD_DIR },
         { from: './public/images/*', to: BUILD_DIR },      
-        { from: './src/styles/App.css', to: BUILD_DIR }        
+        { from: './src/styles/App.css', to: BUILD_DIR },      
+        { from: './images', to: BUILD_DIR + "/images" }        
       ])]
 };
 
