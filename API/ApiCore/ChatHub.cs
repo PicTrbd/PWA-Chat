@@ -26,18 +26,18 @@ namespace ApiCore
             return base.OnConnectedAsync();
         }
 
-        public override Task OnDisconnectedAsync(Exception exception)
-        {
-            Console.WriteLine("User {0} is now disconnected !", Context.ConnectionId);
+        //public override Task OnDisconnectedAsync(Exception exception)
+        //{
+        //    Console.WriteLine("User {0} is now disconnected !", Context.ConnectionId);
 
-            _channelAdapter.FindUserAndRemoveItFromChannel(Context.ConnectionId);
+        //    _channelAdapter.FindUserAndRemoveItFromChannel(Context.ConnectionId);
 
-            var channel = _channelAdapter.FindUserChannel(Context.ConnectionId);
-            if (channel != null)
-                Groups.RemoveAsync(Context.ConnectionId, channel.ChannelName);
+        //    var channel = _channelAdapter.FindUserChannel(Context.ConnectionId);
+        //    if (channel != null)
+        //        Groups.RemoveAsync(Context.ConnectionId, channel.ChannelName);
 
-            return base.OnDisconnectedAsync(exception);
-        }
+        //    return base.OnDisconnectedAsync(exception);
+        //}
 
         public void GetAllChannels()
             => Clients.Client(Context.ConnectionId).InvokeAsync("RetrieveAllChannels", _channelAdapter.GetAllChanels());

@@ -30,6 +30,8 @@ var config = {
       ]),
 
       new WebpackPwaManifest({
+        filename: 'manifest.json',
+        fingerprints: 'false',
         name: 'My Progressive Web App',
         short_name: 'MyPWA',
         description: 'My awesome Progressive Web App!',
