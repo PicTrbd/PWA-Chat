@@ -1,9 +1,7 @@
 'use strict';
 
 self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    
-  );
+
 });
 
 self.addEventListener('notificationclose', event => {
