@@ -46,13 +46,6 @@ namespace ChatHexagone.Services
 
         public void MatchSubscribedUsersWithChannelUsers(List<User> subscribedUsers)
         {
-            //Channels.SelectMany(channel => channel.Users)
-            //    .Where(x => x.PushSubscription == null)
-            //    .SelectMany(x => subscribedUsers, (user, subscription) => new {user, subscription})
-            //    .Where(x => x.subscription.ClientId == x.user.ClientId)
-            //    .ToList().ForEach(x => x.user.PushSubscription = x.subscription.PushSubscription);
-
-
             foreach (var channel in Channels)
             {
                 foreach (var channelUser in channel.Users)

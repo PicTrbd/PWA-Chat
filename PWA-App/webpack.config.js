@@ -1,6 +1,8 @@
 var webpack = require('webpack');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var path = require('path');
+var WebappManifestPlugin = require('webapp-manifest-plugin').default;
+
 
 var BUILD_DIR = path.resolve(__dirname, 'build');
 var APP_DIR = path.resolve(__dirname, 'src');
@@ -25,7 +27,9 @@ var config = {
         { from: './public/sw.js', to: BUILD_DIR },
         { from: './public/images/*', to: BUILD_DIR },      
         { from: './src/styles/App.css', to: BUILD_DIR }        
-      ])]
+      ]),
+      new WebappManifestPlugin()
+      ]
 };
 
 module.exports = config;
