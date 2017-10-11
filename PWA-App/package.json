@@ -28,5 +28,8 @@
     "build": "webpack",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "webpack-pwa-manifest": "^3.3.2"
   }
 }

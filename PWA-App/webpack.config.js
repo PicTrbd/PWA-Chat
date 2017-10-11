@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+var WebpackPwaManifest = require('webpack-pwa-manifest')
 var path = require('path');
-var WebappManifestPlugin = require('webapp-manifest-plugin').default;
 
 
 var BUILD_DIR = path.resolve(__dirname, 'build');
@@ -23,12 +23,20 @@ var config = {
   plugins: [
     new CopyWebpackPlugin([
         { from: './public/index.html', to: BUILD_DIR },
-        { from: './public/manifest.json', to: BUILD_DIR },
+        //{ from: './public/manifest.json', to: BUILD_DIR },
         { from: './public/sw.js', to: BUILD_DIR },
         { from: './public/images/*', to: BUILD_DIR },      
         { from: './src/styles/App.css', to: BUILD_DIR }        
       ]),
-      new WebappManifestPlugin()
+
+      new WebpackPwaManifest({
+        name: 'My Progressive Web App',
+        short_name: 'MyPWA',
+        description: 'My awesome Progressive Web App!',
+        background_color: '#ffffff',
+       
+      })
+
       ]
 };
 
