@@ -14,7 +14,7 @@ namespace ApiCore.Adapters.RightSide
         public void SendNewMessageNotification(List<User> users, Guid senderId)
         {
             if (users == null || senderId == null)
-                throw new ArgumentException("One of your paramater is null");
+                throw new ArgumentException("One of your paramater is null !");
 
             var data = JsonConvert.SerializeObject(new {From = senderId.ToString() });
 
