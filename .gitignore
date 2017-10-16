@@ -68,11 +68,8 @@ artifacts/
 **/appsettings.staging.json
 **/appsettings.production.json
 
-
-
-
-
-
+# ignore Terraform Secrets
+**/*.tfvars
 
 *_i.c
 *_p.c
