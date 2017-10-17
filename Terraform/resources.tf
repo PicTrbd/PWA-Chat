@@ -38,7 +38,8 @@ resource "azurerm_app_service" "Web-app" {
     app_service_plan_id = "${azurerm_app_service_plan.production.id}"
 
     site_config {
-        dotnet_framework_version = "v4.0"
+        dotnet_framework_version = "v4.0",
+        default_documents = ["salut.html"]
     }
 }
 
@@ -49,7 +50,8 @@ resource "azurerm_app_service" "API" {
     app_service_plan_id = "${azurerm_app_service_plan.production.id}"
 
     site_config {
-        dotnet_framework_version = "v4.0"
+        dotnet_framework_version = "v4.0",
+        websockets_enabled = true
     }
 
     app_settings {
