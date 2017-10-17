@@ -25,10 +25,18 @@ namespace ApiCore
 
         public void AddUser(User user)
         {
-            using (var db = new DataAccess())
+            try
             {
-                db.Users.Add(user);
-                db.SaveChanges();
+                using (var db = new DataAccess())
+                {
+                    db.Users.Add(user);
+                    db.SaveChanges();
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error on subscribe user");
             }
         }
 
