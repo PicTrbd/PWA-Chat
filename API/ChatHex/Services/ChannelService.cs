@@ -14,6 +14,7 @@ namespace ChatHexagone.Services
         void RemoveUserFromChannel(string socketId);
         void AddMessageToChannel(string channelName, Message message);
         void AddUserToChannel(string room, Guid clientId, string socketId);
+        void MatchSubscribedUsersWithChannelUsers(List<User> subscribedUsers);
         List<User> GetChannelUsersWithoutTheSender(string channelName, Guid senderId);
     }
 
@@ -33,13 +34,32 @@ namespace ChatHexagone.Services
         public void RemoveUserFromChannel(string socketId)
             => Channels.ForEach(r => r.Users.RemoveAll(x => x.SocketId == socketId));
 
+
         public List<User> GetChannelUsersWithoutTheSender(string channelName, Guid senderId)
-            => Channels.FirstOrDefault(c => c.ChannelName == channelName)?.Users.Where(u => u.ClientId != senderId).ToList();
+            => Channels.FirstOrDefault(c => c.ChannelName == channelName)?.Users.Where(u => u.ClientId != senderId && u.PushSubscription != null).ToList();
 
         public void AddUserToChannel(string room, Guid clientId, string socketId)
         {
             Channels.ForEach(channel => channel.Users.RemoveAll(u => u.ClientId == clientId || u.SocketId == socketId));
             GetChannel(room).Users.Add(new User() { ClientId = clientId, SocketId = socketId });
+        }
+
+        public void MatchSubscribedUsersWithChannelUsers(List<User> subscribedUsers)
+        {
+            foreach (var channel in Channels)
+            {
+                foreach (var channelUser in channel.Users)
+                {
+                    if (channelUser.PushSubscription == null)
+                    {
+                        foreach (var subscribedUser in subscribedUsers)
+                        {
+                            if (subscribedUser.ClientId == channelUser.ClientId)
+                                channelUser.PushSubscription = subscribedUser.PushSubscription;
+                        }
+                    }
+                }
+            }
         }
 
         public Channel FindUserChannel(string socketId)

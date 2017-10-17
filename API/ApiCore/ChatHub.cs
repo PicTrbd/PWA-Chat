@@ -26,18 +26,18 @@ namespace ApiCore
             return base.OnConnectedAsync();
         }
 
-        public override Task OnDisconnectedAsync(Exception exception)
-        {
-            Console.WriteLine("User {0} is now disconnected !", Context.ConnectionId);
+        //public override Task OnDisconnectedAsync(Exception exception)
+        //{
+        //    Console.WriteLine("User {0} is now disconnected !", Context.ConnectionId);
 
-            _channelAdapter.FindUserAndRemoveItFromChannel(Context.ConnectionId);
+        //    _channelAdapter.FindUserAndRemoveItFromChannel(Context.ConnectionId);
 
-            var channel = _channelAdapter.FindUserChannel(Context.ConnectionId);
-            if (channel != null)
-                Groups.RemoveAsync(Context.ConnectionId, channel.ChannelName);
+        //    var channel = _channelAdapter.FindUserChannel(Context.ConnectionId);
+        //    if (channel != null)
+        //        Groups.RemoveAsync(Context.ConnectionId, channel.ChannelName);
 
-            return base.OnDisconnectedAsync(exception);
-        }
+        //    return base.OnDisconnectedAsync(exception);
+        //}
 
         public void GetAllChannels()
             => Clients.Client(Context.ConnectionId).InvokeAsync("RetrieveAllChannels", _channelAdapter.GetAllChanels());
@@ -49,17 +49,6 @@ namespace ApiCore
         {
             _channelAdapter.CreateChannel(roomName);
             Clients.All.InvokeAsync("RetrieveAllChannels",_channelAdapter.GetAllChanels());
-
-            //const string iconUrl = "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678092-sign-add-128.png";
-            //var data = JsonConvert.SerializeObject(
-            //    new
-            //    {
-            //        SocketId = roomName,
-            //        ChannelOwner = $"Pablo ({Context.ConnectionId})",
-            //        Icon = iconUrl
-            //    });
-
-            //Dependencies.NotificationsController.SendNotifications(data);
         }
 
         public async void JoinChannel(string oldRoom, string newRoom, Guid userId)

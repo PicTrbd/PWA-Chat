@@ -8,6 +8,10 @@ html, body {
 header {
   background-color:#325181;
   color:white;
+
+  position:fixed;
+  width:100%;
+  z-index:8;
 }
 
 .top-bar {
@@ -19,6 +23,7 @@ header {
 
 .tab-bar {
   background-color:#1B3866;
+  max-height:67px !important;
 }
 
 .isActive {
@@ -28,6 +33,15 @@ header {
 
 /*---------------------------------------*/
 /*---------------------------------------*/
+
+.bm-menu-wrap,
+.bm-overlay {
+  position:absolute!important;
+}
+
+.mdl-layout {
+  overflow:hidden !important;
+}
 
 .menu {
     position: fixed;
@@ -94,6 +108,13 @@ header {
 }
 
 /* M E S S A G E S */
+
+#chatbox {
+  z-index:0;
+  margin-top:185px;
+  width:100%;
+  height:100%;
+}
 
 .chat {
     list-style: none;
@@ -539,12 +560,15 @@ header {
 
 /* Position and sizing of burger button */
 .bm-burger-button {
-  position: relative;
+  /*position: relative;
+  top: -52px;*/
+  position:fixed;
+  top:123px;
+  z-index:10 !important;
   float: right;
   width: 32px;
   height: 36px;
   right: 15px;
-  top: -52px;
   background-image: url("../images/icon-menu.png");
 }
 
@@ -555,7 +579,11 @@ header {
 }
 
 .bm-menu-wrap {
-  width:200px !important;
+  width:250px !important;
+
+  position:fixed !important;
+  margin-top:174px;
+  z-index:2;
 }
 
 /* Position and sizing of clickable cross button */
@@ -591,6 +619,7 @@ header {
 /* Styling of overlay */
 .bm-overlay {
   background: rgba(0, 0, 0, 0.3);
+  position: fixed !important;
 }
 
 .menu-item {
