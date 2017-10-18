@@ -15,6 +15,13 @@ provider "azurerm" {
 # RESOURCES
 ############################################
 
+data "terraform_remote_state" "vpc" {
+  backend = "azure"
+  config {
+    name = "hashicorp/vpc-prod"
+  }
+}
+
 resource "azurerm_resource_group" "production" {
     name = "pwachatpushterraform"
     location = "West Europe"
