@@ -3,13 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "Api", "Api\Api.fsproj", "{E2F8D717-CA8E-41E8-B657-6E8EEFDD4762}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiCore", "ApiCore\ApiCore.csproj", "{1B1E5BCA-C006-49C8-9E27-F0F5738B468C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api-v2", "Api-v2\Api-v2.csproj", "{3C623BBB-EA28-4FF2-8472-EFAE23F6EEC0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiCore", "ApiCore\ApiCore.csproj", "{1B1E5BCA-C006-49C8-9E27-F0F5738B468C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatHexagone", "ChatHex\ChatHexagone.csproj", "{497E6305-76C8-4298-B94F-B0B2930CDE5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatHexagone", "ChatHex\ChatHexagone.csproj", "{497E6305-76C8-4298-B94F-B0B2930CDE5B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,14 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E2F8D717-CA8E-41E8-B657-6E8EEFDD4762}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E2F8D717-CA8E-41E8-B657-6E8EEFDD4762}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E2F8D717-CA8E-41E8-B657-6E8EEFDD4762}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E2F8D717-CA8E-41E8-B657-6E8EEFDD4762}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3C623BBB-EA28-4FF2-8472-EFAE23F6EEC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C623BBB-EA28-4FF2-8472-EFAE23F6EEC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C623BBB-EA28-4FF2-8472-EFAE23F6EEC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C623BBB-EA28-4FF2-8472-EFAE23F6EEC0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1B1E5BCA-C006-49C8-9E27-F0F5738B468C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1B1E5BCA-C006-49C8-9E27-F0F5738B468C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B1E5BCA-C006-49C8-9E27-F0F5738B468C}.Release|Any CPU.ActiveCfg = Release|Any CPU
