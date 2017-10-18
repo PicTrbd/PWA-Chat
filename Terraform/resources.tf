@@ -15,11 +15,13 @@ provider "azurerm" {
 # RESOURCES
 ############################################
 
-data "terraform_remote_state" "vpc" {
-  backend = "azure"
-  config {
-    name = "hashicorp/vpc-prod"
-  }
+terraform {
+    backend "azurerm" {
+        storage_account_name = "pwachatpushterraform"
+        container_name = "terraform"
+        key = "terraform.tfstate"
+        access_key = ${azurerm_resource_group.production.name}
+    }
 }
 
 resource "azurerm_resource_group" "production" {
