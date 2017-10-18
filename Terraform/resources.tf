@@ -20,7 +20,7 @@ terraform {
         storage_account_name = "pwachatpushterraform"
         container_name = "terraform"
         key = "terraform.tfstate"
-        access_key = ${azurerm_resource_group.production.name}
+        access_key = "${var.AccessKey}"
     }
 }
 
