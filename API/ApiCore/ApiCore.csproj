@@ -26,4 +26,14 @@
     <ProjectReference Include="..\ChatHex\ChatHexagone.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="**\*.cs" />
+    <EmbeddedResource Include="**\*.resx" />
+    <EmbeddedResource Include="compiler\resources\**\*" />
+    <Content Include="wwwroot\**\*;Views\**\*;Areas\**\Views;project.json;web.config">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+  
+  
 </Project>
