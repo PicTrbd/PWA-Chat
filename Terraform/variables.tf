@@ -13,5 +13,3 @@ variable "Password" {}
 variable "Database" {}
 variable "ServerURL" {}
 
-variable "AccessKey" {}
-

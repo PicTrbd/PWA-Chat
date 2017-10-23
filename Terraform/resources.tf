@@ -15,15 +15,6 @@ provider "azurerm" {
 # RESOURCES
 ############################################
 
-terraform {
-    backend "azurerm" {
-        storage_account_name = "pwachatpushterraform"
-        container_name = "terraform"
-        key = "terraform.tfstate"
-        access_key = "${var.AccessKey}"
-    }
-}
-
 resource "azurerm_resource_group" "production" {
     name = "pwachatpushterraform"
     location = "West Europe"
@@ -39,6 +30,15 @@ resource "azurerm_app_service_plan" "production" {
     size = "B1"
   }
 }
+
+terraform {
+    backend "azurerm" {
+        storage_account_name = "terraformstorageacc"
+        container_name = "terraform-state-storage"
+        key = "terraform.tfstate"
+    }
+}
+
 
 resource "azurerm_app_service" "Web-app" {
     name = "pwachatpush-webapp"
