@@ -40,13 +40,7 @@ Az Storage Container Create -n "terraform-state-storage" --connection-string $Co
 
 Az Storage Account Keys List -g "pwachatpushterraform" -n "terraformstorageacc"
 
-Write-Host  "`nCopy & Paste the Access Key above :  " -ForegroundColor Green
-
-$AccessKey = Read-Host 
-
-Write-Host .\terraform.exe init "access_key=$AccessKey"
-cd Terraform
-.\terraform.exe init -backend-config "access_key=$AccessKey"
+Write-Host  "`nYou are almost done, should now copy & paste the access key above on the Release Variables tab in VSTS" -ForegroundColor Green
 
 Write-Host "`n###################################################################" -ForegroundColor Magenta
 Write-Host "YOU ARE DONE !" -ForegroundColor Magenta
