@@ -8,7 +8,7 @@ import guid from 'guid';
 import Cookies from 'universal-cookie';
 import { retrieveUserId } from './actions';
 import WebSocketManager from './WebSocketManager';
-
+import { CONF } from './Configuration';
 
 const applicationServerPublicKey = 'BMiZDeWBmOzC1PVd4FFK5BKFzF36jzlfsOjq4kOLoDfnEgNIuubR1upxNBwgLm5b5c7RAHppSkG9V6ewntGvenw';
 
@@ -77,17 +77,19 @@ async function subscribeUser() {
     var auth = subJSObject.keys.auth; 
     var p256dh = subJSObject.keys.p256dh;
     var sub = {endpoint: subscription.endpoint, p256dh: p256dh, auth: auth}
-    var subscriptionResult = await handleFetch("https://pwachatpush-rest-api.azurewebsites.net/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
-    //var subscriptionResult = await handleFetch("http://localhost:8080/subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
+    var subscriptionResult = await handleFetch(CONF.API + "subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
     if (subscriptionResult !== undefined) {
       clientId = subscriptionResult.clientId;
     }
-    else {
+    else
       clientId = guid.raw();
-    }
     
-    initialiseApp(clientId);
-
+    var pwaUserId = cookies.get('pwa-user');
+    if (pwaUserId === undefined || pwaUserId === '')
+    {    
+      pwaUserId = clientId;
+      initialiseApp(pwaUserId);
+    }  
   } catch (error) {
     console.log("Failed to subscribe the user : ", error);
   }
@@ -110,8 +112,7 @@ registerServiceWorker();
 function initialiseApp(pwaUserId) {
   cookies.set('pwa-user', pwaUserId, { path: '/' });
   store.dispatch(retrieveUserId(pwaUserId));
-  socketManager.initialize('https://pwachatpush-rest-api.azurewebsites.net/chat', 'chatHub', pwaUserId);
-  //socketManager.initialize('http://localhost:8080/chat', 'chatHub', pwaUserId);
+  socketManager.initialize(CONF.API + 'chat', 'chatHub', pwaUserId);
   socketManager.connection.on('addMessage', socketManager.addMessage);
   socketManager.connection.on('retrievechanneldetails', socketManager.retrieveChannelDetails);
   socketManager.connection.on('retrieveallchannels', socketManager.retrieveAllChannels);
@@ -119,8 +120,15 @@ function initialiseApp(pwaUserId) {
 
   ReactDOM.render(
     <Provider store={store}>
-      <App socketManager={socketManager}/>
+      <App />
     </Provider>, document.getElementById('root'));
 }
 
+var pwaUserId = cookies.get('pwa-user');
+if (pwaUserId !== undefined && pwaUserId !== '')
+{    
+  initialiseApp(pwaUserId);
+}
+
+export { socketManager };
 export { store };
