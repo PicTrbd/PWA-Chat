@@ -12,4 +12,3 @@ variable "UserId" {}
 variable "Password" {}
 variable "Database" {}
 variable "ServerURL" {}
-
