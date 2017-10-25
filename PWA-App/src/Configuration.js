@@ -1,3 +1,3 @@
 var CONFIG = {
-    API : "http://pwachatpush-api.azurewebsites.net:80/",
+    API : "http://pwachatpush-rest-api.azurewebsites.net/",
 }
