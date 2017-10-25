@@ -78,12 +78,13 @@ async function subscribeUser() {
     var p256dh = subJSObject.keys.p256dh;
     var sub = {endpoint: subscription.endpoint, p256dh: p256dh, auth: auth}
     var subscriptionResult = await handleFetch("https://pwachatpush-rest-api.azurewebsites.net/" + "subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
+    console.log("Result");
+    console.log(subscriptionResult);    
     if (subscriptionResult !== undefined) {
       clientId = subscriptionResult.clientId;
     }
     else
       clientId = guid.raw();
-    
     var pwaUserId = cookies.get('pwa-user');
     if (pwaUserId === undefined || pwaUserId === '')
     {    
