@@ -44,7 +44,7 @@ resource "azurerm_sql_server" "production" {
     resource_group_name          = "${azurerm_resource_group.production.name}"
     location                     = "${azurerm_resource_group.production.location}"
     administrator_login          = "anthyme"
-    administrator_login_password = "FDVadmin123"
+    administrator_login_password = "${var.Password}"
     version                      = "12.0"
 }
 
