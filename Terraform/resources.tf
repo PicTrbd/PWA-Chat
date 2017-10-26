@@ -86,6 +86,10 @@ resource "azurerm_app_service" "API" {
         websockets_enabled       = true
     }
 
+    origin {
+        name = "*"
+    }
+
     app_settings {
     "DbAuthentication:UserId"    = "${var.UserId}"
     "DbAuthentication:Password"  = "${var.Password}"

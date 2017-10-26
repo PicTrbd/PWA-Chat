@@ -8,7 +8,7 @@ import guid from 'guid';
 import Cookies from 'universal-cookie';
 import { retrieveUserId } from './actions';
 import WebSocketManager from './WebSocketManager';
-import { CONF } from './Configuration';
+var API = require('./Configuration.js');
 
 const applicationServerPublicKey = 'BMiZDeWBmOzC1PVd4FFK5BKFzF36jzlfsOjq4kOLoDfnEgNIuubR1upxNBwgLm5b5c7RAHppSkG9V6ewntGvenw';
 
@@ -77,9 +77,7 @@ async function subscribeUser() {
     var auth = subJSObject.keys.auth; 
     var p256dh = subJSObject.keys.p256dh;
     var sub = {endpoint: subscription.endpoint, p256dh: p256dh, auth: auth}
-    var subscriptionResult = await handleFetch("https://pwachatpush-rest-api.azurewebsites.net/" + "subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
-    console.log("Result");
-    console.log(subscriptionResult);    
+    var subscriptionResult = await handleFetch(API + "subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
     if (subscriptionResult !== undefined) {
       clientId = subscriptionResult.clientId;
     }
@@ -113,7 +111,7 @@ registerServiceWorker();
 function initialiseApp(pwaUserId) {
   cookies.set('pwa-user', pwaUserId, { path: '/' });
   store.dispatch(retrieveUserId(pwaUserId));
-  socketManager.initialize("https://pwachatpush-rest-api.azurewebsites.net/" + 'chat', 'chatHub', pwaUserId);
+  socketManager.initialize(API + 'chat', 'chatHub', pwaUserId);
   socketManager.connection.on('addMessage', socketManager.addMessage);
   socketManager.connection.on('retrievechanneldetails', socketManager.retrieveChannelDetails);
   socketManager.connection.on('retrieveallchannels', socketManager.retrieveAllChannels);
