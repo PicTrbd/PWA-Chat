@@ -1,1 +1,1 @@
-module.exports = "http://pwachatpush-rest-api.azurewebsites.net/"
+module.exports = "https://pwachatpush-rest-api.azurewebsites.net/"
