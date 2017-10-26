@@ -10,6 +10,7 @@ import { retrieveUserId } from './actions';
 import WebSocketManager from './WebSocketManager';
 var API = require('./Configuration.js');
 
+
 const applicationServerPublicKey = 'BMiZDeWBmOzC1PVd4FFK5BKFzF36jzlfsOjq4kOLoDfnEgNIuubR1upxNBwgLm5b5c7RAHppSkG9V6ewntGvenw';
 
 let isSubscribed = false;
@@ -77,18 +78,16 @@ async function subscribeUser() {
     var auth = subJSObject.keys.auth; 
     var p256dh = subJSObject.keys.p256dh;
     var sub = {endpoint: subscription.endpoint, p256dh: p256dh, auth: auth}
-    var subscriptionResult = await handleFetch(API + "subscribe", { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
+    var subscriptionResult = await handleFetch(API + 'subscribe', { method: 'post', mode: 'cors', body: JSON.stringify(sub) });
     if (subscriptionResult !== undefined) {
       clientId = subscriptionResult.clientId;
     }
-    else
+    else {
       clientId = guid.raw();
-    var pwaUserId = cookies.get('pwa-user');
-    if (pwaUserId === undefined || pwaUserId === '')
-    {    
-      pwaUserId = clientId;
-      initialiseApp(pwaUserId);
-    }  
+    }
+    
+    initialiseApp(clientId);
+
   } catch (error) {
     console.log("Failed to subscribe the user : ", error);
   }
@@ -119,15 +118,8 @@ function initialiseApp(pwaUserId) {
 
   ReactDOM.render(
     <Provider store={store}>
-      <App />
+      <App socketManager={socketManager}/>
     </Provider>, document.getElementById('root'));
 }
 
-var pwaUserId = cookies.get('pwa-user');
-if (pwaUserId !== undefined && pwaUserId !== '')
-{    
-  initialiseApp(pwaUserId);
-}
-
-export { socketManager };
 export { store };
