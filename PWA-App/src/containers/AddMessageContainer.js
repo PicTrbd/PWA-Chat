@@ -17,7 +17,7 @@ async function sendMessage(userId, message, currentChannel, socketManager) {
             Id: guid.raw(),
             Date: new Date()
         };
-        await socketManager.connection.invoke('sendmessage', currentChannel.ChannelName, JSON.stringify(newMessage));
+        await socketManager.connection.invoke('SendMessage', currentChannel.ChannelName, JSON.stringify(newMessage));
         var scrolldiv = document.getElementById("bottom-div-scroll");
         scrolldiv.scrollIntoView({ behavior: "smooth" });
     } catch (error) {
