@@ -121,5 +121,4 @@ function initialiseApp(pwaUserId) {
       <App socketManager={socketManager}/>
     </Provider>, document.getElementById('root'));
 }
-
 export { store };
