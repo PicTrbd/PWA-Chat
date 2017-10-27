@@ -65,7 +65,7 @@ namespace ApiCore
             using (var db = new DataAccess())
             {
                 var channels = db.Set<Channel>();
-                if (channels.All(x => x.ChannelName != "Main"))
+                if (!channels.Any(x => x.ChannelName == "Main"))
                 {
                     db.Chanels.Add(new Channel() { ChannelName = "Main", Messages = new List<Message>() });
                     db.SaveChanges();

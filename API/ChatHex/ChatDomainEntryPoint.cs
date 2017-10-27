@@ -30,11 +30,11 @@ namespace ChatHexagone
 
         private void InitializeFirstLaunch()
         {
+            _isStartUp = false;
             _databaseAdapter.TryCreateMainChanel();
             RetrieveSavedSubscribedUsers();
             RetrieveSavedChanels();
             CheckIfPropertiesAreNull();
-            _isStartUp = false;
         }
 
         private void CheckIfPropertiesAreNull()
