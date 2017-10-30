@@ -18,19 +18,19 @@ Write-Host "`n##################################################################
 Write-Host "RESOURCE GROUP CREATION " -ForegroundColor Yellow
 Write-Host "###################################################################`n" -ForegroundColor Yellow
 
-Az Group Create --location "West Europe" --name "pwachatpushterraform"
+Az Group Create --location "West Europe" --name "pwachatpush"
 
 Write-Host "`n###################################################################" -ForegroundColor Yellow
 Write-Host "STORAGE ACCOUNT CREATION " -ForegroundColor Yellow
 Write-Host "###################################################################`n" -ForegroundColor Yellow
 
-Az Storage Account Create --name "terraformstorageacc" --resource-group "pwachatpushterraform" --sku "Standard_LRS"
+Az Storage Account Create --name "terraformstorageacc" --resource-group "pwachatpush" --sku "Standard_LRS"
 
 Write-Host "`n###################################################################" -ForegroundColor Yellow
 Write-Host "STORAGE ACCOUNT CONNECTION STRING " -ForegroundColor Yellow
 Write-Host "###################################################################`n" -ForegroundColor Yellow
 
-Az Storage Account show-connection-string --name "terraformstorageacc" --resource-group "pwachatpushterraform"
+Az Storage Account show-connection-string --name "terraformstorageacc" --resource-group "pwachatpush"
 
 Write-Host  "`nCopy & Paste the connection string above :  " -ForegroundColor Green
 
@@ -38,7 +38,7 @@ $ConnectionString = Read-Host
 
 Az Storage Container Create -n "terraform-state-storage" --connection-string $ConnectionString
 
-Az Storage Account Keys List -g "pwachatpushterraform" -n "terraformstorageacc"
+Az Storage Account Keys List -g "pwachatpush" -n "terraformstorageacc"
 
 Write-Host  "`nYou are almost done, should now copy & paste the access key above on the Release Variables tab in VSTS" -ForegroundColor Green
 

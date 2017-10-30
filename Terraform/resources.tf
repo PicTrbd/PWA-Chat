@@ -16,7 +16,7 @@ provider "azurerm" {
 ############################################
 
 resource "azurerm_resource_group" "production" {
-    name                         = "pwachatpushterraform"
+    name                         = "pwachatpush"
     location                     = "West Europe"
 }
 
@@ -64,7 +64,7 @@ resource "azurerm_sql_database" "production" {
 }
 
 resource "azurerm_app_service" "Web-app" {
-    name                         = "pwachatpush-webapp"
+    name                         = "pwachatpush"
     location                     = "${azurerm_resource_group.production.location}"
     resource_group_name          = "${azurerm_resource_group.production.name}"
     app_service_plan_id          = "${azurerm_app_service_plan.production.id}"
